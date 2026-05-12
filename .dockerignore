@@ -26,8 +26,8 @@ Dockerfile
 docker-compose*.yml
 .dockerignore
 
-# Storage (runtime volume)
-storage
+# Storage (runtime volume – anchored to root so src/exports/storage/ is NOT excluded)
+/storage
 
 # Tests
 test
