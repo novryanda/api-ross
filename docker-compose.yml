@@ -18,6 +18,7 @@ services:
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
       BETTER_AUTH_URL: ${BETTER_AUTH_URL}
       TRUSTED_ORIGINS: ${TRUSTED_ORIGINS}
+      AUTH_COOKIE_DOMAIN: ${AUTH_COOKIE_DOMAIN}
 
       # ── Startup flags ──────────────────────────────────────
       RUN_MIGRATE_ON_STARTUP: ${RUN_MIGRATE_ON_STARTUP}

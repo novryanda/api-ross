@@ -23,6 +23,16 @@ export function getBetterAuthUrl(): string {
   return process.env.BETTER_AUTH_URL ?? 'http://localhost:3001';
 }
 
+/**
+ * Returns the root domain for cross-subdomain cookie sharing.
+ * Set AUTH_COOKIE_DOMAIN=".netkrida.cloud" in production so that cookies
+ * set by api.netkrida.cloud are readable by ross.netkrida.cloud.
+ * Returns null in development (cookies stay on localhost).
+ */
+export function getAuthCookieDomain(): string | null {
+  return process.env.AUTH_COOKIE_DOMAIN?.trim() || null;
+}
+
 export type R2Config = {
   endpoint: string;
   bucket: string;

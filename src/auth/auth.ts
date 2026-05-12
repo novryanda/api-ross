@@ -3,7 +3,7 @@ import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin as adminPlugin } from 'better-auth/plugins/admin';
 import { UserRole, UserStatus } from '../generated/prisma/client.js';
-import { getBetterAuthUrl, getTrustedOrigins } from '../config/env.js';
+import { getBetterAuthUrl, getAuthCookieDomain, getTrustedOrigins } from '../config/env.js';
 import {
   adminRole,
   buzzerRole,
@@ -64,6 +64,9 @@ export const auth = betterAuth({
   advanced: {
     useSecureCookies: process.env.NODE_ENV === 'production',
     cookiePrefix: 'ross',
+    crossSubDomainCookies: getAuthCookieDomain()
+      ? { enabled: true, domain: getAuthCookieDomain()! }
+      : undefined,
     database: {
       generateId: 'uuid',
     },
