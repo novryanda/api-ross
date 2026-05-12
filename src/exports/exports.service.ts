@@ -26,7 +26,7 @@ import { CreateExportDto, ExportQueryDto } from './dto/index.js';
 import {
   createExportFileStore,
   type ExportFileStore,
-} from './storage/index.js';
+} from './stores/index.js';
 import { ExportSnapshotLoader } from './generators/snapshot-loader.js';
 import { renderSnapshotAsPdf } from './generators/pdf.generator.js';
 import { renderSnapshotAsXlsx } from './generators/xlsx.generator.js';

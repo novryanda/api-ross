@@ -2,8 +2,8 @@ import { jest } from '@jest/globals';
 import { Readable } from 'node:stream';
 import { S3Client } from '@aws-sdk/client-s3';
 import { ExportsService } from './exports.service.js';
-import { LocalFileStore } from './storage/local-file-store.js';
-import { R2FileStore } from './storage/r2-file-store.js';
+import { LocalFileStore } from './stores/local-file-store.js';
+import { R2FileStore } from './stores/r2-file-store.js';
 import {
   AuditAction,
   ExportFormat,
