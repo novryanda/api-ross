@@ -260,6 +260,7 @@ model Campaign {
   startDate   DateTime       @map("start_date") @db.Date
   endDate     DateTime?      @map("end_date") @db.Date
   status      CampaignStatus @default(DRAFT)
+  platforms   Platform[]     @default([])
   createdById String         @map("created_by") @db.Uuid
   createdAt   DateTime       @default(now()) @map("created_at")
   updatedAt   DateTime       @updatedAt @map("updated_at")

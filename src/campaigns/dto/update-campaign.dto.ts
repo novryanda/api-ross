@@ -1,11 +1,12 @@
 import {
+  IsArray,
   IsDateString,
   IsEnum,
   IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
-import { CampaignStatus } from '../../generated/prisma/client.js';
+import { CampaignStatus, Platform } from '../../generated/prisma/client.js';
 
 export class UpdateCampaignDto {
   @IsOptional()
@@ -28,4 +29,9 @@ export class UpdateCampaignDto {
   @IsOptional()
   @IsEnum(CampaignStatus)
   status?: CampaignStatus;
+
+  @IsOptional()
+  @IsArray()
+  @IsEnum(Platform, { each: true })
+  platforms?: Platform[];
 }

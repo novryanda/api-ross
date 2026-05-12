@@ -57,6 +57,7 @@ export type CampaignCountAggregateOutputType = {
   startDate: number
   endDate: number
   status: number
+  platforms: number
   createdById: number
   createdAt: number
   updatedAt: number
@@ -98,6 +99,7 @@ export type CampaignCountAggregateInputType = {
   startDate?: true
   endDate?: true
   status?: true
+  platforms?: true
   createdById?: true
   createdAt?: true
   updatedAt?: true
@@ -184,6 +186,7 @@ export type CampaignGroupByOutputType = {
   startDate: Date
   endDate: Date | null
   status: $Enums.CampaignStatus
+  platforms: $Enums.Platform[]
   createdById: string
   createdAt: Date
   updatedAt: Date
@@ -218,6 +221,7 @@ export type CampaignWhereInput = {
   startDate?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"Campaign"> | Date | string | null
   status?: Prisma.EnumCampaignStatusFilter<"Campaign"> | $Enums.CampaignStatus
+  platforms?: Prisma.EnumPlatformNullableListFilter<"Campaign">
   createdById?: Prisma.UuidFilter<"Campaign"> | string
   createdAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
@@ -237,6 +241,7 @@ export type CampaignOrderByWithRelationInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  platforms?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -259,6 +264,7 @@ export type CampaignWhereUniqueInput = Prisma.AtLeast<{
   startDate?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"Campaign"> | Date | string | null
   status?: Prisma.EnumCampaignStatusFilter<"Campaign"> | $Enums.CampaignStatus
+  platforms?: Prisma.EnumPlatformNullableListFilter<"Campaign">
   createdById?: Prisma.UuidFilter<"Campaign"> | string
   createdAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
@@ -278,6 +284,7 @@ export type CampaignOrderByWithAggregationInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  platforms?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -297,6 +304,7 @@ export type CampaignScalarWhereWithAggregatesInput = {
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Campaign"> | Date | string
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Campaign"> | Date | string | null
   status?: Prisma.EnumCampaignStatusWithAggregatesFilter<"Campaign"> | $Enums.CampaignStatus
+  platforms?: Prisma.EnumPlatformNullableListFilter<"Campaign">
   createdById?: Prisma.UuidWithAggregatesFilter<"Campaign"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Campaign"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Campaign"> | Date | string
@@ -310,6 +318,7 @@ export type CampaignCreateInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -328,6 +337,7 @@ export type CampaignUncheckedCreateInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -346,6 +356,7 @@ export type CampaignUpdateInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -364,6 +375,7 @@ export type CampaignUncheckedUpdateInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -382,6 +394,7 @@ export type CampaignCreateManyInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -395,6 +408,7 @@ export type CampaignUpdateManyMutationInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -407,6 +421,7 @@ export type CampaignUncheckedUpdateManyInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -423,6 +438,14 @@ export type CampaignOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type EnumPlatformNullableListFilter<$PrismaModel = never> = {
+  equals?: $Enums.Platform[] | Prisma.ListEnumPlatformFieldRefInput<$PrismaModel> | null
+  has?: $Enums.Platform | Prisma.EnumPlatformFieldRefInput<$PrismaModel> | null
+  hasEvery?: $Enums.Platform[] | Prisma.ListEnumPlatformFieldRefInput<$PrismaModel>
+  hasSome?: $Enums.Platform[] | Prisma.ListEnumPlatformFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type CampaignCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -430,6 +453,7 @@ export type CampaignCountOrderByAggregateInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  platforms?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -514,8 +538,17 @@ export type CampaignUncheckedUpdateManyWithoutCreatedByNestedInput = {
   deleteMany?: Prisma.CampaignScalarWhereInput | Prisma.CampaignScalarWhereInput[]
 }
 
+export type CampaignCreateplatformsInput = {
+  set: $Enums.Platform[]
+}
+
 export type EnumCampaignStatusFieldUpdateOperationsInput = {
   set?: $Enums.CampaignStatus
+}
+
+export type CampaignUpdateplatformsInput = {
+  set?: $Enums.Platform[]
+  push?: $Enums.Platform | $Enums.Platform[]
 }
 
 export type CampaignCreateNestedOneWithoutMembersInput = {
@@ -597,6 +630,7 @@ export type CampaignCreateWithoutCreatedByInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -614,6 +648,7 @@ export type CampaignUncheckedCreateWithoutCreatedByInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -660,6 +695,7 @@ export type CampaignScalarWhereInput = {
   startDate?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"Campaign"> | Date | string | null
   status?: Prisma.EnumCampaignStatusFilter<"Campaign"> | $Enums.CampaignStatus
+  platforms?: Prisma.EnumPlatformNullableListFilter<"Campaign">
   createdById?: Prisma.UuidFilter<"Campaign"> | string
   createdAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
@@ -673,6 +709,7 @@ export type CampaignCreateWithoutMembersInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -690,6 +727,7 @@ export type CampaignUncheckedCreateWithoutMembersInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -723,6 +761,7 @@ export type CampaignUpdateWithoutMembersInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -740,6 +779,7 @@ export type CampaignUncheckedUpdateWithoutMembersInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -757,6 +797,7 @@ export type CampaignCreateWithoutBlastTargetsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -774,6 +815,7 @@ export type CampaignUncheckedCreateWithoutBlastTargetsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -807,6 +849,7 @@ export type CampaignUpdateWithoutBlastTargetsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -824,6 +867,7 @@ export type CampaignUncheckedUpdateWithoutBlastTargetsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -841,6 +885,7 @@ export type CampaignCreateWithoutCommentCommandsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -858,6 +903,7 @@ export type CampaignUncheckedCreateWithoutCommentCommandsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -891,6 +937,7 @@ export type CampaignUpdateWithoutCommentCommandsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -908,6 +955,7 @@ export type CampaignUncheckedUpdateWithoutCommentCommandsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -925,6 +973,7 @@ export type CampaignCreateWithoutExportReportsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -942,6 +991,7 @@ export type CampaignUncheckedCreateWithoutExportReportsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -975,6 +1025,7 @@ export type CampaignUpdateWithoutExportReportsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -992,6 +1043,7 @@ export type CampaignUncheckedUpdateWithoutExportReportsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1009,6 +1061,7 @@ export type CampaignCreateWithoutAuditLogsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1026,6 +1079,7 @@ export type CampaignUncheckedCreateWithoutAuditLogsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1059,6 +1113,7 @@ export type CampaignUpdateWithoutAuditLogsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1076,6 +1131,7 @@ export type CampaignUncheckedUpdateWithoutAuditLogsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1093,6 +1149,7 @@ export type CampaignCreateManyCreatedByInput = {
   startDate: Date | string
   endDate?: Date | string | null
   status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1105,6 +1162,7 @@ export type CampaignUpdateWithoutCreatedByInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1122,6 +1180,7 @@ export type CampaignUncheckedUpdateWithoutCreatedByInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1139,6 +1198,7 @@ export type CampaignUncheckedUpdateManyWithoutCreatedByInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1218,6 +1278,7 @@ export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   startDate?: boolean
   endDate?: boolean
   status?: boolean
+  platforms?: boolean
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1238,6 +1299,7 @@ export type CampaignSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   startDate?: boolean
   endDate?: boolean
   status?: boolean
+  platforms?: boolean
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1252,6 +1314,7 @@ export type CampaignSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   startDate?: boolean
   endDate?: boolean
   status?: boolean
+  platforms?: boolean
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1266,13 +1329,14 @@ export type CampaignSelectScalar = {
   startDate?: boolean
   endDate?: boolean
   status?: boolean
+  platforms?: boolean
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "startDate" | "endDate" | "status" | "createdById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["campaign"]>
+export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "startDate" | "endDate" | "status" | "platforms" | "createdById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["campaign"]>
 export type CampaignInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Campaign$membersArgs<ExtArgs>
@@ -1306,6 +1370,7 @@ export type $CampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     startDate: Date
     endDate: Date | null
     status: $Enums.CampaignStatus
+    platforms: $Enums.Platform[]
     createdById: string
     createdAt: Date
     updatedAt: Date
@@ -1745,6 +1810,7 @@ export interface CampaignFieldRefs {
   readonly startDate: Prisma.FieldRef<"Campaign", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Campaign", 'DateTime'>
   readonly status: Prisma.FieldRef<"Campaign", 'CampaignStatus'>
+  readonly platforms: Prisma.FieldRef<"Campaign", 'Platform[]'>
   readonly createdById: Prisma.FieldRef<"Campaign", 'String'>
   readonly createdAt: Prisma.FieldRef<"Campaign", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Campaign", 'DateTime'>

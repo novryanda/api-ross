@@ -1565,6 +1565,7 @@ export const CampaignScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   status: 'status',
+  platforms: 'platforms',
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -1862,16 +1863,9 @@ export type ListEnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
- * Reference to a field of type 'CampaignMemberRole'
+ * Reference to a field of type 'Platform[]'
  */
-export type EnumCampaignMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignMemberRole'>
-    
-
-
-/**
- * Reference to a field of type 'CampaignMemberRole[]'
- */
-export type ListEnumCampaignMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignMemberRole[]'>
+export type ListEnumPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Platform[]'>
     
 
 
@@ -1883,9 +1877,16 @@ export type EnumPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Platform[]'
+ * Reference to a field of type 'CampaignMemberRole'
  */
-export type ListEnumPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Platform[]'>
+export type EnumCampaignMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignMemberRole'>
+    
+
+
+/**
+ * Reference to a field of type 'CampaignMemberRole[]'
+ */
+export type ListEnumCampaignMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignMemberRole[]'>
     
 
 

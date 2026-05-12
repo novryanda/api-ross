@@ -156,6 +156,7 @@ export const CampaignScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   status: 'status',
+  platforms: 'platforms',
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',

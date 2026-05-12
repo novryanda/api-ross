@@ -196,6 +196,7 @@ export class CampaignsService {
           startDate: new Date(dto.startDate),
           endDate: dto.endDate ? new Date(dto.endDate) : undefined,
           status: dto.status ?? CampaignStatus.DRAFT,
+          platforms: dto.platforms ?? [],
           createdById: user.id,
           members: {
             create: {
@@ -459,6 +460,7 @@ export class CampaignsService {
           ? { endDate: new Date(dto.endDate) }
           : {}),
         ...(dto.status !== undefined ? { status: dto.status } : {}),
+        ...(dto.platforms !== undefined ? { platforms: dto.platforms } : {}),
       },
     });
 
