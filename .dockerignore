@@ -1,0 +1,42 @@
+# Dependencies (re-installed in container)
+node_modules
+
+# Build output (rebuilt in container)
+dist
+coverage
+
+# Environment (injected at runtime, never baked into image)
+.env
+.env.local
+.env.*.local
+
+# Dev/IDE
+.vscode
+.idea
+*.log
+.nest-dev.log
+.nest-dev.err
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Storage (runtime volume)
+storage
+
+# Tests
+test
+*.spec.ts
+
+# Misc
+README.md
+.prettierrc
+eslint.config.mjs
+.tmp
+.cache
+asset

@@ -1,0 +1,42 @@
+# ============================================================
+# ROSS/BuzzTrack – Backend API (no database service)
+# Database is an existing PostgreSQL instance (Dokploy/external)
+# ============================================================
+
+services:
+  ross-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ross-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - '${PORT:-3001}:${PORT:-3001}'
+    volumes:
+      # Persist local export files across container restarts
+      - ross-exports:/app/storage/exports
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:${PORT:-3001}/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - dokploy-network
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+volumes:
+  ross-exports:
+    driver: local
+
+# Sesuaikan nama network dengan output `docker network ls` di VPS
+networks:
+  dokploy-network:
+    external: true

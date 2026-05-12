@@ -1,0 +1,23 @@
+# compiled output
+dist/
+coverage/
+
+# dependencies
+node_modules/
+
+# logs
+*.log
+.nest-dev.log
+.nest-dev.err
+
+# environment
+.env
+.env.local
+.env.*.local
+
+# cache
+.tmp/
+.cache/
+
+# storage
+storage/

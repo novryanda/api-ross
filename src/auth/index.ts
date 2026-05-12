@@ -1,0 +1,11 @@
+export { auth } from './auth.js';
+export { authApi, buildAuthHeaders } from './auth-api.js';
+export { RossAuthModule } from './ross-auth.module.js';
+export { CurrentSession } from './decorators/current-session.decorator.js';
+export { CurrentUser } from './decorators/current-user.decorator.js';
+export { Roles } from './decorators/roles.decorator.js';
+export { CampaignAccess } from './decorators/campaign-access.decorator.js';
+export { AuthSessionGuard } from './guards/auth-session.guard.js';
+export { RolesGuard } from './guards/roles.guard.js';
+export { CampaignAccessGuard } from './guards/campaign-access.guard.js';
+export type { RossRole, RossUserSession } from './auth.types.js';

@@ -1,0 +1,518 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  BUZZER
+  VIEWER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum CampaignMemberRole {
+  ADMIN
+  BUZZER
+  VIEWER
+}
+
+enum Platform {
+  INSTAGRAM
+  TIKTOK
+  X_TWITTER @map("X")
+  FACEBOOK
+}
+
+enum SocialAccountCategory {
+  MEDIA
+  KOL @map("INFLUENCER")
+  COMMUNITY
+  BRAND
+  OTHER
+}
+
+enum SocialAccountStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum BlastSourceType {
+  ADMIN_SUBMITTED @map("ADMIN")
+  BUZZER_SUGGESTED @map("BUZZER_SUGGESTION")
+
+  @@map("BlastTargetSourceType")
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@map("BlastTargetReviewStatus")
+}
+
+enum BlastTargetStatus {
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum BlastAttemptStatus {
+  AVAILABLE
+  KEPT
+  COMPLETED
+  RELEASED
+  EXPIRED
+  CANCELLED
+}
+
+enum CommentStance {
+  PRO
+  KONTRA
+}
+
+enum CommentCommandStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum CommentTaskStatus {
+  AVAILABLE
+  KEPT
+  IN_PROGRESS
+  COMPLETED
+  RELEASED
+  EXPIRED
+  CANCELLED
+}
+
+enum ExportFormat {
+  PDF
+  EXCEL
+}
+
+enum ExportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ExportScope {
+  SUMMARY
+  BLAST_REPORTS
+  COMMENT_TASKS
+  FULL
+}
+
+enum AuditAction {
+  USER_CREATED
+  USER_UPDATED
+  USER_STATUS_CHANGED
+  USER_PASSWORD_RESET_REQUESTED
+  PROFILE_UPDATED
+  PASSWORD_CHANGED
+  CAMPAIGN_CREATED
+  CAMPAIGN_UPDATED
+  CAMPAIGN_ARCHIVED
+  CAMPAIGN_MEMBER_ADDED
+  CAMPAIGN_MEMBER_REMOVED
+  SOCIAL_ACCOUNT_CREATED
+  SOCIAL_ACCOUNT_UPDATED
+  SOCIAL_ACCOUNT_STATUS_UPDATED
+  BLAST_TARGET_CREATED
+  BLAST_TARGET_UPDATED
+  BLAST_TARGET_STATUS_UPDATED
+  BLAST_ATTEMPT_CREATED
+  REBLAST_ATTEMPT_CREATED
+  BLAST_ATTEMPT_KEPT
+  BLAST_ATTEMPT_RELEASED
+  BLAST_ATTEMPT_EXPIRED
+  BLAST_ATTEMPT_CANCELLED
+  BLAST_REPORT_SUBMITTED
+  COMMENT_COMMAND_CREATED
+  COMMENT_COMMAND_UPDATED
+  COMMENT_COMMAND_ASSIGNED
+  COMMENT_COMMAND_PAUSED
+  COMMENT_COMMAND_ARCHIVED
+  COMMENT_TASK_KEPT
+  COMMENT_TASK_RELEASED
+  COMMENT_TASK_STARTED
+  COMMENT_TASK_COMPLETED
+  COMMENT_TASK_REJECTED
+  COMMENT_TASK_BLOCKED
+  COMMENT_TASK_EXPIRED
+  EXPORT_REQUESTED
+  EXPORT_GENERATED
+  EXPORT_COMPLETED
+  EXPORT_FAILED
+  EXPORT_RETRIED
+  EXPORT_DOWNLOADED
+}
+
+model User {
+  id            String     @id @default(uuid()) @db.Uuid
+  name          String     @db.VarChar(150)
+  email         String     @unique @db.VarChar(255)
+  emailVerified Boolean    @default(false) @map("email_verified")
+  image         String?
+  role          UserRole   @default(BUZZER)
+  status        UserStatus @default(ACTIVE)
+  lastLoginAt   DateTime?  @map("last_login_at")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+  deletedAt     DateTime?  @map("deleted_at")
+  banned        Boolean?   @default(false)
+  banReason     String?    @map("ban_reason")
+  banExpires    DateTime?  @map("ban_expires")
+
+  sessions                 Session[]
+  accounts                 Account[]
+  createdCampaigns         Campaign[]       @relation("CampaignCreatedBy")
+  campaignMemberships      CampaignMember[] @relation("CampaignMemberUser")
+  createdSocialAccounts    SocialAccount[]  @relation("SocialAccountCreator")
+  submittedBlastTargets    BlastTarget[]    @relation("BlastTargetSubmitter")
+  keptBlastAttempts        BlastAttempt[]   @relation("BlastAttemptKeeper")
+  blastReports             BlastReport[]    @relation("BlastReportSubmitter")
+  createdCommentCommands   CommentCommand[] @relation("CommentCommandCreator")
+  keptCommentTasks         CommentTask[]    @relation("CommentTaskKeeper")
+  exportReports            ExportReport[]   @relation("ExportReportRequester")
+  auditLogs                AuditLog[]       @relation("AuditLogActor")
+
+  @@index([role])
+  @@index([status])
+  @@map("users")
+}
+
+model Session {
+  id             String   @id @default(uuid()) @db.Uuid
+  expiresAt      DateTime @map("expires_at")
+  token          String   @unique
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  ipAddress      String?  @map("ip_address")
+  userAgent      String?  @map("user_agent")
+  userId         String   @map("user_id") @db.Uuid
+  impersonatedBy String?  @map("impersonated_by")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id @default(uuid()) @db.Uuid
+  accountId             String    @map("account_id")
+  providerId            String    @map("provider_id")
+  userId                String    @map("user_id") @db.Uuid
+  accessToken           String?   @map("access_token")
+  refreshToken          String?   @map("refresh_token")
+  idToken               String?   @map("id_token")
+  accessTokenExpiresAt  DateTime? @map("access_token_expires_at")
+  refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id @default(uuid()) @db.Uuid
+  identifier String
+  value      String
+  expiresAt  DateTime @map("expires_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([identifier])
+  @@map("verifications")
+}
+
+model Campaign {
+  id          String         @id @default(uuid()) @db.Uuid
+  name        String         @db.VarChar(150)
+  description String?
+  startDate   DateTime       @map("start_date") @db.Date
+  endDate     DateTime?      @map("end_date") @db.Date
+  status      CampaignStatus @default(DRAFT)
+  createdById String         @map("created_by") @db.Uuid
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  deletedAt   DateTime?      @map("deleted_at")
+
+  createdBy       User             @relation("CampaignCreatedBy", fields: [createdById], references: [id])
+  members         CampaignMember[]
+  blastTargets    BlastTarget[]
+  commentCommands CommentCommand[]
+  exportReports   ExportReport[]
+  auditLogs       AuditLog[]
+
+  @@index([status])
+  @@index([startDate])
+  @@index([endDate])
+  @@index([createdById])
+  @@index([createdAt])
+  @@map("campaigns")
+}
+
+model CampaignMember {
+  id         String             @id @default(uuid()) @db.Uuid
+  campaignId String             @map("campaign_id") @db.Uuid
+  userId     String             @map("user_id") @db.Uuid
+  memberRole CampaignMemberRole @map("member_role")
+  createdAt  DateTime           @default(now()) @map("created_at")
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user     User     @relation("CampaignMemberUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, userId])
+  @@index([campaignId])
+  @@index([userId])
+  @@map("campaign_members")
+}
+
+model SocialAccount {
+  id          String                @id @default(uuid()) @db.Uuid
+  platform    Platform
+  username    String                @db.VarChar(150)
+  displayName String                @map("display_name") @db.VarChar(150)
+  profileUrl  String                @map("profile_url")
+  category    SocialAccountCategory
+  status      SocialAccountStatus   @default(ACTIVE)
+  createdById String                @map("created_by") @db.Uuid
+  createdAt   DateTime              @default(now()) @map("created_at")
+  updatedAt   DateTime              @updatedAt @map("updated_at")
+  deletedAt   DateTime?             @map("deleted_at")
+
+  createdBy       User             @relation("SocialAccountCreator", fields: [createdById], references: [id])
+  blastTargets    BlastTarget[]
+  commentCommands CommentCommand[]
+
+  @@unique([platform, username])
+  @@index([platform])
+  @@index([status])
+  @@index([createdAt])
+  @@map("social_accounts")
+}
+
+model BlastTarget {
+  id              String            @id @default(uuid()) @db.Uuid
+  campaignId      String            @map("campaign_id") @db.Uuid
+  socialAccountId String            @map("social_account_id") @db.Uuid
+  postUrl         String            @map("post_url")
+  platform        Platform
+  instruction     String?
+  submittedById   String            @map("submitted_by") @db.Uuid
+  sourceType      BlastSourceType   @default(ADMIN_SUBMITTED) @map("source_type")
+  reviewStatus    ReviewStatus      @default(APPROVED) @map("review_status")
+  status          BlastTargetStatus @default(ACTIVE)
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  deletedAt       DateTime?         @map("deleted_at")
+
+  campaign      Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  socialAccount SocialAccount  @relation(fields: [socialAccountId], references: [id])
+  submittedBy   User           @relation("BlastTargetSubmitter", fields: [submittedById], references: [id])
+  attempts      BlastAttempt[]
+
+  @@unique([campaignId, postUrl])
+  @@index([campaignId])
+  @@index([socialAccountId])
+  @@index([submittedById])
+  @@index([platform])
+  @@index([status])
+  @@index([reviewStatus])
+  @@index([createdAt])
+  @@map("blast_targets")
+}
+
+model BlastAttempt {
+  id            String             @id @default(uuid()) @db.Uuid
+  blastTargetId String             @map("blast_target_id") @db.Uuid
+  attemptNo     Int                @map("attempt_no")
+  status        BlastAttemptStatus @default(AVAILABLE)
+  keptById      String?            @map("kept_by") @db.Uuid
+  keptAt        DateTime?          @map("kept_at")
+  keepExpiresAt DateTime?          @map("keep_expires_at")
+  completedAt   DateTime?          @map("completed_at")
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+
+  blastTarget BlastTarget  @relation(fields: [blastTargetId], references: [id], onDelete: Cascade)
+  keptBy      User?        @relation("BlastAttemptKeeper", fields: [keptById], references: [id])
+  report      BlastReport?
+
+  @@unique([blastTargetId, attemptNo])
+  @@index([blastTargetId])
+  @@index([status])
+  @@index([keptById])
+  @@index([keepExpiresAt])
+  @@index([createdAt])
+  @@map("blast_attempts")
+}
+
+model BlastReport {
+  id             String   @id @default(uuid()) @db.Uuid
+  blastAttemptId String   @unique @map("blast_attempt_id") @db.Uuid
+  submittedById  String   @map("submitted_by") @db.Uuid
+  views          Int      @default(0)
+  likes          Int      @default(0)
+  comments       Int      @default(0)
+  shares         Int      @default(0)
+  reposts        Int      @default(0)
+  proofLink      String   @map("proof_link")
+  notes          String?
+  submittedAt    DateTime @default(now()) @map("submitted_at")
+
+  blastAttempt BlastAttempt @relation(fields: [blastAttemptId], references: [id], onDelete: Cascade)
+  submittedBy  User         @relation("BlastReportSubmitter", fields: [submittedById], references: [id])
+
+  @@index([submittedById])
+  @@index([submittedAt])
+  @@map("blast_reports")
+}
+
+model CommentCommand {
+  id                String               @id @default(uuid()) @db.Uuid
+  campaignId        String               @map("campaign_id") @db.Uuid
+  targetPostUrl     String               @map("target_post_url")
+  platform          Platform
+  socialAccountId   String?              @map("social_account_id") @db.Uuid
+  stance            CommentStance
+  narrative         String
+  instruction       String?
+  requiredSlots     Int                  @default(1) @map("required_slots")
+  keepExpiryMinutes Int                  @default(120) @map("keep_expiry_minutes")
+  deadline          DateTime
+  status            CommentCommandStatus @default(DRAFT)
+  createdById       String               @map("created_by") @db.Uuid
+  createdAt         DateTime             @default(now()) @map("created_at")
+  updatedAt         DateTime             @updatedAt @map("updated_at")
+  deletedAt         DateTime?            @map("deleted_at")
+
+  campaign      Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  socialAccount SocialAccount? @relation(fields: [socialAccountId], references: [id])
+  createdBy     User           @relation("CommentCommandCreator", fields: [createdById], references: [id])
+  tasks         CommentTask[]
+
+  @@index([campaignId])
+  @@index([socialAccountId])
+  @@index([platform])
+  @@index([stance])
+  @@index([status])
+  @@index([createdById])
+  @@index([createdAt])
+  @@map("comment_commands")
+}
+
+model CommentTask {
+  id                String            @id @default(uuid()) @db.Uuid
+  commentCommandId  String            @map("command_id") @db.Uuid
+  taskNo            Int               @map("task_no")
+  status            CommentTaskStatus @default(AVAILABLE)
+  keptById          String?           @map("kept_by") @db.Uuid
+  keptAt            DateTime?         @map("kept_at")
+  keepExpiresAt     DateTime?         @map("keep_expires_at")
+  completedAt       DateTime?         @map("completed_at")
+  proofLink         String?           @map("proof_link")
+  notes             String?
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+
+  command CommentCommand @relation(fields: [commentCommandId], references: [id], onDelete: Cascade)
+  keptBy  User?          @relation("CommentTaskKeeper", fields: [keptById], references: [id])
+
+  @@unique([commentCommandId, taskNo])
+  @@index([commentCommandId])
+  @@index([status])
+  @@index([keptById])
+  @@index([keepExpiresAt])
+  @@index([createdAt])
+  @@map("comment_tasks")
+}
+
+model ExportReport {
+  id            String       @id @default(uuid()) @db.Uuid
+  campaignId    String       @map("campaign_id") @db.Uuid
+  format        ExportFormat
+  scope         ExportScope  @default(FULL)
+  requestedBy   String       @map("requested_by") @db.Uuid
+  status        ExportStatus @default(PENDING)
+  dateFrom      DateTime?    @map("date_from")
+  dateTo        DateTime?    @map("date_to")
+  fileName      String?      @map("file_name")
+  filePath      String?      @map("file_path")
+  fileUrl       String?      @map("file_url")
+  fileSize      Int?         @map("file_size")
+  mimeType      String?      @map("mime_type")
+  errorMessage  String?      @map("error_message")
+  retriedFromId String?      @map("retried_from_id") @db.Uuid
+  startedAt     DateTime?    @map("started_at")
+  completedAt   DateTime?    @map("completed_at")
+  failedAt      DateTime?    @map("failed_at")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  campaign    Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  requester   User           @relation("ExportReportRequester", fields: [requestedBy], references: [id])
+  retriedFrom ExportReport?  @relation("ExportRetry", fields: [retriedFromId], references: [id])
+  retries     ExportReport[] @relation("ExportRetry")
+
+  @@index([campaignId])
+  @@index([requestedBy])
+  @@index([status])
+  @@index([scope])
+  @@index([retriedFromId])
+  @@index([createdAt])
+  @@map("export_reports")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  actorId    String?  @map("actor_id") @db.Uuid
+  campaignId String?  @map("campaign_id") @db.Uuid
+  action     AuditAction
+  entityType String   @map("entity_type") @db.VarChar(100)
+  entityId   String?  @map("entity_id") @db.Uuid
+  oldValue   Json?    @map("old_value") @db.JsonB
+  newValue   Json?    @map("new_value") @db.JsonB
+  ipAddress  String?  @map("ip_address") @db.VarChar(45)
+  userAgent  String?  @map("user_agent")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  actor    User?     @relation("AuditLogActor", fields: [actorId], references: [id])
+  campaign Campaign? @relation(fields: [campaignId], references: [id])
+
+  @@index([actorId])
+  @@index([campaignId])
+  @@index([action])
+  @@index([entityType])
+  @@index([entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
