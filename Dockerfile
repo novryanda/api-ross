@@ -50,9 +50,9 @@ FROM base AS runner
 ENV NODE_ENV=production
 ENV PORT=3001
 
-# Create non-root user
+# Create non-root user with home directory (npm cache needs ~/.npm)
 RUN groupadd --system --gid 1001 ross && \
-    useradd --system --uid 1001 --gid ross ross
+    useradd --system --uid 1001 --gid ross --create-home ross
 
 WORKDIR /app
 
@@ -83,6 +83,9 @@ RUN chmod +x /app/docker-entrypoint.sh
 
 # Create storage directory for local exports
 RUN mkdir -p /app/storage/exports && chown -R ross:ross /app/storage
+
+# Ensure ross owns the app directory (for npm cache + node_modules access)
+RUN chown -R ross:ross /app
 
 # Switch to non-root
 USER ross
