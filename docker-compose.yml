@@ -8,14 +8,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ross-api
+    # No fixed container_name – Dokploy generates unique names per deploy
     restart: unless-stopped
     env_file:
       - .env
     environment:
       - NODE_ENV=production
-    ports:
-      - '${PORT:-3001}:${PORT:-3001}'
+    # expose (not ports) – Dokploy reverse-proxy routes traffic via Docker network
+    expose:
+      - '${PORT:-3001}'
     volumes:
       # Persist local export files across container restarts
       - ross-exports:/app/storage/exports
