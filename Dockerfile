@@ -44,6 +44,12 @@ COPY src ./src
 # Build NestJS
 RUN npm run build
 
+# Pre-compile bootstrap script to JS (so runner doesn't need tsx)
+RUN ./node_modules/.bin/esbuild prisma/bootstrap-admin.ts \
+      --bundle --platform=node --format=esm \
+      --packages=external \
+      --outfile=prisma/bootstrap-admin.mjs
+
 # ── Runner ───────────────────────────────────────────────────
 FROM base AS runner
 
@@ -62,14 +68,16 @@ COPY --from=builder /app/package.json /app/package-lock.json ./
 # Install production-only deps
 RUN npm ci --omit=dev
 
-# Install runtime tools needed by entrypoint (migrate deploy + bootstrap)
-# These are devDeps but required at container startup
-RUN npm install --no-save prisma tsx
+# Install runtime tools needed by entrypoint (migrate deploy)
+RUN npm install --no-save prisma
 
 # Copy Prisma schema + config (needed for runtime migrations)
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./
 COPY --from=builder /app/tsconfig.json ./
+
+# Copy pre-compiled bootstrap script
+COPY --from=builder /app/prisma/bootstrap-admin.mjs ./prisma/bootstrap-admin.mjs
 
 # Copy generated Prisma Client from builder
 COPY --from=builder /app/src/generated ./src/generated

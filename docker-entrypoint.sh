@@ -16,7 +16,7 @@ echo "🔧 [entrypoint] Running Prisma migrate deploy..."
 # Idempotent: skips if an admin user already exists.
 # Configurable via SEED_ADMIN_NAME, SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD.
 echo "🔧 [entrypoint] Bootstrapping admin user..."
-./node_modules/.bin/tsx prisma/bootstrap-admin.ts
+node prisma/bootstrap-admin.mjs
 
 echo "✅ [entrypoint] Ready. Starting application..."
 
