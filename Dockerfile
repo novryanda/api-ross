@@ -29,6 +29,11 @@ FROM deps AS builder
 COPY prisma ./prisma
 COPY prisma.config.ts ./
 
+# Dummy DATABASE_URL for build-time only – prisma generate needs the config
+# to load but does NOT connect to the database. The real URL is injected at
+# runtime via Dokploy environment variables.
+ENV DATABASE_URL="postgresql://build:build@localhost:5432/build?schema=public"
+
 # Generate Prisma Client targeting the runtime platform
 RUN npx prisma generate
 
