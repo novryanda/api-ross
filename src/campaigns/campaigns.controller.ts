@@ -62,6 +62,18 @@ export class CampaignsController {
     return this.campaignsService.create(user, dto);
   }
 
+  @Get('dashboard/global')
+  @Roles(UserRole.ADMIN, UserRole.BUZZER, UserRole.VIEWER)
+  @ApiEndpointDoc({
+    summary: 'Get global dashboard aggregated metrics',
+    description:
+      'Returns real-time global dashboard data including calculated historical period deltas.',
+    roles: [UserRole.ADMIN, UserRole.BUZZER, UserRole.VIEWER],
+  })
+  getGlobalDashboard(@CurrentUser() user: RossUserSession['user']) {
+    return this.campaignsService.getGlobalDashboard(user);
+  }
+
   @Get(':campaignId/dashboard')
   @Roles(UserRole.ADMIN, UserRole.VIEWER)
   @ApiEndpointDoc({

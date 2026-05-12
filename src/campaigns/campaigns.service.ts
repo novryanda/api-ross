@@ -843,4 +843,227 @@ export class CampaignsService {
       endDate: membership.campaign.endDate,
     };
   }
+
+  private calculateDelta(
+    current: number,
+    previous: number,
+    unit = '%',
+  ): { delta: string | null; isPositive: boolean } {
+    if (current === 0 && previous === 0) {
+      return { delta: null, isPositive: true };
+    }
+    if (previous === 0) {
+      return { delta: `100${unit} (New)`, isPositive: true };
+    }
+
+    const diff = current - previous;
+    const percentage = unit === 'pp' ? diff : (diff / previous) * 100;
+    const rounded = Math.abs(Math.round(percentage * 10) / 10);
+    const isPositive = diff >= 0;
+
+    return {
+      delta: `${rounded}${unit} vs last 7 days`,
+      isPositive,
+    };
+  }
+
+  async getGlobalDashboard(user: CurrentUser) {
+    const now = new Date();
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+
+    const baseWhere: Prisma.CampaignWhereInput = { deletedAt: null };
+    const userAccessWhere =
+      user.role === UserRole.ADMIN
+        ? {}
+        : {
+            members: {
+              some: {
+                userId: user.id,
+              },
+            },
+          };
+    const visibleCampaignsWhere = { ...baseWhere, ...userAccessWhere };
+
+    const campaigns = await this.prisma.campaign.findMany({
+      where: visibleCampaignsWhere,
+      select: {
+        id: true,
+        status: true,
+        name: true,
+        blastTargets: {
+          select: {
+            attempts: {
+              select: {
+                status: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    const campaignIds = campaigns.map((c) => c.id);
+
+    const [
+      currentReports,
+      previousReports,
+      totalLifetimeReports,
+      completedAttemptsLifetime,
+      totalAttemptsLifetime,
+      recentReportsList,
+    ] = await this.prisma.$transaction([
+      this.prisma.blastReport.findMany({
+        where: {
+          submittedAt: { gte: sevenDaysAgo },
+          blastAttempt: {
+            blastTarget: { campaignId: { in: campaignIds }, deletedAt: null },
+          },
+        },
+        select: {
+          views: true,
+          likes: true,
+          comments: true,
+          shares: true,
+          reposts: true,
+        },
+      }),
+      this.prisma.blastReport.findMany({
+        where: {
+          submittedAt: { gte: fourteenDaysAgo, lt: sevenDaysAgo },
+          blastAttempt: {
+            blastTarget: { campaignId: { in: campaignIds }, deletedAt: null },
+          },
+        },
+        select: {
+          views: true,
+          likes: true,
+          comments: true,
+          shares: true,
+          reposts: true,
+        },
+      }),
+      this.prisma.blastReport.findMany({
+        where: {
+          blastAttempt: {
+            blastTarget: { campaignId: { in: campaignIds }, deletedAt: null },
+          },
+        },
+        select: {
+          views: true,
+          likes: true,
+          comments: true,
+          shares: true,
+          reposts: true,
+        },
+      }),
+      this.prisma.blastAttempt.count({
+        where: {
+          status: 'COMPLETED',
+          blastTarget: { campaignId: { in: campaignIds }, deletedAt: null },
+        },
+      }),
+      this.prisma.blastAttempt.count({
+        where: {
+          blastTarget: { campaignId: { in: campaignIds }, deletedAt: null },
+        },
+      }),
+      this.prisma.blastReport.findMany({
+        where: {
+          blastAttempt: {
+            blastTarget: { campaignId: { in: campaignIds }, deletedAt: null },
+          },
+        },
+        orderBy: { submittedAt: 'desc' },
+        take: 5,
+        include: { submittedBy: { select: { name: true } } },
+      }),
+    ]);
+
+    const sumMetrics = (reports: any[]) =>
+      reports.reduce(
+        (acc, r) => ({
+          views: acc.views + r.views,
+          engagement:
+            acc.engagement + r.likes + r.comments + r.shares + r.reposts,
+        }),
+        { views: 0, engagement: 0 },
+      );
+
+    const currentMetrics = sumMetrics(currentReports);
+    const previousMetrics = sumMetrics(previousReports);
+    const lifetimeMetrics = sumMetrics(totalLifetimeReports);
+
+    const activeCampaignsCount = campaigns.filter(
+      (c) => c.status === 'ACTIVE',
+    ).length;
+    const completionRateVal =
+      totalAttemptsLifetime > 0
+        ? Math.round((completedAttemptsLifetime / totalAttemptsLifetime) * 100)
+        : 0;
+
+    const viewsDelta = this.calculateDelta(
+      currentMetrics.views,
+      previousMetrics.views,
+    );
+    const engagementDelta = this.calculateDelta(
+      currentMetrics.engagement,
+      previousMetrics.engagement,
+    );
+
+    return {
+      activeCampaigns: activeCampaignsCount,
+      activeCampaignsDelta: null,
+      activeCampaignsDeltaPositive: true,
+
+      totalViews: lifetimeMetrics.views,
+      totalViewsDelta: viewsDelta.delta,
+      totalViewsDeltaPositive: viewsDelta.isPositive,
+
+      totalEngagement: lifetimeMetrics.engagement,
+      totalEngagementDelta: engagementDelta.delta,
+      totalEngagementDeltaPositive: engagementDelta.isPositive,
+
+      completionRate: completionRateVal,
+      completionRateDelta: null,
+      completionRateDeltaPositive: true,
+
+      overdueTasks: 0,
+      expiredKeeps: 0,
+      activeBuzzers: 0,
+      engagementTrend: [],
+      topBuzzers: [],
+      recentActivity: recentReportsList.map((r) => ({
+        id: r.id,
+        type: 'blast',
+        message: `${r.submittedBy?.name ?? 'Buzzer'} submitted a blast report.`,
+        timestamp: r.submittedAt.toISOString(),
+        actor: r.submittedBy?.name ?? 'Unknown',
+      })),
+      campaignPerformance: campaigns.map((c) => {
+        let cTotal = 0;
+        let cCompleted = 0;
+        for (const target of c.blastTargets) {
+          cTotal += target.attempts.length;
+          for (const att of target.attempts) {
+            if (att.status === 'COMPLETED') {
+              cCompleted += 1;
+            }
+          }
+        }
+        const completion =
+          cTotal > 0 ? Math.round((cCompleted / cTotal) * 100) : 0;
+        const risk =
+          completion < 50 ? 'High' : completion < 80 ? 'Medium' : 'Low';
+
+        return {
+          id: c.id,
+          name: c.name,
+          status: c.status,
+          views: 0,
+          completion,
+          risk,
+        };
+      }),
+    };
+  }
 }
