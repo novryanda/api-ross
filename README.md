@@ -84,27 +84,17 @@ $ npm run test:cov
 
 ## Export file storage
 
-Campaign exports can store generated PDF/XLSX files on the local filesystem or
-in a private Cloudflare R2 bucket. The frontend download endpoint stays the
-same:
+Campaign exports store generated PDF/XLSX files in a private Cloudflare R2
+bucket. The frontend download endpoint stays the same:
 
 ```text
 GET /api/v1/exports/:exportId/download
 ```
 
-For local development, use:
+R2 credentials are provided through `.env` or deployment secrets. Do not commit
+real credentials:
 
 ```env
-EXPORT_STORAGE_DRIVER="local"
-EXPORT_STORAGE_DIR="./storage/exports"
-```
-
-For Cloudflare R2, set the driver and provide R2 credentials through `.env` or
-deployment secrets. Do not commit real credentials:
-
-```env
-EXPORT_STORAGE_DRIVER="r2"
-R2_ENABLED=true
 R2_ENDPOINT="https://<account_id>.r2.cloudflarestorage.com"
 R2_BUCKET="ross-project"
 R2_ACCESS_KEY_ID="<access_key_id>"
@@ -113,7 +103,7 @@ R2_PUBLIC_BASE_URL=""
 R2_FORCE_PATH_STYLE=true
 ```
 
-When `R2_PUBLIC_BASE_URL` is empty, files are still downloaded by streaming the
+When `R2_PUBLIC_BASE_URL` is empty, files are downloaded by streaming the
 private object through the backend endpoint. Private R2 URLs and credentials are
 not exposed to clients.
 

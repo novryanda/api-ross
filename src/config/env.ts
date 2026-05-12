@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import { resolve } from 'node:path';
 
 const LOCAL_DATABASE_URL =
   'postgresql://postgres:postgres@localhost:5432/ross?schema=public';
@@ -24,20 +23,6 @@ export function getBetterAuthUrl(): string {
   return process.env.BETTER_AUTH_URL ?? 'http://localhost:3001';
 }
 
-/**
- * Absolute directory path where generated export artefacts are written.
- * Override via `EXPORT_STORAGE_DIR`. Defaults to `<cwd>/storage/exports`.
- */
-export function getExportStorageDir(): string {
-  const configured = process.env.EXPORT_STORAGE_DIR?.trim();
-  if (configured && configured.length > 0) {
-    return resolve(configured);
-  }
-  return resolve(process.cwd(), 'storage', 'exports');
-}
-
-export type ExportStorageDriver = 'local' | 'r2';
-
 export type R2Config = {
   endpoint: string;
   bucket: string;
@@ -47,24 +32,12 @@ export type R2Config = {
   publicBaseUrl: string | null;
 };
 
-function isEnabled(value: string | undefined): boolean {
-  return value?.trim().toLowerCase() === 'true';
-}
-
 function requiredEnv(name: string): string {
   const value = process.env[name]?.trim();
   if (!value) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return value;
-}
-
-export function getExportStorageDriver(): ExportStorageDriver {
-  const configured = process.env.EXPORT_STORAGE_DRIVER?.trim().toLowerCase();
-  if (configured === 'r2' || isEnabled(process.env.R2_ENABLED)) {
-    return 'r2';
-  }
-  return 'local';
 }
 
 export function getExportProcessingTimeoutMinutes(): number {

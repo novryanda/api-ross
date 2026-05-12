@@ -638,10 +638,11 @@ export class ExportsService {
           ? await renderSnapshotAsPdf(snapshot)
           : await renderSnapshotAsXlsx(snapshot);
 
-      const storageKey =
-        this.fileStore.driver === 'r2'
-          ? buildStorageKey(initial.campaignId, fileName, generatedAt)
-          : fileName;
+      const storageKey = buildStorageKey(
+        initial.campaignId,
+        fileName,
+        generatedAt,
+      );
       const stored = await this.fileStore.writeObject({
         key: storageKey,
         body: buffer,

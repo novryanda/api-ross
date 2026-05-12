@@ -35,7 +35,7 @@ export class ExportsController {
   @ApiEndpointDoc({
     summary: 'Request campaign export',
     description:
-      'Generates a PDF/XLSX snapshot for the campaign using the requested scope and optional date range. Files are stored using the configured export storage driver (local filesystem or private Cloudflare R2). Audit: EXPORT_REQUESTED + EXPORT_COMPLETED or EXPORT_FAILED.',
+      'Generates a PDF/XLSX snapshot for the campaign using the requested scope and optional date range. Files are stored in private Cloudflare R2. Audit: EXPORT_REQUESTED + EXPORT_COMPLETED or EXPORT_FAILED.',
     roles: [UserRole.ADMIN],
     body: CreateExportDto,
     errors: [400, 401, 403, 404],
@@ -108,7 +108,7 @@ export class ExportsController {
   @ApiEndpointDoc({
     summary: 'Download export file',
     description:
-      'Streams the generated artefact through the backend endpoint regardless of local/R2 storage. Requires status COMPLETED. Writes EXPORT_DOWNLOADED audit log. Error codes: EXPORT_NOT_READY (409), EXPORT_FILE_NOT_FOUND (404).',
+      'Streams the generated artefact from Cloudflare R2 through the backend endpoint. Requires status COMPLETED. Writes EXPORT_DOWNLOADED audit log. Error codes: EXPORT_NOT_READY (409), EXPORT_FILE_NOT_FOUND (404).',
     roles: [UserRole.ADMIN, UserRole.VIEWER],
     errors: [401, 403, 404, 409],
   })

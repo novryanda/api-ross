@@ -265,14 +265,12 @@ docker compose exec ross-api npx prisma db execute --stdin <<< "SELECT 1;"
 | `BETTER_AUTH_SECRET` | ✅ | – | 32+ char random secret |
 | `BETTER_AUTH_URL` | ✅ | – | Public backend URL |
 | `TRUSTED_ORIGINS` | ✅ | – | Allowed CORS origins |
-| `EXPORT_STORAGE_DRIVER` | ❌ | `local` | `local` or `r2` |
-| `EXPORT_STORAGE_DIR` | ❌ | `./storage/exports` | Local export path |
-| `R2_ENABLED` | ❌ | `false` | Enable Cloudflare R2 |
-| `R2_ACCOUNT_ID` | When R2 | – | Cloudflare Account ID |
-| `R2_ENDPOINT` | When R2 | – | R2 S3-compatible endpoint |
-| `R2_BUCKET` | When R2 | – | R2 bucket name |
-| `R2_ACCESS_KEY_ID` | When R2 | – | R2 access key |
-| `R2_SECRET_ACCESS_KEY` | When R2 | – | R2 secret key |
+| `EXPORT_PROCESSING_TIMEOUT_MINUTES` | ❌ | `10` | Processing timeout |
+| `R2_ACCOUNT_ID` | ✅ | – | Cloudflare Account ID |
+| `R2_ENDPOINT` | ✅ | – | R2 S3-compatible endpoint |
+| `R2_BUCKET` | ✅ | – | R2 bucket name |
+| `R2_ACCESS_KEY_ID` | ✅ | – | R2 access key |
+| `R2_SECRET_ACCESS_KEY` | ✅ | – | R2 secret key |
 | `R2_PUBLIC_BASE_URL` | ❌ | – | Public R2 URL (CDN) |
 | `R2_FORCE_PATH_STYLE` | ❌ | `true` | S3 path-style access |
 | `SEED_*` | ❌ | – | Initial admin seed values |

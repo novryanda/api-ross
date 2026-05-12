@@ -89,9 +89,6 @@ COPY --from=builder /app/dist ./dist
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
 
-# Create storage directory for local exports
-RUN mkdir -p /app/storage/exports && chown -R ross:ross /app/storage
-
 # Ensure ross owns the app directory (for npm cache + node_modules access)
 RUN chown -R ross:ross /app
 

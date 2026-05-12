@@ -22,7 +22,7 @@ export type WriteObjectResult = {
 };
 
 export interface ExportFileStore {
-  readonly driver: 'local' | 'r2';
+  readonly driver: 'r2';
   ensureReady(): Promise<void>;
   writeObject(params: WriteObjectParams): Promise<WriteObjectResult>;
   readObject(params: ObjectKeyParams): Promise<Buffer>;

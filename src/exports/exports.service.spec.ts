@@ -2,7 +2,6 @@ import { jest } from '@jest/globals';
 import { Readable } from 'node:stream';
 import { S3Client } from '@aws-sdk/client-s3';
 import { ExportsService } from './exports.service.js';
-import { LocalFileStore } from './stores/local-file-store.js';
 import { R2FileStore } from './stores/r2-file-store.js';
 import {
   AuditAction,
@@ -92,7 +91,7 @@ function stubCompletedExport(id: string, format: ExportFormat) {
     dateFrom: null,
     dateTo: null,
     fileName: `export_${campaignId}_x.${format === 'PDF' ? 'pdf' : 'xlsx'}`,
-    filePath: `/tmp/${id}.${format === 'PDF' ? 'pdf' : 'xlsx'}`,
+    filePath: `exports/${campaignId}/2026/05/${id}.${format === 'PDF' ? 'pdf' : 'xlsx'}`,
     fileUrl: `/api/v1/exports/${id}/download`,
     fileSize: 100,
     mimeType: format === 'PDF' ? 'application/pdf' : 'xlsx-mime',
@@ -149,31 +148,31 @@ function buildPrismaStub(overrides: Record<string, unknown> = {}) {
   return prisma;
 }
 
+function setupR2Env() {
+  return {
+    R2_ENDPOINT: 'https://account.r2.cloudflarestorage.com',
+    R2_BUCKET: 'ross-project',
+    R2_ACCESS_KEY_ID: 'test-access-key',
+    R2_SECRET_ACCESS_KEY: 'test-secret-key',
+    R2_FORCE_PATH_STYLE: 'true',
+    R2_PUBLIC_BASE_URL: '',
+  };
+}
+
 describe('ExportsService', () => {
   const originalEnv = { ...process.env };
-  let writeObjectSpy: jest.SpiedFunction<any>;
-  let ensureReadySpy: jest.SpiedFunction<any>;
-  let statSpy: jest.SpiedFunction<any>;
 
   beforeEach(() => {
-    process.env = {
-      ...originalEnv,
-      EXPORT_STORAGE_DRIVER: 'local',
-      R2_ENABLED: 'false',
-    };
-    writeObjectSpy = jest
-      .spyOn(LocalFileStore.prototype, 'writeObject')
-      .mockResolvedValue({
-        key: '/tmp/file.bin',
-        size: 12345,
-        contentType: 'application/pdf',
-      });
-    ensureReadySpy = jest
-      .spyOn(LocalFileStore.prototype, 'ensureReady')
-      .mockResolvedValue(undefined);
-    statSpy = jest
-      .spyOn(LocalFileStore.prototype, 'stat')
-      .mockResolvedValue({ size: 12345 });
+    process.env = { ...originalEnv, ...setupR2Env() };
+    jest.spyOn(S3Client.prototype, 'send').mockImplementation((command) => {
+      if (command.constructor.name === 'HeadObjectCommand') {
+        return Promise.resolve({
+          ContentLength: 12345,
+          ContentType: 'application/pdf',
+        }) as never;
+      }
+      return Promise.resolve({}) as never;
+    });
   });
 
   afterEach(() => {
@@ -201,7 +200,20 @@ describe('ExportsService', () => {
     });
   });
 
-  it('creates a COMPLETED export with EXPORT_REQUESTED + EXPORT_COMPLETED audits on the happy path', async () => {
+  it('creates a COMPLETED export with R2 storage key and EXPORT_REQUESTED + EXPORT_COMPLETED audits', async () => {
+    const sentCommands: unknown[] = [];
+    jest.restoreAllMocks();
+    jest.spyOn(S3Client.prototype, 'send').mockImplementation((command) => {
+      sentCommands.push(command);
+      if (command.constructor.name === 'HeadObjectCommand') {
+        return Promise.resolve({
+          ContentLength: 12345,
+          ContentType: 'application/pdf',
+        }) as never;
+      }
+      return Promise.resolve({}) as never;
+    });
+
     const prisma = buildPrismaStub();
     const pending = {
       ...stubCompletedExport('exp-1', ExportFormat.PDF),
@@ -238,11 +250,17 @@ describe('ExportsService', () => {
         requestedBy: expect.objectContaining({ id: admin.id }),
       }),
     );
-    expect(ensureReadySpy).toHaveBeenCalled();
-    expect(writeObjectSpy).toHaveBeenCalledWith(
+
+    const putCommand = sentCommands.find(
+      (command) => command?.constructor.name === 'PutObjectCommand',
+    ) as { input: Record<string, unknown> };
+    expect(putCommand.input).toEqual(
       expect.objectContaining({
-        key: expect.stringMatching(/^ross_campaign_full_pdf_\d{8}_\d{6}\.pdf$/),
-        contentType: 'application/pdf',
+        Bucket: 'ross-project',
+        Key: expect.stringMatching(
+          /^exports\/22222222-2222-2222-2222-222222222222\/\d{4}\/\d{2}\/ross_campaign_full_pdf_\d{8}_\d{6}\.pdf$/,
+        ),
+        ContentType: 'application/pdf',
       }),
     );
 
@@ -308,6 +326,19 @@ describe('ExportsService', () => {
   });
 
   it('retry creates a new record and writes EXPORT_RETRIED', async () => {
+    const sentCommands: unknown[] = [];
+    jest.restoreAllMocks();
+    jest.spyOn(S3Client.prototype, 'send').mockImplementation((command) => {
+      sentCommands.push(command);
+      if (command.constructor.name === 'HeadObjectCommand') {
+        return Promise.resolve({
+          ContentLength: 12345,
+          ContentType: 'application/pdf',
+        }) as never;
+      }
+      return Promise.resolve({}) as never;
+    });
+
     const prisma = buildPrismaStub();
     const failed = {
       ...stubCompletedExport('exp-failed', ExportFormat.PDF),
@@ -391,124 +422,9 @@ describe('ExportsService', () => {
     });
   });
 
-  it('openForDownload streams from local fallback and writes EXPORT_DOWNLOADED', async () => {
-    const prisma = buildPrismaStub();
-    prisma.exportReport.findUnique.mockResolvedValue(
-      stubCompletedExport('exp-local', ExportFormat.PDF),
-    );
-    jest.spyOn(LocalFileStore.prototype, 'exists').mockResolvedValue(true);
-    jest
-      .spyOn(LocalFileStore.prototype, 'getDownloadStream')
-      .mockResolvedValue(Readable.from(['pdf']));
-
-    const service = new ExportsService(
-      prisma as never,
-      {
-        load: jest.fn(),
-      } as never,
-    );
-
-    const result = await service.openForDownload(admin as never, 'exp-local');
-
-    expect(result.fileName).toContain('export_');
-    expect(result.mimeType).toBe('application/pdf');
-    expect(result.fileSize).toBe(100);
-    expect(prisma.auditLog.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({
-          action: AuditAction.EXPORT_DOWNLOADED,
-        }),
-      }),
-    );
-  });
-
-  it('creates a COMPLETED export with R2 object key when R2 driver is enabled', async () => {
-    process.env = {
-      ...originalEnv,
-      EXPORT_STORAGE_DRIVER: 'r2',
-      R2_ENABLED: 'true',
-      R2_ENDPOINT: 'https://account.r2.cloudflarestorage.com',
-      R2_BUCKET: 'ross-project',
-      R2_ACCESS_KEY_ID: 'test-access-key',
-      R2_SECRET_ACCESS_KEY: 'test-secret-key',
-      R2_FORCE_PATH_STYLE: 'true',
-      R2_PUBLIC_BASE_URL: '',
-    };
-
+  it('openForDownload streams from R2 and writes EXPORT_DOWNLOADED', async () => {
     const sentCommands: unknown[] = [];
-    jest.spyOn(S3Client.prototype, 'send').mockImplementation((command) => {
-      sentCommands.push(command);
-      if (command.constructor.name === 'HeadObjectCommand') {
-        return Promise.resolve({
-          ContentLength: 12345,
-          ContentType: 'application/pdf',
-        }) as never;
-      }
-      return Promise.resolve({}) as never;
-    });
-
-    const prisma = buildPrismaStub();
-    const pending = {
-      ...stubCompletedExport(
-        '33333333-3333-3333-3333-333333333333',
-        ExportFormat.PDF,
-      ),
-      status: ExportStatus.PENDING,
-      completedAt: null,
-      filePath: null,
-      fileSize: null,
-      fileUrl: null,
-      fileName: null,
-      mimeType: null,
-    };
-    prisma.exportReport.create.mockResolvedValue(pending);
-    prisma.exportReport.update
-      .mockResolvedValueOnce({ ...pending, status: ExportStatus.PROCESSING })
-      .mockImplementationOnce((args: any) =>
-        Promise.resolve({
-          ...stubCompletedExport(pending.id, ExportFormat.PDF),
-          ...args.data,
-        }),
-      );
-
-    const service = new ExportsService(
-      prisma as never,
-      {
-        load: jest.fn().mockResolvedValue(buildSnapshot(ExportScope.FULL)),
-      } as never,
-    );
-
-    const result = await service.create(admin as never, campaignId, {
-      format: ExportFormat.PDF,
-    });
-
-    expect(result.status).toBe(ExportStatus.COMPLETED);
-    const putCommand = sentCommands.find(
-      (command) => command?.constructor.name === 'PutObjectCommand',
-    ) as { input: Record<string, unknown> };
-    expect(putCommand.input).toEqual(
-      expect.objectContaining({
-        Bucket: 'ross-project',
-        Key: expect.stringMatching(
-          /^exports\/22222222-2222-2222-2222-222222222222\/\d{4}\/\d{2}\/ross_campaign_full_pdf_\d{8}_\d{6}\.pdf$/,
-        ),
-        ContentType: 'application/pdf',
-      }),
-    );
-  });
-
-  it('openForDownload streams from R2 when R2 driver is enabled', async () => {
-    process.env = {
-      ...originalEnv,
-      EXPORT_STORAGE_DRIVER: 'r2',
-      R2_ENABLED: 'true',
-      R2_ENDPOINT: 'https://account.r2.cloudflarestorage.com',
-      R2_BUCKET: 'ross-project',
-      R2_ACCESS_KEY_ID: 'test-access-key',
-      R2_SECRET_ACCESS_KEY: 'test-secret-key',
-    };
-
-    const sentCommands: unknown[] = [];
+    jest.restoreAllMocks();
     jest.spyOn(S3Client.prototype, 'send').mockImplementation((command) => {
       sentCommands.push(command);
       if (command.constructor.name === 'HeadObjectCommand') {
@@ -527,7 +443,7 @@ describe('ExportsService', () => {
     prisma.exportReport.findUnique.mockResolvedValue({
       ...stubCompletedExport('exp-r2-download', ExportFormat.PDF),
       filePath:
-        'exports/22222222-2222-2222-2222-222222222222/exp-r2-download/export.pdf',
+        'exports/22222222-2222-2222-2222-222222222222/2026/05/export.pdf',
       fileSize: null,
     });
 
@@ -550,19 +466,17 @@ describe('ExportsService', () => {
         (command) => command?.constructor.name === 'GetObjectCommand',
       ),
     ).toBe(true);
+    expect(prisma.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          action: AuditAction.EXPORT_DOWNLOADED,
+        }),
+      }),
+    );
   });
 
   it('openForDownload returns EXPORT_FILE_NOT_FOUND when R2 object is missing', async () => {
-    process.env = {
-      ...originalEnv,
-      EXPORT_STORAGE_DRIVER: 'r2',
-      R2_ENABLED: 'true',
-      R2_ENDPOINT: 'https://account.r2.cloudflarestorage.com',
-      R2_BUCKET: 'ross-project',
-      R2_ACCESS_KEY_ID: 'test-access-key',
-      R2_SECRET_ACCESS_KEY: 'test-secret-key',
-    };
-
+    jest.restoreAllMocks();
     jest.spyOn(S3Client.prototype, 'send').mockRejectedValue({
       name: 'NotFound',
       $metadata: { httpStatusCode: 404 },
@@ -572,7 +486,7 @@ describe('ExportsService', () => {
     prisma.exportReport.findUnique.mockResolvedValue({
       ...stubCompletedExport('exp-r2-missing', ExportFormat.PDF),
       filePath:
-        'exports/22222222-2222-2222-2222-222222222222/exp-r2-missing/export.pdf',
+        'exports/22222222-2222-2222-2222-222222222222/2026/05/export.pdf',
     });
 
     const service = new ExportsService(
@@ -589,11 +503,9 @@ describe('ExportsService', () => {
     });
   });
 
-  it('throws a config error when R2 driver is enabled without credentials', () => {
+  it('throws a config error when R2 credentials are missing', () => {
     process.env = {
       ...originalEnv,
-      EXPORT_STORAGE_DRIVER: 'r2',
-      R2_ENABLED: 'true',
       R2_ENDPOINT: 'https://account.r2.cloudflarestorage.com',
       R2_BUCKET: 'ross-project',
       R2_ACCESS_KEY_ID: '',

@@ -57,11 +57,11 @@ All env vars are injected via Dokploy's environment settings. Key variables:
 | `PORT` | ❌ | Internal listen port (default: `3001`) |
 | `BETTER_AUTH_SECRET` | ✅ | Auth signing secret |
 | `BETTER_AUTH_URL` | ✅ | Public API URL (e.g. `https://api.yourdomain.com`) |
-| `EXPORT_STORAGE_DRIVER` | ❌ | `local` or `r2` (default: `local`) |
-| `R2_ENDPOINT` | When R2 | Cloudflare R2 endpoint |
-| `R2_BUCKET` | When R2 | R2 bucket name |
-| `R2_ACCESS_KEY_ID` | When R2 | R2 access key |
-| `R2_SECRET_ACCESS_KEY` | When R2 | R2 secret key |
+| `EXPORT_PROCESSING_TIMEOUT_MINUTES` | ❌ | Processing timeout (default: `10`) |
+| `R2_ENDPOINT` | ✅ | Cloudflare R2 endpoint |
+| `R2_BUCKET` | ✅ | R2 bucket name |
+| `R2_ACCESS_KEY_ID` | ✅ | R2 access key |
+| `R2_SECRET_ACCESS_KEY` | ✅ | R2 secret key |
 
 ---
 
