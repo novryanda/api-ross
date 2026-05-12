@@ -12,7 +12,13 @@ echo "🔧 [entrypoint] PORT=${PORT:-3001}"
 echo "🔧 [entrypoint] Running Prisma migrate deploy..."
 npx prisma migrate deploy
 
-echo "✅ [entrypoint] Migrations applied. Starting application..."
+# ── Bootstrap initial admin user ─────────────────────────────
+# Idempotent: skips if an admin user already exists.
+# Configurable via SEED_ADMIN_NAME, SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD.
+echo "🔧 [entrypoint] Bootstrapping admin user..."
+npx tsx prisma/bootstrap-admin.ts
+
+echo "✅ [entrypoint] Ready. Starting application..."
 
 # ── Hand off to CMD (node dist/main.js) ──────────────────────
 exec "$@"

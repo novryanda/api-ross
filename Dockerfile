@@ -57,9 +57,14 @@ COPY --from=builder /app/package.json /app/package-lock.json ./
 # Install production-only deps
 RUN npm ci --omit=dev
 
+# Install runtime tools needed by entrypoint (migrate deploy + bootstrap)
+# These are devDeps but required at container startup
+RUN npm install --no-save prisma tsx
+
 # Copy Prisma schema + config (needed for runtime migrations)
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./
+COPY --from=builder /app/tsconfig.json ./
 
 # Copy generated Prisma Client from builder
 COPY --from=builder /app/src/generated ./src/generated
