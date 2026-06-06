@@ -43,6 +43,11 @@ export type Verification = Prisma.VerificationModel
  */
 export type Campaign = Prisma.CampaignModel
 /**
+ * Model OrgUnit
+ * 
+ */
+export type OrgUnit = Prisma.OrgUnitModel
+/**
  * Model CampaignMember
  * 
  */
@@ -57,6 +62,16 @@ export type SocialAccount = Prisma.SocialAccountModel
  * 
  */
 export type BlastTarget = Prisma.BlastTargetModel
+/**
+ * Model PostingOrder
+ * 
+ */
+export type PostingOrder = Prisma.PostingOrderModel
+/**
+ * Model PostingSubmission
+ * 
+ */
+export type PostingSubmission = Prisma.PostingSubmissionModel
 /**
  * Model BlastAttempt
  * 

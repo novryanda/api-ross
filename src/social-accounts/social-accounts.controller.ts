@@ -29,12 +29,12 @@ export class SocialAccountsController {
   constructor(private readonly socialAccountsService: SocialAccountsService) {}
 
   @Get()
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PIC)
   @ApiEndpointDoc({
     summary: 'List social accounts',
     description:
-      'Admin-only list of source posting accounts. SocialAccount is not owned by Buzzer.',
-    roles: [UserRole.ADMIN],
+      'Admin sees every source posting account. PIC sees only the accounts they created for themselves.',
+    roles: [UserRole.ADMIN, UserRole.PIC],
     query: SocialAccountQueryDto,
     queryParams: [
       'page',
@@ -47,17 +47,21 @@ export class SocialAccountsController {
     ],
     errors: [400, 401, 403],
   })
-  async findAll(@Query() query: SocialAccountQueryDto) {
-    const result = await this.socialAccountsService.findAll(query);
+  async findAll(
+    @CurrentUser() user: RossUserSession['user'],
+    @Query() query: SocialAccountQueryDto,
+  ) {
+    const result = await this.socialAccountsService.findAll(user, query);
     return successResponse(result.items, result.meta);
   }
 
   @Post()
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PIC)
   @ApiEndpointDoc({
     summary: 'Create social account',
-    description: 'Creates a source posting account managed by Admin.',
-    roles: [UserRole.ADMIN],
+    description:
+      'Admin can create any source posting account. PIC can self-register the social accounts they personally use for submissions.',
+    roles: [UserRole.ADMIN, UserRole.PIC],
     body: CreateSocialAccountDto,
     errors: [400, 401, 403, 409],
   })
@@ -69,23 +73,27 @@ export class SocialAccountsController {
   }
 
   @Get(':id')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PIC)
   @ApiEndpointDoc({
     summary: 'Get social account detail',
-    description: 'Admin-only social account detail.',
-    roles: [UserRole.ADMIN],
+    description: 'Admin can open any account detail. PIC can open only accounts they created.',
+    roles: [UserRole.ADMIN, UserRole.PIC],
     errors: [401, 403, 404],
   })
-  findOne(@Param('id') id: string) {
-    return this.socialAccountsService.findOne(id);
+  findOne(
+    @CurrentUser() user: RossUserSession['user'],
+    @Param('id') id: string,
+  ) {
+    return this.socialAccountsService.findOne(user, id);
   }
 
   @Patch(':id')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PIC)
   @ApiEndpointDoc({
     summary: 'Update social account',
-    description: 'Updates account profile fields and writes audit log.',
-    roles: [UserRole.ADMIN],
+    description:
+      'Admin can update any account. PIC can update only the accounts they created.',
+    roles: [UserRole.ADMIN, UserRole.PIC],
     body: UpdateSocialAccountDto,
     errors: [400, 401, 403, 404, 409],
   })
@@ -98,11 +106,12 @@ export class SocialAccountsController {
   }
 
   @Patch(':id/status')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PIC)
   @ApiEndpointDoc({
     summary: 'Update social account status',
-    description: 'Updates active/inactive/archive status. Admin only.',
-    roles: [UserRole.ADMIN],
+    description:
+      'Admin can change any account status. PIC can archive or activate only their own accounts.',
+    roles: [UserRole.ADMIN, UserRole.PIC],
     body: UpdateSocialAccountStatusDto,
     errors: [400, 401, 403, 404],
   })

@@ -50,6 +50,7 @@ const USER_SELECT = {
   image: true,
   role: true,
   status: true,
+  picUnitId: true,
   lastLoginAt: true,
   createdAt: true,
   updatedAt: true,
@@ -70,6 +71,7 @@ function campaignMemberRoleForUserRole(role: UserRole): CampaignMemberRole {
       return CampaignMemberRole.ADMIN;
     case UserRole.VIEWER:
       return CampaignMemberRole.VIEWER;
+    case UserRole.PIC:
     case UserRole.BUZZER:
     default:
       return CampaignMemberRole.BUZZER;
@@ -148,6 +150,15 @@ export class UsersService {
       where: { id, deletedAt: null },
       select: {
         ...USER_SELECT,
+        picUnit: {
+          select: {
+            id: true,
+            name: true,
+            code: true,
+            status: true,
+            parentId: true,
+          },
+        },
         campaignMemberships: {
           orderBy: { createdAt: 'desc' },
           select: {
@@ -185,8 +196,12 @@ export class UsersService {
     const email = dto.email.trim().toLowerCase();
     await this.ensureEmailAvailable(email);
 
-    if (dto.campaignIds?.length) {
+    if (dto.campaignIds?.length && dto.role !== UserRole.PIC) {
       await this.ensureCampaignsExist(dto.campaignIds);
+    }
+
+    if (dto.picUnitId) {
+      await this.ensurePicUnitExists(dto.picUnitId);
     }
 
     const passwordHash = dto.temporaryPassword
@@ -201,6 +216,7 @@ export class UsersService {
           emailVerified: true,
           role: dto.role,
           status: dto.status ?? UserStatus.ACTIVE,
+          picUnitId: dto.role === UserRole.PIC ? dto.picUnitId : null,
           banned: false,
         },
         select: USER_SELECT,
@@ -217,7 +233,7 @@ export class UsersService {
         });
       }
 
-      if (dto.campaignIds?.length) {
+      if (dto.campaignIds?.length && dto.role !== UserRole.PIC) {
         const memberRole = campaignMemberRoleForUserRole(dto.role);
         await tx.campaignMember.createMany({
           data: dto.campaignIds.map((campaignId) => ({
@@ -238,6 +254,7 @@ export class UsersService {
           newValue: toAuditJson({
             ...user,
             campaignIds: dto.campaignIds ?? [],
+            picUnitId: dto.role === UserRole.PIC ? dto.picUnitId ?? null : null,
             hasTemporaryPassword: Boolean(passwordHash),
             requirePasswordChange: dto.requirePasswordChange ?? false,
             notes: dto.notes,
@@ -250,9 +267,22 @@ export class UsersService {
       return user;
     });
 
+    if (dto.role === UserRole.PIC && dto.picUnitId) {
+      await this.auditLogs.create({
+        actorId: actor.id,
+        action: AuditAction.USER_PIC_UNIT_ASSIGNED,
+        entityType: 'User',
+        entityId: created.id,
+        newValue: toAuditJson({ picUnitId: dto.picUnitId }),
+        ipAddress: request?.ip,
+        userAgent: request?.userAgent,
+      });
+    }
+
     return {
       ...created,
-      campaignCount: dto.campaignIds?.length ?? 0,
+      campaignCount:
+        dto.role === UserRole.PIC ? 0 : (dto.campaignIds?.length ?? 0),
       // Signal to UI that the auth provider does not yet enforce
       // "require password change on next login".
       requirePasswordChange:
@@ -277,9 +307,16 @@ export class UsersService {
     }
 
     const current = await this.findExistingUser(userId);
+    const nextRole = dto.role ?? current.role;
+    const nextPicUnitId =
+      nextRole === UserRole.PIC ? dto.picUnitId ?? current.picUnitId : null;
 
     if (dto.email && dto.email.trim().toLowerCase() !== current.email) {
       await this.ensureEmailAvailable(dto.email.trim().toLowerCase(), userId);
+    }
+
+    if (dto.picUnitId) {
+      await this.ensurePicUnitExists(dto.picUnitId);
     }
 
     if (dto.role !== undefined && dto.role !== current.role) {
@@ -301,6 +338,9 @@ export class UsersService {
             : {}),
           ...(dto.role !== undefined ? { role: dto.role } : {}),
           ...(dto.status !== undefined ? { status: dto.status } : {}),
+          ...(dto.picUnitId !== undefined || nextRole !== current.role
+            ? { picUnitId: nextPicUnitId }
+            : {}),
         },
         select: USER_SELECT,
       });
@@ -342,6 +382,19 @@ export class UsersService {
 
       return row;
     });
+
+    if (nextPicUnitId !== current.picUnitId) {
+      await this.auditLogs.create({
+        actorId: actor.id,
+        action: AuditAction.USER_PIC_UNIT_ASSIGNED,
+        entityType: 'User',
+        entityId: userId,
+        oldValue: toAuditJson({ picUnitId: current.picUnitId }),
+        newValue: toAuditJson({ picUnitId: nextPicUnitId }),
+        ipAddress: request?.ip,
+        userAgent: request?.userAgent,
+      });
+    }
 
     return updated;
   }
@@ -549,6 +602,24 @@ export class UsersService {
       throw new NotFoundException({
         code: 'CAMPAIGN_NOT_FOUND',
         message: 'One or more campaigns were not found.',
+        details: [],
+      });
+    }
+  }
+
+  private async ensurePicUnitExists(picUnitId: string) {
+    const unit = await this.prisma.orgUnit.findFirst({
+      where: {
+        id: picUnitId,
+        status: 'ACTIVE',
+      },
+      select: { id: true },
+    });
+
+    if (!unit) {
+      throw new NotFoundException({
+        code: 'NOT_FOUND',
+        message: 'PIC unit not found or inactive.',
         details: [],
       });
     }

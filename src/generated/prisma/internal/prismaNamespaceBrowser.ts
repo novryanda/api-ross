@@ -56,9 +56,12 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Campaign: 'Campaign',
+  OrgUnit: 'OrgUnit',
   CampaignMember: 'CampaignMember',
   SocialAccount: 'SocialAccount',
   BlastTarget: 'BlastTarget',
+  PostingOrder: 'PostingOrder',
+  PostingSubmission: 'PostingSubmission',
   BlastAttempt: 'BlastAttempt',
   BlastReport: 'BlastReport',
   CommentCommand: 'CommentCommand',
@@ -91,6 +94,7 @@ export const UserScalarFieldEnum = {
   image: 'image',
   role: 'role',
   status: 'status',
+  picUnitId: 'picUnitId',
   lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -166,6 +170,20 @@ export const CampaignScalarFieldEnum = {
 export type CampaignScalarFieldEnum = (typeof CampaignScalarFieldEnum)[keyof typeof CampaignScalarFieldEnum]
 
 
+export const OrgUnitScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  status: 'status',
+  parentId: 'parentId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrgUnitScalarFieldEnum = (typeof OrgUnitScalarFieldEnum)[keyof typeof OrgUnitScalarFieldEnum]
+
+
 export const CampaignMemberScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
@@ -198,6 +216,7 @@ export const BlastTargetScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
   socialAccountId: 'socialAccountId',
+  sourcePostingSubmissionId: 'sourcePostingSubmissionId',
   postUrl: 'postUrl',
   platform: 'platform',
   instruction: 'instruction',
@@ -211,6 +230,47 @@ export const BlastTargetScalarFieldEnum = {
 } as const
 
 export type BlastTargetScalarFieldEnum = (typeof BlastTargetScalarFieldEnum)[keyof typeof BlastTargetScalarFieldEnum]
+
+
+export const PostingOrderScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  targetUnitId: 'targetUnitId',
+  platform: 'platform',
+  contentDriveUrl: 'contentDriveUrl',
+  scheduledAt: 'scheduledAt',
+  caption: 'caption',
+  description: 'description',
+  status: 'status',
+  createdById: 'createdById',
+  claimedById: 'claimedById',
+  claimedAt: 'claimedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PostingOrderScalarFieldEnum = (typeof PostingOrderScalarFieldEnum)[keyof typeof PostingOrderScalarFieldEnum]
+
+
+export const PostingSubmissionScalarFieldEnum = {
+  id: 'id',
+  postingOrderId: 'postingOrderId',
+  submittedById: 'submittedById',
+  socialAccountId: 'socialAccountId',
+  postedUrl: 'postedUrl',
+  proofDriveUrl: 'proofDriveUrl',
+  notes: 'notes',
+  status: 'status',
+  reviewNotes: 'reviewNotes',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  submittedAt: 'submittedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PostingSubmissionScalarFieldEnum = (typeof PostingSubmissionScalarFieldEnum)[keyof typeof PostingSubmissionScalarFieldEnum]
 
 
 export const BlastAttemptScalarFieldEnum = {

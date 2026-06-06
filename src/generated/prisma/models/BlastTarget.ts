@@ -28,6 +28,7 @@ export type BlastTargetMinAggregateOutputType = {
   id: string | null
   campaignId: string | null
   socialAccountId: string | null
+  sourcePostingSubmissionId: string | null
   postUrl: string | null
   platform: $Enums.Platform | null
   instruction: string | null
@@ -44,6 +45,7 @@ export type BlastTargetMaxAggregateOutputType = {
   id: string | null
   campaignId: string | null
   socialAccountId: string | null
+  sourcePostingSubmissionId: string | null
   postUrl: string | null
   platform: $Enums.Platform | null
   instruction: string | null
@@ -60,6 +62,7 @@ export type BlastTargetCountAggregateOutputType = {
   id: number
   campaignId: number
   socialAccountId: number
+  sourcePostingSubmissionId: number
   postUrl: number
   platform: number
   instruction: number
@@ -78,6 +81,7 @@ export type BlastTargetMinAggregateInputType = {
   id?: true
   campaignId?: true
   socialAccountId?: true
+  sourcePostingSubmissionId?: true
   postUrl?: true
   platform?: true
   instruction?: true
@@ -94,6 +98,7 @@ export type BlastTargetMaxAggregateInputType = {
   id?: true
   campaignId?: true
   socialAccountId?: true
+  sourcePostingSubmissionId?: true
   postUrl?: true
   platform?: true
   instruction?: true
@@ -110,6 +115,7 @@ export type BlastTargetCountAggregateInputType = {
   id?: true
   campaignId?: true
   socialAccountId?: true
+  sourcePostingSubmissionId?: true
   postUrl?: true
   platform?: true
   instruction?: true
@@ -199,6 +205,7 @@ export type BlastTargetGroupByOutputType = {
   id: string
   campaignId: string
   socialAccountId: string
+  sourcePostingSubmissionId: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction: string | null
@@ -236,6 +243,7 @@ export type BlastTargetWhereInput = {
   id?: Prisma.UuidFilter<"BlastTarget"> | string
   campaignId?: Prisma.UuidFilter<"BlastTarget"> | string
   socialAccountId?: Prisma.UuidFilter<"BlastTarget"> | string
+  sourcePostingSubmissionId?: Prisma.UuidNullableFilter<"BlastTarget"> | string | null
   postUrl?: Prisma.StringFilter<"BlastTarget"> | string
   platform?: Prisma.EnumPlatformFilter<"BlastTarget"> | $Enums.Platform
   instruction?: Prisma.StringNullableFilter<"BlastTarget"> | string | null
@@ -248,6 +256,7 @@ export type BlastTargetWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"BlastTarget"> | Date | string | null
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
   socialAccount?: Prisma.XOR<Prisma.SocialAccountScalarRelationFilter, Prisma.SocialAccountWhereInput>
+  sourcePostingSubmission?: Prisma.XOR<Prisma.PostingSubmissionNullableScalarRelationFilter, Prisma.PostingSubmissionWhereInput> | null
   submittedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   attempts?: Prisma.BlastAttemptListRelationFilter
 }
@@ -256,6 +265,7 @@ export type BlastTargetOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrderInput | Prisma.SortOrder
   postUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   instruction?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -268,12 +278,14 @@ export type BlastTargetOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   campaign?: Prisma.CampaignOrderByWithRelationInput
   socialAccount?: Prisma.SocialAccountOrderByWithRelationInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionOrderByWithRelationInput
   submittedBy?: Prisma.UserOrderByWithRelationInput
   attempts?: Prisma.BlastAttemptOrderByRelationAggregateInput
 }
 
 export type BlastTargetWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  sourcePostingSubmissionId?: string
   campaignId_postUrl?: Prisma.BlastTargetCampaignIdPostUrlCompoundUniqueInput
   AND?: Prisma.BlastTargetWhereInput | Prisma.BlastTargetWhereInput[]
   OR?: Prisma.BlastTargetWhereInput[]
@@ -292,14 +304,16 @@ export type BlastTargetWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"BlastTarget"> | Date | string | null
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
   socialAccount?: Prisma.XOR<Prisma.SocialAccountScalarRelationFilter, Prisma.SocialAccountWhereInput>
+  sourcePostingSubmission?: Prisma.XOR<Prisma.PostingSubmissionNullableScalarRelationFilter, Prisma.PostingSubmissionWhereInput> | null
   submittedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   attempts?: Prisma.BlastAttemptListRelationFilter
-}, "id" | "campaignId_postUrl">
+}, "id" | "sourcePostingSubmissionId" | "campaignId_postUrl">
 
 export type BlastTargetOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrderInput | Prisma.SortOrder
   postUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   instruction?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -322,6 +336,7 @@ export type BlastTargetScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"BlastTarget"> | string
   campaignId?: Prisma.UuidWithAggregatesFilter<"BlastTarget"> | string
   socialAccountId?: Prisma.UuidWithAggregatesFilter<"BlastTarget"> | string
+  sourcePostingSubmissionId?: Prisma.UuidNullableWithAggregatesFilter<"BlastTarget"> | string | null
   postUrl?: Prisma.StringWithAggregatesFilter<"BlastTarget"> | string
   platform?: Prisma.EnumPlatformWithAggregatesFilter<"BlastTarget"> | $Enums.Platform
   instruction?: Prisma.StringNullableWithAggregatesFilter<"BlastTarget"> | string | null
@@ -347,6 +362,7 @@ export type BlastTargetCreateInput = {
   deletedAt?: Date | string | null
   campaign: Prisma.CampaignCreateNestedOneWithoutBlastTargetsInput
   socialAccount: Prisma.SocialAccountCreateNestedOneWithoutBlastTargetsInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutBlastTargetInput
   submittedBy: Prisma.UserCreateNestedOneWithoutSubmittedBlastTargetsInput
   attempts?: Prisma.BlastAttemptCreateNestedManyWithoutBlastTargetInput
 }
@@ -355,6 +371,7 @@ export type BlastTargetUncheckedCreateInput = {
   id?: string
   campaignId: string
   socialAccountId: string
+  sourcePostingSubmissionId?: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction?: string | null
@@ -381,6 +398,7 @@ export type BlastTargetUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutBlastTargetsNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutBlastTargetsNestedInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutBlastTargetNestedInput
   submittedBy?: Prisma.UserUpdateOneRequiredWithoutSubmittedBlastTargetsNestedInput
   attempts?: Prisma.BlastAttemptUpdateManyWithoutBlastTargetNestedInput
 }
@@ -389,6 +407,7 @@ export type BlastTargetUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -406,6 +425,7 @@ export type BlastTargetCreateManyInput = {
   id?: string
   campaignId: string
   socialAccountId: string
+  sourcePostingSubmissionId?: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction?: string | null
@@ -435,6 +455,7 @@ export type BlastTargetUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -466,6 +487,7 @@ export type BlastTargetCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrder
   postUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   instruction?: Prisma.SortOrder
@@ -482,6 +504,7 @@ export type BlastTargetMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrder
   postUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   instruction?: Prisma.SortOrder
@@ -498,6 +521,7 @@ export type BlastTargetMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrder
   postUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   instruction?: Prisma.SortOrder
@@ -508,6 +532,11 @@ export type BlastTargetMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type BlastTargetNullableScalarRelationFilter = {
+  is?: Prisma.BlastTargetWhereInput | null
+  isNot?: Prisma.BlastTargetWhereInput | null
 }
 
 export type BlastTargetScalarRelationFilter = {
@@ -653,6 +682,38 @@ export type EnumBlastTargetStatusFieldUpdateOperationsInput = {
   set?: $Enums.BlastTargetStatus
 }
 
+export type BlastTargetCreateNestedOneWithoutSourcePostingSubmissionInput = {
+  create?: Prisma.XOR<Prisma.BlastTargetCreateWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUncheckedCreateWithoutSourcePostingSubmissionInput>
+  connectOrCreate?: Prisma.BlastTargetCreateOrConnectWithoutSourcePostingSubmissionInput
+  connect?: Prisma.BlastTargetWhereUniqueInput
+}
+
+export type BlastTargetUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput = {
+  create?: Prisma.XOR<Prisma.BlastTargetCreateWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUncheckedCreateWithoutSourcePostingSubmissionInput>
+  connectOrCreate?: Prisma.BlastTargetCreateOrConnectWithoutSourcePostingSubmissionInput
+  connect?: Prisma.BlastTargetWhereUniqueInput
+}
+
+export type BlastTargetUpdateOneWithoutSourcePostingSubmissionNestedInput = {
+  create?: Prisma.XOR<Prisma.BlastTargetCreateWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUncheckedCreateWithoutSourcePostingSubmissionInput>
+  connectOrCreate?: Prisma.BlastTargetCreateOrConnectWithoutSourcePostingSubmissionInput
+  upsert?: Prisma.BlastTargetUpsertWithoutSourcePostingSubmissionInput
+  disconnect?: Prisma.BlastTargetWhereInput | boolean
+  delete?: Prisma.BlastTargetWhereInput | boolean
+  connect?: Prisma.BlastTargetWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BlastTargetUpdateToOneWithWhereWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUpdateWithoutSourcePostingSubmissionInput>, Prisma.BlastTargetUncheckedUpdateWithoutSourcePostingSubmissionInput>
+}
+
+export type BlastTargetUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput = {
+  create?: Prisma.XOR<Prisma.BlastTargetCreateWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUncheckedCreateWithoutSourcePostingSubmissionInput>
+  connectOrCreate?: Prisma.BlastTargetCreateOrConnectWithoutSourcePostingSubmissionInput
+  upsert?: Prisma.BlastTargetUpsertWithoutSourcePostingSubmissionInput
+  disconnect?: Prisma.BlastTargetWhereInput | boolean
+  delete?: Prisma.BlastTargetWhereInput | boolean
+  connect?: Prisma.BlastTargetWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BlastTargetUpdateToOneWithWhereWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUpdateWithoutSourcePostingSubmissionInput>, Prisma.BlastTargetUncheckedUpdateWithoutSourcePostingSubmissionInput>
+}
+
 export type BlastTargetCreateNestedOneWithoutAttemptsInput = {
   create?: Prisma.XOR<Prisma.BlastTargetCreateWithoutAttemptsInput, Prisma.BlastTargetUncheckedCreateWithoutAttemptsInput>
   connectOrCreate?: Prisma.BlastTargetCreateOrConnectWithoutAttemptsInput
@@ -680,6 +741,7 @@ export type BlastTargetCreateWithoutSubmittedByInput = {
   deletedAt?: Date | string | null
   campaign: Prisma.CampaignCreateNestedOneWithoutBlastTargetsInput
   socialAccount: Prisma.SocialAccountCreateNestedOneWithoutBlastTargetsInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutBlastTargetInput
   attempts?: Prisma.BlastAttemptCreateNestedManyWithoutBlastTargetInput
 }
 
@@ -687,6 +749,7 @@ export type BlastTargetUncheckedCreateWithoutSubmittedByInput = {
   id?: string
   campaignId: string
   socialAccountId: string
+  sourcePostingSubmissionId?: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction?: string | null
@@ -732,6 +795,7 @@ export type BlastTargetScalarWhereInput = {
   id?: Prisma.UuidFilter<"BlastTarget"> | string
   campaignId?: Prisma.UuidFilter<"BlastTarget"> | string
   socialAccountId?: Prisma.UuidFilter<"BlastTarget"> | string
+  sourcePostingSubmissionId?: Prisma.UuidNullableFilter<"BlastTarget"> | string | null
   postUrl?: Prisma.StringFilter<"BlastTarget"> | string
   platform?: Prisma.EnumPlatformFilter<"BlastTarget"> | $Enums.Platform
   instruction?: Prisma.StringNullableFilter<"BlastTarget"> | string | null
@@ -756,6 +820,7 @@ export type BlastTargetCreateWithoutCampaignInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   socialAccount: Prisma.SocialAccountCreateNestedOneWithoutBlastTargetsInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutBlastTargetInput
   submittedBy: Prisma.UserCreateNestedOneWithoutSubmittedBlastTargetsInput
   attempts?: Prisma.BlastAttemptCreateNestedManyWithoutBlastTargetInput
 }
@@ -763,6 +828,7 @@ export type BlastTargetCreateWithoutCampaignInput = {
 export type BlastTargetUncheckedCreateWithoutCampaignInput = {
   id?: string
   socialAccountId: string
+  sourcePostingSubmissionId?: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction?: string | null
@@ -814,6 +880,7 @@ export type BlastTargetCreateWithoutSocialAccountInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   campaign: Prisma.CampaignCreateNestedOneWithoutBlastTargetsInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutBlastTargetInput
   submittedBy: Prisma.UserCreateNestedOneWithoutSubmittedBlastTargetsInput
   attempts?: Prisma.BlastAttemptCreateNestedManyWithoutBlastTargetInput
 }
@@ -821,6 +888,7 @@ export type BlastTargetCreateWithoutSocialAccountInput = {
 export type BlastTargetUncheckedCreateWithoutSocialAccountInput = {
   id?: string
   campaignId: string
+  sourcePostingSubmissionId?: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction?: string | null
@@ -860,7 +928,7 @@ export type BlastTargetUpdateManyWithWhereWithoutSocialAccountInput = {
   data: Prisma.XOR<Prisma.BlastTargetUpdateManyMutationInput, Prisma.BlastTargetUncheckedUpdateManyWithoutSocialAccountInput>
 }
 
-export type BlastTargetCreateWithoutAttemptsInput = {
+export type BlastTargetCreateWithoutSourcePostingSubmissionInput = {
   id?: string
   postUrl: string
   platform: $Enums.Platform
@@ -874,12 +942,98 @@ export type BlastTargetCreateWithoutAttemptsInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutBlastTargetsInput
   socialAccount: Prisma.SocialAccountCreateNestedOneWithoutBlastTargetsInput
   submittedBy: Prisma.UserCreateNestedOneWithoutSubmittedBlastTargetsInput
+  attempts?: Prisma.BlastAttemptCreateNestedManyWithoutBlastTargetInput
+}
+
+export type BlastTargetUncheckedCreateWithoutSourcePostingSubmissionInput = {
+  id?: string
+  campaignId: string
+  socialAccountId: string
+  postUrl: string
+  platform: $Enums.Platform
+  instruction?: string | null
+  submittedById: string
+  sourceType?: $Enums.BlastSourceType
+  reviewStatus?: $Enums.ReviewStatus
+  status?: $Enums.BlastTargetStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  attempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutBlastTargetInput
+}
+
+export type BlastTargetCreateOrConnectWithoutSourcePostingSubmissionInput = {
+  where: Prisma.BlastTargetWhereUniqueInput
+  create: Prisma.XOR<Prisma.BlastTargetCreateWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUncheckedCreateWithoutSourcePostingSubmissionInput>
+}
+
+export type BlastTargetUpsertWithoutSourcePostingSubmissionInput = {
+  update: Prisma.XOR<Prisma.BlastTargetUpdateWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUncheckedUpdateWithoutSourcePostingSubmissionInput>
+  create: Prisma.XOR<Prisma.BlastTargetCreateWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUncheckedCreateWithoutSourcePostingSubmissionInput>
+  where?: Prisma.BlastTargetWhereInput
+}
+
+export type BlastTargetUpdateToOneWithWhereWithoutSourcePostingSubmissionInput = {
+  where?: Prisma.BlastTargetWhereInput
+  data: Prisma.XOR<Prisma.BlastTargetUpdateWithoutSourcePostingSubmissionInput, Prisma.BlastTargetUncheckedUpdateWithoutSourcePostingSubmissionInput>
+}
+
+export type BlastTargetUpdateWithoutSourcePostingSubmissionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  postUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.EnumBlastSourceTypeFieldUpdateOperationsInput | $Enums.BlastSourceType
+  reviewStatus?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+  status?: Prisma.EnumBlastTargetStatusFieldUpdateOperationsInput | $Enums.BlastTargetStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  campaign?: Prisma.CampaignUpdateOneRequiredWithoutBlastTargetsNestedInput
+  socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutBlastTargetsNestedInput
+  submittedBy?: Prisma.UserUpdateOneRequiredWithoutSubmittedBlastTargetsNestedInput
+  attempts?: Prisma.BlastAttemptUpdateManyWithoutBlastTargetNestedInput
+}
+
+export type BlastTargetUncheckedUpdateWithoutSourcePostingSubmissionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  postUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedById?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.EnumBlastSourceTypeFieldUpdateOperationsInput | $Enums.BlastSourceType
+  reviewStatus?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+  status?: Prisma.EnumBlastTargetStatusFieldUpdateOperationsInput | $Enums.BlastTargetStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutBlastTargetNestedInput
+}
+
+export type BlastTargetCreateWithoutAttemptsInput = {
+  id?: string
+  postUrl: string
+  platform: $Enums.Platform
+  instruction?: string | null
+  sourceType?: $Enums.BlastSourceType
+  reviewStatus?: $Enums.ReviewStatus
+  status?: $Enums.BlastTargetStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  campaign: Prisma.CampaignCreateNestedOneWithoutBlastTargetsInput
+  socialAccount: Prisma.SocialAccountCreateNestedOneWithoutBlastTargetsInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutBlastTargetInput
+  submittedBy: Prisma.UserCreateNestedOneWithoutSubmittedBlastTargetsInput
 }
 
 export type BlastTargetUncheckedCreateWithoutAttemptsInput = {
   id?: string
   campaignId: string
   socialAccountId: string
+  sourcePostingSubmissionId?: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction?: string | null
@@ -921,6 +1075,7 @@ export type BlastTargetUpdateWithoutAttemptsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutBlastTargetsNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutBlastTargetsNestedInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutBlastTargetNestedInput
   submittedBy?: Prisma.UserUpdateOneRequiredWithoutSubmittedBlastTargetsNestedInput
 }
 
@@ -928,6 +1083,7 @@ export type BlastTargetUncheckedUpdateWithoutAttemptsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -944,6 +1100,7 @@ export type BlastTargetCreateManySubmittedByInput = {
   id?: string
   campaignId: string
   socialAccountId: string
+  sourcePostingSubmissionId?: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction?: string | null
@@ -968,6 +1125,7 @@ export type BlastTargetUpdateWithoutSubmittedByInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutBlastTargetsNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutBlastTargetsNestedInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutBlastTargetNestedInput
   attempts?: Prisma.BlastAttemptUpdateManyWithoutBlastTargetNestedInput
 }
 
@@ -975,6 +1133,7 @@ export type BlastTargetUncheckedUpdateWithoutSubmittedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -991,6 +1150,7 @@ export type BlastTargetUncheckedUpdateManyWithoutSubmittedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1005,6 +1165,7 @@ export type BlastTargetUncheckedUpdateManyWithoutSubmittedByInput = {
 export type BlastTargetCreateManyCampaignInput = {
   id?: string
   socialAccountId: string
+  sourcePostingSubmissionId?: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction?: string | null
@@ -1029,6 +1190,7 @@ export type BlastTargetUpdateWithoutCampaignInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutBlastTargetsNestedInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutBlastTargetNestedInput
   submittedBy?: Prisma.UserUpdateOneRequiredWithoutSubmittedBlastTargetsNestedInput
   attempts?: Prisma.BlastAttemptUpdateManyWithoutBlastTargetNestedInput
 }
@@ -1036,6 +1198,7 @@ export type BlastTargetUpdateWithoutCampaignInput = {
 export type BlastTargetUncheckedUpdateWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1052,6 +1215,7 @@ export type BlastTargetUncheckedUpdateWithoutCampaignInput = {
 export type BlastTargetUncheckedUpdateManyWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1067,6 +1231,7 @@ export type BlastTargetUncheckedUpdateManyWithoutCampaignInput = {
 export type BlastTargetCreateManySocialAccountInput = {
   id?: string
   campaignId: string
+  sourcePostingSubmissionId?: string | null
   postUrl: string
   platform: $Enums.Platform
   instruction?: string | null
@@ -1091,6 +1256,7 @@ export type BlastTargetUpdateWithoutSocialAccountInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutBlastTargetsNestedInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutBlastTargetNestedInput
   submittedBy?: Prisma.UserUpdateOneRequiredWithoutSubmittedBlastTargetsNestedInput
   attempts?: Prisma.BlastAttemptUpdateManyWithoutBlastTargetNestedInput
 }
@@ -1098,6 +1264,7 @@ export type BlastTargetUpdateWithoutSocialAccountInput = {
 export type BlastTargetUncheckedUpdateWithoutSocialAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1114,6 +1281,7 @@ export type BlastTargetUncheckedUpdateWithoutSocialAccountInput = {
 export type BlastTargetUncheckedUpdateManyWithoutSocialAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1161,6 +1329,7 @@ export type BlastTargetSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   campaignId?: boolean
   socialAccountId?: boolean
+  sourcePostingSubmissionId?: boolean
   postUrl?: boolean
   platform?: boolean
   instruction?: boolean
@@ -1173,6 +1342,7 @@ export type BlastTargetSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   deletedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   socialAccount?: boolean | Prisma.SocialAccountDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.BlastTarget$sourcePostingSubmissionArgs<ExtArgs>
   submittedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   attempts?: boolean | Prisma.BlastTarget$attemptsArgs<ExtArgs>
   _count?: boolean | Prisma.BlastTargetCountOutputTypeDefaultArgs<ExtArgs>
@@ -1182,6 +1352,7 @@ export type BlastTargetSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   campaignId?: boolean
   socialAccountId?: boolean
+  sourcePostingSubmissionId?: boolean
   postUrl?: boolean
   platform?: boolean
   instruction?: boolean
@@ -1194,6 +1365,7 @@ export type BlastTargetSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   deletedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   socialAccount?: boolean | Prisma.SocialAccountDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.BlastTarget$sourcePostingSubmissionArgs<ExtArgs>
   submittedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blastTarget"]>
 
@@ -1201,6 +1373,7 @@ export type BlastTargetSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   campaignId?: boolean
   socialAccountId?: boolean
+  sourcePostingSubmissionId?: boolean
   postUrl?: boolean
   platform?: boolean
   instruction?: boolean
@@ -1213,6 +1386,7 @@ export type BlastTargetSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   deletedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   socialAccount?: boolean | Prisma.SocialAccountDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.BlastTarget$sourcePostingSubmissionArgs<ExtArgs>
   submittedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blastTarget"]>
 
@@ -1220,6 +1394,7 @@ export type BlastTargetSelectScalar = {
   id?: boolean
   campaignId?: boolean
   socialAccountId?: boolean
+  sourcePostingSubmissionId?: boolean
   postUrl?: boolean
   platform?: boolean
   instruction?: boolean
@@ -1232,10 +1407,11 @@ export type BlastTargetSelectScalar = {
   deletedAt?: boolean
 }
 
-export type BlastTargetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "socialAccountId" | "postUrl" | "platform" | "instruction" | "submittedById" | "sourceType" | "reviewStatus" | "status" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["blastTarget"]>
+export type BlastTargetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "socialAccountId" | "sourcePostingSubmissionId" | "postUrl" | "platform" | "instruction" | "submittedById" | "sourceType" | "reviewStatus" | "status" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["blastTarget"]>
 export type BlastTargetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   socialAccount?: boolean | Prisma.SocialAccountDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.BlastTarget$sourcePostingSubmissionArgs<ExtArgs>
   submittedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   attempts?: boolean | Prisma.BlastTarget$attemptsArgs<ExtArgs>
   _count?: boolean | Prisma.BlastTargetCountOutputTypeDefaultArgs<ExtArgs>
@@ -1243,11 +1419,13 @@ export type BlastTargetInclude<ExtArgs extends runtime.Types.Extensions.Internal
 export type BlastTargetIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   socialAccount?: boolean | Prisma.SocialAccountDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.BlastTarget$sourcePostingSubmissionArgs<ExtArgs>
   submittedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type BlastTargetIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   socialAccount?: boolean | Prisma.SocialAccountDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.BlastTarget$sourcePostingSubmissionArgs<ExtArgs>
   submittedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
@@ -1256,6 +1434,7 @@ export type $BlastTargetPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     campaign: Prisma.$CampaignPayload<ExtArgs>
     socialAccount: Prisma.$SocialAccountPayload<ExtArgs>
+    sourcePostingSubmission: Prisma.$PostingSubmissionPayload<ExtArgs> | null
     submittedBy: Prisma.$UserPayload<ExtArgs>
     attempts: Prisma.$BlastAttemptPayload<ExtArgs>[]
   }
@@ -1263,6 +1442,7 @@ export type $BlastTargetPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     campaignId: string
     socialAccountId: string
+    sourcePostingSubmissionId: string | null
     postUrl: string
     platform: $Enums.Platform
     instruction: string | null
@@ -1669,6 +1849,7 @@ export interface Prisma__BlastTargetClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   campaign<T extends Prisma.CampaignDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignDefaultArgs<ExtArgs>>): Prisma.Prisma__CampaignClient<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   socialAccount<T extends Prisma.SocialAccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SocialAccountDefaultArgs<ExtArgs>>): Prisma.Prisma__SocialAccountClient<runtime.Types.Result.GetResult<Prisma.$SocialAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  sourcePostingSubmission<T extends Prisma.BlastTarget$sourcePostingSubmissionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlastTarget$sourcePostingSubmissionArgs<ExtArgs>>): Prisma.Prisma__PostingSubmissionClient<runtime.Types.Result.GetResult<Prisma.$PostingSubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   submittedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   attempts<T extends Prisma.BlastTarget$attemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlastTarget$attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlastAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1703,6 +1884,7 @@ export interface BlastTargetFieldRefs {
   readonly id: Prisma.FieldRef<"BlastTarget", 'String'>
   readonly campaignId: Prisma.FieldRef<"BlastTarget", 'String'>
   readonly socialAccountId: Prisma.FieldRef<"BlastTarget", 'String'>
+  readonly sourcePostingSubmissionId: Prisma.FieldRef<"BlastTarget", 'String'>
   readonly postUrl: Prisma.FieldRef<"BlastTarget", 'String'>
   readonly platform: Prisma.FieldRef<"BlastTarget", 'Platform'>
   readonly instruction: Prisma.FieldRef<"BlastTarget", 'String'>
@@ -2111,6 +2293,25 @@ export type BlastTargetDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many BlastTargets to delete.
    */
   limit?: number
+}
+
+/**
+ * BlastTarget.sourcePostingSubmission
+ */
+export type BlastTarget$sourcePostingSubmissionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostingSubmission
+   */
+  select?: Prisma.PostingSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostingSubmission
+   */
+  omit?: Prisma.PostingSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostingSubmissionInclude<ExtArgs> | null
+  where?: Prisma.PostingSubmissionWhereInput
 }
 
 /**

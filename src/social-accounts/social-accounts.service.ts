@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -7,6 +8,7 @@ import {
   AuditAction,
   Prisma,
   SocialAccountStatus,
+  UserRole,
 } from '../generated/prisma/client.js';
 import { buildPaginationMeta } from '../common/dto/pagination-query.dto.js';
 import { toAuditJson } from '../common/utils/audit-json.js';
@@ -49,9 +51,10 @@ export class SocialAccountsService {
     private readonly auditLogs: AuditLogService,
   ) {}
 
-  async findAll(query: SocialAccountQueryDto) {
+  async findAll(actor: CurrentUser, query: SocialAccountQueryDto) {
     const where: Prisma.SocialAccountWhereInput = {
       deletedAt: null,
+      ...(actor.role === UserRole.PIC ? { createdById: actor.id } : {}),
       ...(query.platform ? { platform: query.platform } : {}),
       ...(query.category ? { category: query.category } : {}),
       ...(query.status ? { status: query.status } : {}),
@@ -123,11 +126,12 @@ export class SocialAccountsService {
     return socialAccount;
   }
 
-  async findOne(id: string) {
+  async findOne(actor: CurrentUser, id: string) {
     const socialAccount = await this.prisma.socialAccount.findFirst({
       where: {
         id,
         deletedAt: null,
+        ...(actor.role === UserRole.PIC ? { createdById: actor.id } : {}),
       },
       include: {
         createdBy: {
@@ -159,7 +163,7 @@ export class SocialAccountsService {
   }
 
   async update(actor: CurrentUser, id: string, dto: UpdateSocialAccountDto) {
-    const current = await this.findExistingSocialAccount(id);
+    const current = await this.findExistingSocialAccount(actor, id);
     const nextPlatform = dto.platform ?? current.platform;
     const nextUsername = dto.username ?? current.username;
 
@@ -200,7 +204,7 @@ export class SocialAccountsService {
     id: string,
     dto: UpdateSocialAccountStatusDto,
   ) {
-    const current = await this.findExistingSocialAccount(id);
+    const current = await this.findExistingSocialAccount(actor, id);
 
     const updated = await this.prisma.socialAccount.update({
       where: { id },
@@ -221,7 +225,7 @@ export class SocialAccountsService {
     return updated;
   }
 
-  private async findExistingSocialAccount(id: string) {
+  private async findExistingSocialAccount(actor: CurrentUser, id: string) {
     const socialAccount = await this.prisma.socialAccount.findFirst({
       where: {
         id,
@@ -233,6 +237,17 @@ export class SocialAccountsService {
       throw new NotFoundException({
         code: 'NOT_FOUND',
         message: 'Social account not found.',
+        details: [],
+      });
+    }
+
+    if (
+      actor.role === UserRole.PIC &&
+      socialAccount.createdById !== actor.id
+    ) {
+      throw new ForbiddenException({
+        code: 'FORBIDDEN',
+        message: 'PIC can only manage their own social accounts.',
         details: [],
       });
     }

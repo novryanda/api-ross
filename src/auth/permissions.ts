@@ -5,7 +5,10 @@ export const rossAccessControl = createAccessControl({
   ...defaultStatements,
   campaign: ['create', 'read', 'update', 'archive', 'assign'],
   user: ['create', 'read', 'update', 'delete'],
+  orgUnit: ['create', 'read', 'update'],
   socialAccount: ['create', 'read', 'update', 'delete'],
+  postingOrder: ['create', 'read', 'update', 'claim', 'release', 'submit'],
+  postingSubmission: ['read', 'review'],
   blastTarget: ['create', 'read', 'update', 'suggest', 'reblast'],
   blastAttempt: ['read', 'keep', 'release', 'cancel', 'complete'],
   blastReport: ['create', 'read'],
@@ -20,7 +23,10 @@ export const adminRole = rossAccessControl.newRole({
   ...adminAc.statements,
   campaign: ['create', 'read', 'update', 'archive', 'assign'],
   user: ['create', 'read', 'update', 'delete'],
+  orgUnit: ['create', 'read', 'update'],
   socialAccount: ['create', 'read', 'update', 'delete'],
+  postingOrder: ['create', 'read', 'update', 'claim', 'release', 'submit'],
+  postingSubmission: ['read', 'review'],
   blastTarget: ['create', 'read', 'update', 'suggest', 'reblast'],
   blastAttempt: ['read', 'keep', 'release', 'cancel', 'complete'],
   blastReport: ['create', 'read'],
@@ -37,6 +43,14 @@ export const buzzerRole = rossAccessControl.newRole({
   blastAttempt: ['read', 'keep', 'release', 'complete'],
   blastReport: ['create', 'read'],
   commentTask: ['read', 'keep', 'release', 'start', 'complete'],
+});
+
+export const picRole = rossAccessControl.newRole({
+  campaign: ['read'],
+  orgUnit: ['read'],
+  socialAccount: ['create', 'read', 'update'],
+  postingOrder: ['read', 'claim', 'release', 'submit'],
+  postingSubmission: ['read'],
 });
 
 export const viewerRole = rossAccessControl.newRole({

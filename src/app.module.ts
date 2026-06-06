@@ -9,6 +9,8 @@ import { ProfileModule } from './profile/profile.module.js';
 import { CampaignsModule } from './campaigns/campaigns.module.js';
 import { CampaignMembersModule } from './campaign-members/campaign-members.module.js';
 import { SocialAccountsModule } from './social-accounts/social-accounts.module.js';
+import { OrgUnitsModule } from './org-units/org-units.module.js';
+import { PostingOrdersModule } from './posting-orders/posting-orders.module.js';
 import { BlastTargetsModule } from './blast-targets/blast-targets.module.js';
 import { BlastAttemptsModule } from './blast-attempts/blast-attempts.module.js';
 import { BlastReportsModule } from './blast-reports/blast-reports.module.js';
@@ -26,6 +28,8 @@ import { ExportsModule } from './exports/exports.module.js';
     CampaignsModule,
     CampaignMembersModule,
     SocialAccountsModule,
+    OrgUnitsModule,
+    PostingOrdersModule,
     BlastTargetsModule,
     BlastAttemptsModule,
     BlastReportsModule,

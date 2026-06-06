@@ -11,6 +11,7 @@ import {
   BlastSourceType,
   BlastTargetStatus,
   CampaignStatus,
+  PostingSubmissionStatus,
   Prisma,
   ReviewStatus,
   SocialAccountStatus,
@@ -141,6 +142,121 @@ export class BlastTargetsService {
           entityType: 'BlastTarget',
           entityId: created.id,
           newValue: toAuditJson(created),
+        },
+      });
+
+      const attempt = await tx.blastAttempt.findUnique({
+        where: {
+          blastTargetId_attemptNo: {
+            blastTargetId: created.id,
+            attemptNo: 1,
+          },
+        },
+      });
+
+      if (attempt) {
+        await tx.auditLog.create({
+          data: {
+            actorId: user.id,
+            campaignId,
+            action: AuditAction.BLAST_ATTEMPT_CREATED,
+            entityType: 'BlastAttempt',
+            entityId: attempt.id,
+            newValue: toAuditJson(attempt),
+          },
+        });
+      }
+
+      return created;
+    });
+
+    return this.findOne(user, campaignId, target.id);
+  }
+
+  async createFromSubmission(
+    user: CurrentUser,
+    campaignId: string,
+    submissionId: string,
+  ) {
+    await this.ensureCampaignExists(campaignId);
+
+    const submission = await this.prisma.postingSubmission.findFirst({
+      where: {
+        id: submissionId,
+        status: PostingSubmissionStatus.APPROVED_FOR_BLAST,
+        blastTarget: null,
+        postingOrder: {
+          campaignId,
+        },
+      },
+      include: {
+        postingOrder: true,
+        socialAccount: true,
+      },
+    });
+
+    if (!submission) {
+      throw new NotFoundException({
+        code: 'NOT_FOUND',
+        message: 'Approved PIC submission not found or already converted to blast.',
+        details: [],
+      });
+    }
+
+    await this.ensureUniquePostUrl(campaignId, submission.postedUrl);
+    await this.validateSourceAccount(
+      submission.socialAccountId,
+      submission.postingOrder.platform,
+    );
+
+    const target = await this.prisma.$transaction(async (tx) => {
+      const created = await tx.blastTarget.create({
+        data: {
+          campaignId,
+          socialAccountId: submission.socialAccountId,
+          sourcePostingSubmissionId: submission.id,
+          postUrl: submission.postedUrl,
+          platform: submission.postingOrder.platform,
+          instruction:
+            submission.postingOrder.description ??
+            submission.postingOrder.caption ??
+            undefined,
+          submittedById: user.id,
+          sourceType: BlastSourceType.PIC_SUBMISSION,
+          reviewStatus: ReviewStatus.APPROVED,
+          status: BlastTargetStatus.ACTIVE,
+          attempts: {
+            create: {
+              attemptNo: 1,
+              status: BlastAttemptStatus.AVAILABLE,
+            },
+          },
+        },
+      });
+
+      await tx.auditLog.create({
+        data: {
+          actorId: user.id,
+          campaignId,
+          action: AuditAction.BLAST_TARGET_CREATED,
+          entityType: 'BlastTarget',
+          entityId: created.id,
+          newValue: toAuditJson(created),
+        },
+      });
+
+      await tx.auditLog.create({
+        data: {
+          actorId: user.id,
+          campaignId,
+          action: AuditAction.BLAST_TARGET_CREATED_FROM_PIC_SUBMISSION,
+          entityType: 'PostingSubmission',
+          entityId: submission.id,
+          newValue: toAuditJson({
+            blastTargetId: created.id,
+            postUrl: submission.postedUrl,
+            socialAccountId: submission.socialAccountId,
+          }),
         },
       });
 

@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsOptional,
   IsString,
+  IsUUID,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -32,4 +33,13 @@ export class UpdateUserDto {
   @IsOptional()
   @IsEnum(UserStatus)
   status?: UserStatus;
+
+  @ApiPropertyOptional({
+    format: 'uuid',
+    description:
+      'Optional PIC unit assignment. Send null-equivalent by changing the user role away from PIC.',
+  })
+  @IsOptional()
+  @IsUUID()
+  picUnitId?: string;
 }

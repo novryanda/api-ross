@@ -10,6 +10,7 @@ datasource db {
 enum UserRole {
   ADMIN
   BUZZER
+  PIC
   VIEWER
 }
 
@@ -55,6 +56,7 @@ enum SocialAccountStatus {
 enum BlastSourceType {
   ADMIN_SUBMITTED @map("ADMIN")
   BUZZER_SUGGESTED @map("BUZZER_SUGGESTION")
+  PIC_SUBMISSION @map("PIC_SUBMISSION")
 
   @@map("BlastTargetSourceType")
 }
@@ -123,11 +125,30 @@ enum ExportScope {
   FULL
 }
 
+enum OrgUnitStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum PostingOrderStatus {
+  PUBLISHED_TO_QUEUE
+  CLAIMED
+  COMPLETED
+  CANCELLED
+}
+
+enum PostingSubmissionStatus {
+  SUBMITTED
+  APPROVED_FOR_BLAST
+  REJECTED
+}
+
 enum AuditAction {
   USER_CREATED
   USER_UPDATED
   USER_STATUS_CHANGED
   USER_PASSWORD_RESET_REQUESTED
+  USER_PIC_UNIT_ASSIGNED
   PROFILE_UPDATED
   PASSWORD_CHANGED
   CAMPAIGN_CREATED
@@ -148,6 +169,7 @@ enum AuditAction {
   BLAST_ATTEMPT_EXPIRED
   BLAST_ATTEMPT_CANCELLED
   BLAST_REPORT_SUBMITTED
+  BLAST_TARGET_CREATED_FROM_PIC_SUBMISSION
   COMMENT_COMMAND_CREATED
   COMMENT_COMMAND_UPDATED
   COMMENT_COMMAND_ASSIGNED
@@ -160,6 +182,14 @@ enum AuditAction {
   COMMENT_TASK_REJECTED
   COMMENT_TASK_BLOCKED
   COMMENT_TASK_EXPIRED
+  ORG_UNIT_CREATED
+  ORG_UNIT_UPDATED
+  POSTING_ORDER_CREATED
+  POSTING_ORDER_UPDATED
+  POSTING_ORDER_CLAIMED
+  POSTING_ORDER_RELEASED
+  POSTING_ORDER_SUBMITTED
+  POSTING_SUBMISSION_STATUS_UPDATED
   EXPORT_REQUESTED
   EXPORT_GENERATED
   EXPORT_COMPLETED
@@ -176,6 +206,7 @@ model User {
   image         String?
   role          UserRole   @default(BUZZER)
   status        UserStatus @default(ACTIVE)
+  picUnitId     String?    @map("pic_unit_id") @db.Uuid
   lastLoginAt   DateTime?  @map("last_login_at")
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
@@ -186,9 +217,15 @@ model User {
 
   sessions                 Session[]
   accounts                 Account[]
+  picUnit                  OrgUnit?          @relation("OrgUnitMembers", fields: [picUnitId], references: [id])
   createdCampaigns         Campaign[]       @relation("CampaignCreatedBy")
   campaignMemberships      CampaignMember[] @relation("CampaignMemberUser")
+  createdOrgUnits          OrgUnit[]         @relation("OrgUnitCreator")
   createdSocialAccounts    SocialAccount[]  @relation("SocialAccountCreator")
+  createdPostingOrders     PostingOrder[]    @relation("PostingOrderCreator")
+  claimedPostingOrders     PostingOrder[]    @relation("PostingOrderClaimer")
+  postingSubmissions       PostingSubmission[] @relation("PostingSubmissionSubmitter")
+  reviewedPostingSubmissions PostingSubmission[] @relation("PostingSubmissionReviewer")
   submittedBlastTargets    BlastTarget[]    @relation("BlastTargetSubmitter")
   keptBlastAttempts        BlastAttempt[]   @relation("BlastAttemptKeeper")
   blastReports             BlastReport[]    @relation("BlastReportSubmitter")
@@ -199,6 +236,7 @@ model User {
 
   @@index([role])
   @@index([status])
+  @@index([picUnitId])
   @@map("users")
 }
 
@@ -268,6 +306,7 @@ model Campaign {
 
   createdBy       User             @relation("CampaignCreatedBy", fields: [createdById], references: [id])
   members         CampaignMember[]
+  postingOrders   PostingOrder[]
   blastTargets    BlastTarget[]
   commentCommands CommentCommand[]
   exportReports   ExportReport[]
@@ -279,6 +318,29 @@ model Campaign {
   @@index([createdById])
   @@index([createdAt])
   @@map("campaigns")
+}
+
+model OrgUnit {
+  id          String        @id @default(uuid()) @db.Uuid
+  name        String        @db.VarChar(150)
+  code        String?       @db.VarChar(80)
+  status      OrgUnitStatus @default(ACTIVE)
+  parentId    String?       @map("parent_id") @db.Uuid
+  createdById String        @map("created_by") @db.Uuid
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  parent       OrgUnit?       @relation("OrgUnitHierarchy", fields: [parentId], references: [id])
+  children     OrgUnit[]      @relation("OrgUnitHierarchy")
+  createdBy    User           @relation("OrgUnitCreator", fields: [createdById], references: [id])
+  members      User[]         @relation("OrgUnitMembers")
+  postingOrders PostingOrder[]
+
+  @@index([parentId])
+  @@index([status])
+  @@index([createdById])
+  @@index([createdAt])
+  @@map("org_units")
 }
 
 model CampaignMember {
@@ -311,6 +373,7 @@ model SocialAccount {
   deletedAt   DateTime?             @map("deleted_at")
 
   createdBy       User             @relation("SocialAccountCreator", fields: [createdById], references: [id])
+  postingSubmissions PostingSubmission[]
   blastTargets    BlastTarget[]
   commentCommands CommentCommand[]
 
@@ -325,6 +388,7 @@ model BlastTarget {
   id              String            @id @default(uuid()) @db.Uuid
   campaignId      String            @map("campaign_id") @db.Uuid
   socialAccountId String            @map("social_account_id") @db.Uuid
+  sourcePostingSubmissionId String? @unique @map("source_posting_submission_id") @db.Uuid
   postUrl         String            @map("post_url")
   platform        Platform
   instruction     String?
@@ -336,20 +400,84 @@ model BlastTarget {
   updatedAt       DateTime          @updatedAt @map("updated_at")
   deletedAt       DateTime?         @map("deleted_at")
 
-  campaign      Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  socialAccount SocialAccount  @relation(fields: [socialAccountId], references: [id])
-  submittedBy   User           @relation("BlastTargetSubmitter", fields: [submittedById], references: [id])
-  attempts      BlastAttempt[]
+  campaign               Campaign            @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  socialAccount          SocialAccount       @relation(fields: [socialAccountId], references: [id])
+  sourcePostingSubmission PostingSubmission? @relation("BlastTargetSourceSubmission", fields: [sourcePostingSubmissionId], references: [id])
+  submittedBy            User                @relation("BlastTargetSubmitter", fields: [submittedById], references: [id])
+  attempts               BlastAttempt[]
 
   @@unique([campaignId, postUrl])
   @@index([campaignId])
   @@index([socialAccountId])
+  @@index([sourcePostingSubmissionId])
   @@index([submittedById])
   @@index([platform])
   @@index([status])
   @@index([reviewStatus])
   @@index([createdAt])
   @@map("blast_targets")
+}
+
+model PostingOrder {
+  id              String             @id @default(uuid()) @db.Uuid
+  campaignId      String             @map("campaign_id") @db.Uuid
+  targetUnitId    String             @map("target_unit_id") @db.Uuid
+  platform        Platform
+  contentDriveUrl String             @map("content_drive_url")
+  scheduledAt     DateTime           @map("scheduled_at")
+  caption         String?
+  description     String?
+  status          PostingOrderStatus @default(PUBLISHED_TO_QUEUE)
+  createdById     String             @map("created_by") @db.Uuid
+  claimedById     String?            @map("claimed_by") @db.Uuid
+  claimedAt       DateTime?          @map("claimed_at")
+  completedAt     DateTime?          @map("completed_at")
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+
+  campaign   Campaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  targetUnit OrgUnit            @relation(fields: [targetUnitId], references: [id])
+  createdBy  User               @relation("PostingOrderCreator", fields: [createdById], references: [id])
+  claimedBy  User?              @relation("PostingOrderClaimer", fields: [claimedById], references: [id])
+  submission PostingSubmission?
+
+  @@index([campaignId])
+  @@index([targetUnitId])
+  @@index([status])
+  @@index([claimedById])
+  @@index([scheduledAt])
+  @@index([createdAt])
+  @@map("posting_orders")
+}
+
+model PostingSubmission {
+  id             String                  @id @default(uuid()) @db.Uuid
+  postingOrderId String                  @unique @map("posting_order_id") @db.Uuid
+  submittedById  String                  @map("submitted_by") @db.Uuid
+  socialAccountId String                 @map("social_account_id") @db.Uuid
+  postedUrl      String                  @map("posted_url")
+  proofDriveUrl  String                  @map("proof_drive_url")
+  notes          String?
+  status         PostingSubmissionStatus @default(SUBMITTED)
+  reviewNotes    String?                 @map("review_notes")
+  reviewedById   String?                 @map("reviewed_by") @db.Uuid
+  reviewedAt     DateTime?               @map("reviewed_at")
+  submittedAt    DateTime                @default(now()) @map("submitted_at")
+  createdAt      DateTime                @default(now()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+
+  postingOrder PostingOrder @relation(fields: [postingOrderId], references: [id], onDelete: Cascade)
+  submittedBy User @relation("PostingSubmissionSubmitter", fields: [submittedById], references: [id])
+  socialAccount SocialAccount @relation(fields: [socialAccountId], references: [id])
+  reviewedBy User? @relation("PostingSubmissionReviewer", fields: [reviewedById], references: [id])
+  blastTarget BlastTarget? @relation("BlastTargetSourceSubmission")
+
+  @@index([submittedById])
+  @@index([socialAccountId])
+  @@index([status])
+  @@index([reviewedById])
+  @@index([submittedAt])
+  @@map("posting_submissions")
 }
 
 model BlastAttempt {

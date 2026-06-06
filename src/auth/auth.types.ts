@@ -6,9 +6,10 @@ export type RossUserSession = UserSession<Auth> & {
   user: UserSession<Auth>['user'] & {
     role: UserRole;
     status: UserStatus;
+    picUnitId?: string | null;
     lastLoginAt?: Date | null;
   };
 };
 
-export const ROSS_ROLES = ['ADMIN', 'BUZZER', 'VIEWER'] as const;
+export const ROSS_ROLES = ['ADMIN', 'BUZZER', 'PIC', 'VIEWER'] as const;
 export type RossRole = (typeof ROSS_ROLES)[number];

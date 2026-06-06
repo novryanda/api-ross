@@ -228,6 +228,7 @@ export type CampaignWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"Campaign"> | Date | string | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   members?: Prisma.CampaignMemberListRelationFilter
+  postingOrders?: Prisma.PostingOrderListRelationFilter
   blastTargets?: Prisma.BlastTargetListRelationFilter
   commentCommands?: Prisma.CommentCommandListRelationFilter
   exportReports?: Prisma.ExportReportListRelationFilter
@@ -248,6 +249,7 @@ export type CampaignOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdBy?: Prisma.UserOrderByWithRelationInput
   members?: Prisma.CampaignMemberOrderByRelationAggregateInput
+  postingOrders?: Prisma.PostingOrderOrderByRelationAggregateInput
   blastTargets?: Prisma.BlastTargetOrderByRelationAggregateInput
   commentCommands?: Prisma.CommentCommandOrderByRelationAggregateInput
   exportReports?: Prisma.ExportReportOrderByRelationAggregateInput
@@ -271,6 +273,7 @@ export type CampaignWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"Campaign"> | Date | string | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   members?: Prisma.CampaignMemberListRelationFilter
+  postingOrders?: Prisma.PostingOrderListRelationFilter
   blastTargets?: Prisma.BlastTargetListRelationFilter
   commentCommands?: Prisma.CommentCommandListRelationFilter
   exportReports?: Prisma.ExportReportListRelationFilter
@@ -324,6 +327,7 @@ export type CampaignCreateInput = {
   deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCampaignsInput
   members?: Prisma.CampaignMemberCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportCreateNestedManyWithoutCampaignInput
@@ -343,6 +347,7 @@ export type CampaignUncheckedCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   members?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutCampaignInput
@@ -362,6 +367,7 @@ export type CampaignUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCampaignsNestedInput
   members?: Prisma.CampaignMemberUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUpdateManyWithoutCampaignNestedInput
@@ -381,6 +387,7 @@ export type CampaignUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.CampaignMemberUncheckedUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutCampaignNestedInput
@@ -579,6 +586,20 @@ export type CampaignUpdateOneRequiredWithoutBlastTargetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutBlastTargetsInput, Prisma.CampaignUpdateWithoutBlastTargetsInput>, Prisma.CampaignUncheckedUpdateWithoutBlastTargetsInput>
 }
 
+export type CampaignCreateNestedOneWithoutPostingOrdersInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutPostingOrdersInput, Prisma.CampaignUncheckedCreateWithoutPostingOrdersInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutPostingOrdersInput
+  connect?: Prisma.CampaignWhereUniqueInput
+}
+
+export type CampaignUpdateOneRequiredWithoutPostingOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutPostingOrdersInput, Prisma.CampaignUncheckedCreateWithoutPostingOrdersInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutPostingOrdersInput
+  upsert?: Prisma.CampaignUpsertWithoutPostingOrdersInput
+  connect?: Prisma.CampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutPostingOrdersInput, Prisma.CampaignUpdateWithoutPostingOrdersInput>, Prisma.CampaignUncheckedUpdateWithoutPostingOrdersInput>
+}
+
 export type CampaignCreateNestedOneWithoutCommentCommandsInput = {
   create?: Prisma.XOR<Prisma.CampaignCreateWithoutCommentCommandsInput, Prisma.CampaignUncheckedCreateWithoutCommentCommandsInput>
   connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutCommentCommandsInput
@@ -635,6 +656,7 @@ export type CampaignCreateWithoutCreatedByInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   members?: Prisma.CampaignMemberCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportCreateNestedManyWithoutCampaignInput
@@ -653,6 +675,7 @@ export type CampaignUncheckedCreateWithoutCreatedByInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   members?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutCampaignInput
@@ -714,6 +737,7 @@ export type CampaignCreateWithoutMembersInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCampaignsInput
+  postingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportCreateNestedManyWithoutCampaignInput
@@ -732,6 +756,7 @@ export type CampaignUncheckedCreateWithoutMembersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  postingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutCampaignInput
@@ -766,6 +791,7 @@ export type CampaignUpdateWithoutMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCampaignsNestedInput
+  postingOrders?: Prisma.PostingOrderUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUpdateManyWithoutCampaignNestedInput
@@ -784,6 +810,7 @@ export type CampaignUncheckedUpdateWithoutMembersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  postingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutCampaignNestedInput
@@ -803,6 +830,7 @@ export type CampaignCreateWithoutBlastTargetsInput = {
   deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCampaignsInput
   members?: Prisma.CampaignMemberCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportCreateNestedManyWithoutCampaignInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCampaignInput
@@ -821,6 +849,7 @@ export type CampaignUncheckedCreateWithoutBlastTargetsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   members?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutCampaignInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCampaignInput
@@ -855,6 +884,7 @@ export type CampaignUpdateWithoutBlastTargetsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCampaignsNestedInput
   members?: Prisma.CampaignMemberUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUpdateManyWithoutCampaignNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCampaignNestedInput
@@ -873,6 +903,99 @@ export type CampaignUncheckedUpdateWithoutBlastTargetsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.CampaignMemberUncheckedUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCampaignNestedInput
+  commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCampaignNestedInput
+  exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutCampaignNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignCreateWithoutPostingOrdersInput = {
+  id?: string
+  name: string
+  description?: string | null
+  startDate: Date | string
+  endDate?: Date | string | null
+  status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedCampaignsInput
+  members?: Prisma.CampaignMemberCreateNestedManyWithoutCampaignInput
+  blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutCampaignInput
+  commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCampaignInput
+  exportReports?: Prisma.ExportReportCreateNestedManyWithoutCampaignInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignUncheckedCreateWithoutPostingOrdersInput = {
+  id?: string
+  name: string
+  description?: string | null
+  startDate: Date | string
+  endDate?: Date | string | null
+  status?: $Enums.CampaignStatus
+  platforms?: Prisma.CampaignCreateplatformsInput | $Enums.Platform[]
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  members?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutCampaignInput
+  blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutCampaignInput
+  commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCampaignInput
+  exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutCampaignInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignCreateOrConnectWithoutPostingOrdersInput = {
+  where: Prisma.CampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutPostingOrdersInput, Prisma.CampaignUncheckedCreateWithoutPostingOrdersInput>
+}
+
+export type CampaignUpsertWithoutPostingOrdersInput = {
+  update: Prisma.XOR<Prisma.CampaignUpdateWithoutPostingOrdersInput, Prisma.CampaignUncheckedUpdateWithoutPostingOrdersInput>
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutPostingOrdersInput, Prisma.CampaignUncheckedCreateWithoutPostingOrdersInput>
+  where?: Prisma.CampaignWhereInput
+}
+
+export type CampaignUpdateToOneWithWhereWithoutPostingOrdersInput = {
+  where?: Prisma.CampaignWhereInput
+  data: Prisma.XOR<Prisma.CampaignUpdateWithoutPostingOrdersInput, Prisma.CampaignUncheckedUpdateWithoutPostingOrdersInput>
+}
+
+export type CampaignUpdateWithoutPostingOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCampaignsNestedInput
+  members?: Prisma.CampaignMemberUpdateManyWithoutCampaignNestedInput
+  blastTargets?: Prisma.BlastTargetUpdateManyWithoutCampaignNestedInput
+  commentCommands?: Prisma.CommentCommandUpdateManyWithoutCampaignNestedInput
+  exportReports?: Prisma.ExportReportUpdateManyWithoutCampaignNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignUncheckedUpdateWithoutPostingOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  platforms?: Prisma.CampaignUpdateplatformsInput | $Enums.Platform[]
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  members?: Prisma.CampaignMemberUncheckedUpdateManyWithoutCampaignNestedInput
+  blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutCampaignNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCampaignNestedInput
@@ -891,6 +1014,7 @@ export type CampaignCreateWithoutCommentCommandsInput = {
   deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCampaignsInput
   members?: Prisma.CampaignMemberCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportCreateNestedManyWithoutCampaignInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCampaignInput
@@ -909,6 +1033,7 @@ export type CampaignUncheckedCreateWithoutCommentCommandsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   members?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutCampaignInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCampaignInput
@@ -943,6 +1068,7 @@ export type CampaignUpdateWithoutCommentCommandsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCampaignsNestedInput
   members?: Prisma.CampaignMemberUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUpdateManyWithoutCampaignNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCampaignNestedInput
@@ -961,6 +1087,7 @@ export type CampaignUncheckedUpdateWithoutCommentCommandsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.CampaignMemberUncheckedUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutCampaignNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCampaignNestedInput
@@ -979,6 +1106,7 @@ export type CampaignCreateWithoutExportReportsInput = {
   deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCampaignsInput
   members?: Prisma.CampaignMemberCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCampaignInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCampaignInput
@@ -997,6 +1125,7 @@ export type CampaignUncheckedCreateWithoutExportReportsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   members?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCampaignInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCampaignInput
@@ -1031,6 +1160,7 @@ export type CampaignUpdateWithoutExportReportsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCampaignsNestedInput
   members?: Prisma.CampaignMemberUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUpdateManyWithoutCampaignNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCampaignNestedInput
@@ -1049,6 +1179,7 @@ export type CampaignUncheckedUpdateWithoutExportReportsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.CampaignMemberUncheckedUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCampaignNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCampaignNestedInput
@@ -1067,6 +1198,7 @@ export type CampaignCreateWithoutAuditLogsInput = {
   deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCampaignsInput
   members?: Prisma.CampaignMemberCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportCreateNestedManyWithoutCampaignInput
@@ -1085,6 +1217,7 @@ export type CampaignUncheckedCreateWithoutAuditLogsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   members?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutCampaignInput
+  postingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCampaignInput
   blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutCampaignInput
   commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCampaignInput
   exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutCampaignInput
@@ -1119,6 +1252,7 @@ export type CampaignUpdateWithoutAuditLogsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCampaignsNestedInput
   members?: Prisma.CampaignMemberUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUpdateManyWithoutCampaignNestedInput
@@ -1137,6 +1271,7 @@ export type CampaignUncheckedUpdateWithoutAuditLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.CampaignMemberUncheckedUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutCampaignNestedInput
@@ -1167,6 +1302,7 @@ export type CampaignUpdateWithoutCreatedByInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.CampaignMemberUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUpdateManyWithoutCampaignNestedInput
@@ -1185,6 +1321,7 @@ export type CampaignUncheckedUpdateWithoutCreatedByInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.CampaignMemberUncheckedUpdateManyWithoutCampaignNestedInput
+  postingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCampaignNestedInput
   blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutCampaignNestedInput
   commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCampaignNestedInput
   exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutCampaignNestedInput
@@ -1211,6 +1348,7 @@ export type CampaignUncheckedUpdateManyWithoutCreatedByInput = {
 
 export type CampaignCountOutputType = {
   members: number
+  postingOrders: number
   blastTargets: number
   commentCommands: number
   exportReports: number
@@ -1219,6 +1357,7 @@ export type CampaignCountOutputType = {
 
 export type CampaignCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | CampaignCountOutputTypeCountMembersArgs
+  postingOrders?: boolean | CampaignCountOutputTypeCountPostingOrdersArgs
   blastTargets?: boolean | CampaignCountOutputTypeCountBlastTargetsArgs
   commentCommands?: boolean | CampaignCountOutputTypeCountCommentCommandsArgs
   exportReports?: boolean | CampaignCountOutputTypeCountExportReportsArgs
@@ -1240,6 +1379,13 @@ export type CampaignCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
  */
 export type CampaignCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CampaignMemberWhereInput
+}
+
+/**
+ * CampaignCountOutputType without action
+ */
+export type CampaignCountOutputTypeCountPostingOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostingOrderWhereInput
 }
 
 /**
@@ -1285,6 +1431,7 @@ export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   deletedAt?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Campaign$membersArgs<ExtArgs>
+  postingOrders?: boolean | Prisma.Campaign$postingOrdersArgs<ExtArgs>
   blastTargets?: boolean | Prisma.Campaign$blastTargetsArgs<ExtArgs>
   commentCommands?: boolean | Prisma.Campaign$commentCommandsArgs<ExtArgs>
   exportReports?: boolean | Prisma.Campaign$exportReportsArgs<ExtArgs>
@@ -1340,6 +1487,7 @@ export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type CampaignInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Campaign$membersArgs<ExtArgs>
+  postingOrders?: boolean | Prisma.Campaign$postingOrdersArgs<ExtArgs>
   blastTargets?: boolean | Prisma.Campaign$blastTargetsArgs<ExtArgs>
   commentCommands?: boolean | Prisma.Campaign$commentCommandsArgs<ExtArgs>
   exportReports?: boolean | Prisma.Campaign$exportReportsArgs<ExtArgs>
@@ -1358,6 +1506,7 @@ export type $CampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     createdBy: Prisma.$UserPayload<ExtArgs>
     members: Prisma.$CampaignMemberPayload<ExtArgs>[]
+    postingOrders: Prisma.$PostingOrderPayload<ExtArgs>[]
     blastTargets: Prisma.$BlastTargetPayload<ExtArgs>[]
     commentCommands: Prisma.$CommentCommandPayload<ExtArgs>[]
     exportReports: Prisma.$ExportReportPayload<ExtArgs>[]
@@ -1771,6 +1920,7 @@ export interface Prisma__CampaignClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   members<T extends Prisma.Campaign$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  postingOrders<T extends Prisma.Campaign$postingOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$postingOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostingOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blastTargets<T extends Prisma.Campaign$blastTargetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$blastTargetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlastTargetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   commentCommands<T extends Prisma.Campaign$commentCommandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$commentCommandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentCommandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   exportReports<T extends Prisma.Campaign$exportReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$exportReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExportReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2237,6 +2387,30 @@ export type Campaign$membersArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.CampaignMemberScalarFieldEnum | Prisma.CampaignMemberScalarFieldEnum[]
+}
+
+/**
+ * Campaign.postingOrders
+ */
+export type Campaign$postingOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostingOrder
+   */
+  select?: Prisma.PostingOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostingOrder
+   */
+  omit?: Prisma.PostingOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostingOrderInclude<ExtArgs> | null
+  where?: Prisma.PostingOrderWhereInput
+  orderBy?: Prisma.PostingOrderOrderByWithRelationInput | Prisma.PostingOrderOrderByWithRelationInput[]
+  cursor?: Prisma.PostingOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostingOrderScalarFieldEnum | Prisma.PostingOrderScalarFieldEnum[]
 }
 
 /**

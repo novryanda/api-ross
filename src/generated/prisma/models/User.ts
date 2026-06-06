@@ -32,6 +32,7 @@ export type UserMinAggregateOutputType = {
   image: string | null
   role: $Enums.UserRole | null
   status: $Enums.UserStatus | null
+  picUnitId: string | null
   lastLoginAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -49,6 +50,7 @@ export type UserMaxAggregateOutputType = {
   image: string | null
   role: $Enums.UserRole | null
   status: $Enums.UserStatus | null
+  picUnitId: string | null
   lastLoginAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -66,6 +68,7 @@ export type UserCountAggregateOutputType = {
   image: number
   role: number
   status: number
+  picUnitId: number
   lastLoginAt: number
   createdAt: number
   updatedAt: number
@@ -85,6 +88,7 @@ export type UserMinAggregateInputType = {
   image?: true
   role?: true
   status?: true
+  picUnitId?: true
   lastLoginAt?: true
   createdAt?: true
   updatedAt?: true
@@ -102,6 +106,7 @@ export type UserMaxAggregateInputType = {
   image?: true
   role?: true
   status?: true
+  picUnitId?: true
   lastLoginAt?: true
   createdAt?: true
   updatedAt?: true
@@ -119,6 +124,7 @@ export type UserCountAggregateInputType = {
   image?: true
   role?: true
   status?: true
+  picUnitId?: true
   lastLoginAt?: true
   createdAt?: true
   updatedAt?: true
@@ -209,6 +215,7 @@ export type UserGroupByOutputType = {
   image: string | null
   role: $Enums.UserRole
   status: $Enums.UserStatus
+  picUnitId: string | null
   lastLoginAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -247,6 +254,7 @@ export type UserWhereInput = {
   image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  picUnitId?: Prisma.UuidNullableFilter<"User"> | string | null
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -256,9 +264,15 @@ export type UserWhereInput = {
   banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  picUnit?: Prisma.XOR<Prisma.OrgUnitNullableScalarRelationFilter, Prisma.OrgUnitWhereInput> | null
   createdCampaigns?: Prisma.CampaignListRelationFilter
   campaignMemberships?: Prisma.CampaignMemberListRelationFilter
+  createdOrgUnits?: Prisma.OrgUnitListRelationFilter
   createdSocialAccounts?: Prisma.SocialAccountListRelationFilter
+  createdPostingOrders?: Prisma.PostingOrderListRelationFilter
+  claimedPostingOrders?: Prisma.PostingOrderListRelationFilter
+  postingSubmissions?: Prisma.PostingSubmissionListRelationFilter
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionListRelationFilter
   submittedBlastTargets?: Prisma.BlastTargetListRelationFilter
   keptBlastAttempts?: Prisma.BlastAttemptListRelationFilter
   blastReports?: Prisma.BlastReportListRelationFilter
@@ -276,6 +290,7 @@ export type UserOrderByWithRelationInput = {
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  picUnitId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -285,9 +300,15 @@ export type UserOrderByWithRelationInput = {
   banExpires?: Prisma.SortOrderInput | Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
+  picUnit?: Prisma.OrgUnitOrderByWithRelationInput
   createdCampaigns?: Prisma.CampaignOrderByRelationAggregateInput
   campaignMemberships?: Prisma.CampaignMemberOrderByRelationAggregateInput
+  createdOrgUnits?: Prisma.OrgUnitOrderByRelationAggregateInput
   createdSocialAccounts?: Prisma.SocialAccountOrderByRelationAggregateInput
+  createdPostingOrders?: Prisma.PostingOrderOrderByRelationAggregateInput
+  claimedPostingOrders?: Prisma.PostingOrderOrderByRelationAggregateInput
+  postingSubmissions?: Prisma.PostingSubmissionOrderByRelationAggregateInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionOrderByRelationAggregateInput
   submittedBlastTargets?: Prisma.BlastTargetOrderByRelationAggregateInput
   keptBlastAttempts?: Prisma.BlastAttemptOrderByRelationAggregateInput
   blastReports?: Prisma.BlastReportOrderByRelationAggregateInput
@@ -308,6 +329,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  picUnitId?: Prisma.UuidNullableFilter<"User"> | string | null
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -317,9 +339,15 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  picUnit?: Prisma.XOR<Prisma.OrgUnitNullableScalarRelationFilter, Prisma.OrgUnitWhereInput> | null
   createdCampaigns?: Prisma.CampaignListRelationFilter
   campaignMemberships?: Prisma.CampaignMemberListRelationFilter
+  createdOrgUnits?: Prisma.OrgUnitListRelationFilter
   createdSocialAccounts?: Prisma.SocialAccountListRelationFilter
+  createdPostingOrders?: Prisma.PostingOrderListRelationFilter
+  claimedPostingOrders?: Prisma.PostingOrderListRelationFilter
+  postingSubmissions?: Prisma.PostingSubmissionListRelationFilter
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionListRelationFilter
   submittedBlastTargets?: Prisma.BlastTargetListRelationFilter
   keptBlastAttempts?: Prisma.BlastAttemptListRelationFilter
   blastReports?: Prisma.BlastReportListRelationFilter
@@ -337,6 +365,7 @@ export type UserOrderByWithAggregationInput = {
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  picUnitId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -360,6 +389,7 @@ export type UserScalarWhereWithAggregatesInput = {
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
+  picUnitId?: Prisma.UuidNullableWithAggregatesFilter<"User"> | string | null
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -386,9 +416,15 @@ export type UserCreateInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -406,6 +442,7 @@ export type UserUncheckedCreateInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -417,7 +454,12 @@ export type UserUncheckedCreateInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -444,9 +486,15 @@ export type UserUpdateInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -464,6 +512,7 @@ export type UserUncheckedUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -475,7 +524,12 @@ export type UserUncheckedUpdateInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -493,6 +547,7 @@ export type UserCreateManyInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -527,6 +582,7 @@ export type UserUncheckedUpdateManyInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -544,6 +600,7 @@ export type UserCountOrderByAggregateInput = {
   image?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  picUnitId?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -561,6 +618,7 @@ export type UserMaxOrderByAggregateInput = {
   image?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  picUnitId?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -578,6 +636,7 @@ export type UserMinOrderByAggregateInput = {
   image?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  picUnitId?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -590,6 +649,16 @@ export type UserMinOrderByAggregateInput = {
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type UserNullableScalarRelationFilter = {
@@ -671,6 +740,62 @@ export type UserUpdateOneRequiredWithoutCreatedCampaignsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedCampaignsInput, Prisma.UserUpdateWithoutCreatedCampaignsInput>, Prisma.UserUncheckedUpdateWithoutCreatedCampaignsInput>
 }
 
+export type UserCreateNestedOneWithoutCreatedOrgUnitsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedOrgUnitsInput, Prisma.UserUncheckedCreateWithoutCreatedOrgUnitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedOrgUnitsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedManyWithoutPicUnitInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPicUnitInput, Prisma.UserUncheckedCreateWithoutPicUnitInput> | Prisma.UserCreateWithoutPicUnitInput[] | Prisma.UserUncheckedCreateWithoutPicUnitInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPicUnitInput | Prisma.UserCreateOrConnectWithoutPicUnitInput[]
+  createMany?: Prisma.UserCreateManyPicUnitInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutPicUnitInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPicUnitInput, Prisma.UserUncheckedCreateWithoutPicUnitInput> | Prisma.UserCreateWithoutPicUnitInput[] | Prisma.UserUncheckedCreateWithoutPicUnitInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPicUnitInput | Prisma.UserCreateOrConnectWithoutPicUnitInput[]
+  createMany?: Prisma.UserCreateManyPicUnitInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateOneRequiredWithoutCreatedOrgUnitsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedOrgUnitsInput, Prisma.UserUncheckedCreateWithoutCreatedOrgUnitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedOrgUnitsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedOrgUnitsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedOrgUnitsInput, Prisma.UserUpdateWithoutCreatedOrgUnitsInput>, Prisma.UserUncheckedUpdateWithoutCreatedOrgUnitsInput>
+}
+
+export type UserUpdateManyWithoutPicUnitNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPicUnitInput, Prisma.UserUncheckedCreateWithoutPicUnitInput> | Prisma.UserCreateWithoutPicUnitInput[] | Prisma.UserUncheckedCreateWithoutPicUnitInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPicUnitInput | Prisma.UserCreateOrConnectWithoutPicUnitInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutPicUnitInput | Prisma.UserUpsertWithWhereUniqueWithoutPicUnitInput[]
+  createMany?: Prisma.UserCreateManyPicUnitInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutPicUnitInput | Prisma.UserUpdateWithWhereUniqueWithoutPicUnitInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutPicUnitInput | Prisma.UserUpdateManyWithWhereWithoutPicUnitInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutPicUnitNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPicUnitInput, Prisma.UserUncheckedCreateWithoutPicUnitInput> | Prisma.UserCreateWithoutPicUnitInput[] | Prisma.UserUncheckedCreateWithoutPicUnitInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPicUnitInput | Prisma.UserCreateOrConnectWithoutPicUnitInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutPicUnitInput | Prisma.UserUpsertWithWhereUniqueWithoutPicUnitInput[]
+  createMany?: Prisma.UserCreateManyPicUnitInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutPicUnitInput | Prisma.UserUpdateWithWhereUniqueWithoutPicUnitInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutPicUnitInput | Prisma.UserUpdateManyWithWhereWithoutPicUnitInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
 export type UserCreateNestedOneWithoutCampaignMembershipsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCampaignMembershipsInput, Prisma.UserUncheckedCreateWithoutCampaignMembershipsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCampaignMembershipsInput
@@ -711,6 +836,66 @@ export type UserUpdateOneRequiredWithoutSubmittedBlastTargetsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutSubmittedBlastTargetsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubmittedBlastTargetsInput, Prisma.UserUpdateWithoutSubmittedBlastTargetsInput>, Prisma.UserUncheckedUpdateWithoutSubmittedBlastTargetsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedPostingOrdersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedPostingOrdersInput, Prisma.UserUncheckedCreateWithoutCreatedPostingOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedPostingOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutClaimedPostingOrdersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClaimedPostingOrdersInput, Prisma.UserUncheckedCreateWithoutClaimedPostingOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClaimedPostingOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedPostingOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedPostingOrdersInput, Prisma.UserUncheckedCreateWithoutCreatedPostingOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedPostingOrdersInput
+  upsert?: Prisma.UserUpsertWithoutCreatedPostingOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedPostingOrdersInput, Prisma.UserUpdateWithoutCreatedPostingOrdersInput>, Prisma.UserUncheckedUpdateWithoutCreatedPostingOrdersInput>
+}
+
+export type UserUpdateOneWithoutClaimedPostingOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClaimedPostingOrdersInput, Prisma.UserUncheckedCreateWithoutClaimedPostingOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClaimedPostingOrdersInput
+  upsert?: Prisma.UserUpsertWithoutClaimedPostingOrdersInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClaimedPostingOrdersInput, Prisma.UserUpdateWithoutClaimedPostingOrdersInput>, Prisma.UserUncheckedUpdateWithoutClaimedPostingOrdersInput>
+}
+
+export type UserCreateNestedOneWithoutPostingSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPostingSubmissionsInput, Prisma.UserUncheckedCreateWithoutPostingSubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPostingSubmissionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReviewedPostingSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedPostingSubmissionsInput, Prisma.UserUncheckedCreateWithoutReviewedPostingSubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedPostingSubmissionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPostingSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPostingSubmissionsInput, Prisma.UserUncheckedCreateWithoutPostingSubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPostingSubmissionsInput
+  upsert?: Prisma.UserUpsertWithoutPostingSubmissionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPostingSubmissionsInput, Prisma.UserUpdateWithoutPostingSubmissionsInput>, Prisma.UserUncheckedUpdateWithoutPostingSubmissionsInput>
+}
+
+export type UserUpdateOneWithoutReviewedPostingSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedPostingSubmissionsInput, Prisma.UserUncheckedCreateWithoutReviewedPostingSubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedPostingSubmissionsInput
+  upsert?: Prisma.UserUpsertWithoutReviewedPostingSubmissionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewedPostingSubmissionsInput, Prisma.UserUpdateWithoutReviewedPostingSubmissionsInput>, Prisma.UserUncheckedUpdateWithoutReviewedPostingSubmissionsInput>
 }
 
 export type UserCreateNestedOneWithoutKeptBlastAttemptsInput = {
@@ -819,9 +1004,15 @@ export type UserCreateWithoutSessionsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -839,6 +1030,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -849,7 +1041,12 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -891,9 +1088,15 @@ export type UserUpdateWithoutSessionsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -911,6 +1114,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -921,7 +1125,12 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -947,9 +1156,15 @@ export type UserCreateWithoutAccountsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -967,6 +1182,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -977,7 +1193,12 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -1019,9 +1240,15 @@ export type UserUpdateWithoutAccountsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -1039,6 +1266,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1049,7 +1277,12 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -1076,8 +1309,14 @@ export type UserCreateWithoutCreatedCampaignsInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -1095,6 +1334,7 @@ export type UserUncheckedCreateWithoutCreatedCampaignsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1105,7 +1345,12 @@ export type UserUncheckedCreateWithoutCreatedCampaignsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -1148,8 +1393,14 @@ export type UserUpdateWithoutCreatedCampaignsInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -1167,6 +1418,7 @@ export type UserUncheckedUpdateWithoutCreatedCampaignsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1177,7 +1429,12 @@ export type UserUncheckedUpdateWithoutCreatedCampaignsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -1185,6 +1442,273 @@ export type UserUncheckedUpdateWithoutCreatedCampaignsInput = {
   keptCommentTasks?: Prisma.CommentTaskUncheckedUpdateManyWithoutKeptByNestedInput
   exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutRequesterNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutCreatedOrgUnitsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
+  createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutCreatedOrgUnitsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  picUnitId?: string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutCreatedOrgUnitsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedOrgUnitsInput, Prisma.UserUncheckedCreateWithoutCreatedOrgUnitsInput>
+}
+
+export type UserCreateWithoutPicUnitInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutPicUnitInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutPicUnitInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPicUnitInput, Prisma.UserUncheckedCreateWithoutPicUnitInput>
+}
+
+export type UserCreateManyPicUnitInputEnvelope = {
+  data: Prisma.UserCreateManyPicUnitInput | Prisma.UserCreateManyPicUnitInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithoutCreatedOrgUnitsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedOrgUnitsInput, Prisma.UserUncheckedUpdateWithoutCreatedOrgUnitsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedOrgUnitsInput, Prisma.UserUncheckedCreateWithoutCreatedOrgUnitsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedOrgUnitsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedOrgUnitsInput, Prisma.UserUncheckedUpdateWithoutCreatedOrgUnitsInput>
+}
+
+export type UserUpdateWithoutCreatedOrgUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
+  createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedOrgUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserUpsertWithWhereUniqueWithoutPicUnitInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPicUnitInput, Prisma.UserUncheckedUpdateWithoutPicUnitInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPicUnitInput, Prisma.UserUncheckedCreateWithoutPicUnitInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutPicUnitInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPicUnitInput, Prisma.UserUncheckedUpdateWithoutPicUnitInput>
+}
+
+export type UserUpdateManyWithWhereWithoutPicUnitInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutPicUnitInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  id?: Prisma.UuidFilter<"User"> | string
+  name?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  emailVerified?: Prisma.BoolFilter<"User"> | boolean
+  image?: Prisma.StringNullableFilter<"User"> | string | null
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  picUnitId?: Prisma.UuidNullableFilter<"User"> | string | null
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  banned?: Prisma.BoolNullableFilter<"User"> | boolean | null
+  banReason?: Prisma.StringNullableFilter<"User"> | string | null
+  banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
 }
 
 export type UserCreateWithoutCampaignMembershipsInput = {
@@ -1204,8 +1728,14 @@ export type UserCreateWithoutCampaignMembershipsInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -1223,6 +1753,7 @@ export type UserUncheckedCreateWithoutCampaignMembershipsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1233,7 +1764,12 @@ export type UserUncheckedCreateWithoutCampaignMembershipsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -1276,8 +1812,14 @@ export type UserUpdateWithoutCampaignMembershipsInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -1295,6 +1837,7 @@ export type UserUncheckedUpdateWithoutCampaignMembershipsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1305,7 +1848,12 @@ export type UserUncheckedUpdateWithoutCampaignMembershipsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -1332,8 +1880,14 @@ export type UserCreateWithoutCreatedSocialAccountsInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -1351,6 +1905,7 @@ export type UserUncheckedCreateWithoutCreatedSocialAccountsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1362,6 +1917,11 @@ export type UserUncheckedCreateWithoutCreatedSocialAccountsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -1404,8 +1964,14 @@ export type UserUpdateWithoutCreatedSocialAccountsInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -1423,6 +1989,7 @@ export type UserUncheckedUpdateWithoutCreatedSocialAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1434,6 +2001,11 @@ export type UserUncheckedUpdateWithoutCreatedSocialAccountsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -1460,9 +2032,15 @@ export type UserCreateWithoutSubmittedBlastTargetsInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
   createdCommentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCreatedByInput
@@ -1479,6 +2057,7 @@ export type UserUncheckedCreateWithoutSubmittedBlastTargetsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1490,7 +2069,12 @@ export type UserUncheckedCreateWithoutSubmittedBlastTargetsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
   createdCommentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1532,9 +2116,15 @@ export type UserUpdateWithoutSubmittedBlastTargetsInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
   createdCommentCommands?: Prisma.CommentCommandUpdateManyWithoutCreatedByNestedInput
@@ -1551,6 +2141,7 @@ export type UserUncheckedUpdateWithoutSubmittedBlastTargetsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1562,7 +2153,620 @@ export type UserUncheckedUpdateWithoutSubmittedBlastTargetsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutCreatedPostingOrdersInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
+  createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutCreatedPostingOrdersInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  picUnitId?: string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutCreatedPostingOrdersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedPostingOrdersInput, Prisma.UserUncheckedCreateWithoutCreatedPostingOrdersInput>
+}
+
+export type UserCreateWithoutClaimedPostingOrdersInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
+  createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutClaimedPostingOrdersInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  picUnitId?: string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutClaimedPostingOrdersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClaimedPostingOrdersInput, Prisma.UserUncheckedCreateWithoutClaimedPostingOrdersInput>
+}
+
+export type UserUpsertWithoutCreatedPostingOrdersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedPostingOrdersInput, Prisma.UserUncheckedUpdateWithoutCreatedPostingOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedPostingOrdersInput, Prisma.UserUncheckedCreateWithoutCreatedPostingOrdersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedPostingOrdersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedPostingOrdersInput, Prisma.UserUncheckedUpdateWithoutCreatedPostingOrdersInput>
+}
+
+export type UserUpdateWithoutCreatedPostingOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
+  createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedPostingOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserUpsertWithoutClaimedPostingOrdersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClaimedPostingOrdersInput, Prisma.UserUncheckedUpdateWithoutClaimedPostingOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClaimedPostingOrdersInput, Prisma.UserUncheckedCreateWithoutClaimedPostingOrdersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClaimedPostingOrdersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClaimedPostingOrdersInput, Prisma.UserUncheckedUpdateWithoutClaimedPostingOrdersInput>
+}
+
+export type UserUpdateWithoutClaimedPostingOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
+  createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClaimedPostingOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutPostingSubmissionsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
+  createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutPostingSubmissionsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  picUnitId?: string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutPostingSubmissionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPostingSubmissionsInput, Prisma.UserUncheckedCreateWithoutPostingSubmissionsInput>
+}
+
+export type UserCreateWithoutReviewedPostingSubmissionsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
+  createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutReviewedPostingSubmissionsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  picUnitId?: string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
+  blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCreatedByInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedCreateNestedManyWithoutKeptByInput
+  exportReports?: Prisma.ExportReportUncheckedCreateNestedManyWithoutRequesterInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutReviewedPostingSubmissionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedPostingSubmissionsInput, Prisma.UserUncheckedCreateWithoutReviewedPostingSubmissionsInput>
+}
+
+export type UserUpsertWithoutPostingSubmissionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPostingSubmissionsInput, Prisma.UserUncheckedUpdateWithoutPostingSubmissionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPostingSubmissionsInput, Prisma.UserUncheckedCreateWithoutPostingSubmissionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPostingSubmissionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPostingSubmissionsInput, Prisma.UserUncheckedUpdateWithoutPostingSubmissionsInput>
+}
+
+export type UserUpdateWithoutPostingSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
+  createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPostingSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserUpsertWithoutReviewedPostingSubmissionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewedPostingSubmissionsInput, Prisma.UserUncheckedUpdateWithoutReviewedPostingSubmissionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedPostingSubmissionsInput, Prisma.UserUncheckedCreateWithoutReviewedPostingSubmissionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReviewedPostingSubmissionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewedPostingSubmissionsInput, Prisma.UserUncheckedUpdateWithoutReviewedPostingSubmissionsInput>
+}
+
+export type UserUpdateWithoutReviewedPostingSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
+  createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReviewedPostingSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
   createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1588,9 +2792,15 @@ export type UserCreateWithoutKeptBlastAttemptsInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
   createdCommentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCreatedByInput
@@ -1607,6 +2817,7 @@ export type UserUncheckedCreateWithoutKeptBlastAttemptsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1618,7 +2829,12 @@ export type UserUncheckedCreateWithoutKeptBlastAttemptsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
   createdCommentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1660,9 +2876,15 @@ export type UserUpdateWithoutKeptBlastAttemptsInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
   createdCommentCommands?: Prisma.CommentCommandUpdateManyWithoutCreatedByNestedInput
@@ -1679,6 +2901,7 @@ export type UserUncheckedUpdateWithoutKeptBlastAttemptsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1690,7 +2913,12 @@ export type UserUncheckedUpdateWithoutKeptBlastAttemptsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
   createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1716,9 +2944,15 @@ export type UserCreateWithoutBlastReportsInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   createdCommentCommands?: Prisma.CommentCommandCreateNestedManyWithoutCreatedByInput
@@ -1735,6 +2969,7 @@ export type UserUncheckedCreateWithoutBlastReportsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1746,7 +2981,12 @@ export type UserUncheckedCreateWithoutBlastReportsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   createdCommentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1788,9 +3028,15 @@ export type UserUpdateWithoutBlastReportsInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   createdCommentCommands?: Prisma.CommentCommandUpdateManyWithoutCreatedByNestedInput
@@ -1807,6 +3053,7 @@ export type UserUncheckedUpdateWithoutBlastReportsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1818,7 +3065,12 @@ export type UserUncheckedUpdateWithoutBlastReportsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1844,9 +3096,15 @@ export type UserCreateWithoutCreatedCommentCommandsInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -1863,6 +3121,7 @@ export type UserUncheckedCreateWithoutCreatedCommentCommandsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1874,7 +3133,12 @@ export type UserUncheckedCreateWithoutCreatedCommentCommandsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -1916,9 +3180,15 @@ export type UserUpdateWithoutCreatedCommentCommandsInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -1935,6 +3205,7 @@ export type UserUncheckedUpdateWithoutCreatedCommentCommandsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1946,7 +3217,12 @@ export type UserUncheckedUpdateWithoutCreatedCommentCommandsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -1972,9 +3248,15 @@ export type UserCreateWithoutKeptCommentTasksInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -1991,6 +3273,7 @@ export type UserUncheckedCreateWithoutKeptCommentTasksInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2002,7 +3285,12 @@ export type UserUncheckedCreateWithoutKeptCommentTasksInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -2044,9 +3332,15 @@ export type UserUpdateWithoutKeptCommentTasksInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -2063,6 +3357,7 @@ export type UserUncheckedUpdateWithoutKeptCommentTasksInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2074,7 +3369,12 @@ export type UserUncheckedUpdateWithoutKeptCommentTasksInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -2100,9 +3400,15 @@ export type UserCreateWithoutExportReportsInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -2119,6 +3425,7 @@ export type UserUncheckedCreateWithoutExportReportsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2130,7 +3437,12 @@ export type UserUncheckedCreateWithoutExportReportsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -2172,9 +3484,15 @@ export type UserUpdateWithoutExportReportsInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -2191,6 +3509,7 @@ export type UserUncheckedUpdateWithoutExportReportsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2202,7 +3521,12 @@ export type UserUncheckedUpdateWithoutExportReportsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -2228,9 +3552,15 @@ export type UserCreateWithoutAuditLogsInput = {
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  picUnit?: Prisma.OrgUnitCreateNestedOneWithoutMembersInput
   createdCampaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportCreateNestedManyWithoutSubmittedByInput
@@ -2247,6 +3577,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   image?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  picUnitId?: string | null
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2258,7 +3589,12 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   createdCampaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedCreateNestedManyWithoutUserInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedCreateNestedManyWithoutCreatedByInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedCreateNestedManyWithoutCreatedByInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedCreateNestedManyWithoutClaimedByInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutReviewedByInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSubmittedByInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedCreateNestedManyWithoutKeptByInput
   blastReports?: Prisma.BlastReportUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -2300,9 +3636,15 @@ export type UserUpdateWithoutAuditLogsInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  picUnit?: Prisma.OrgUnitUpdateOneWithoutMembersNestedInput
   createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
@@ -2312,6 +3654,91 @@ export type UserUpdateWithoutAuditLogsInput = {
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  picUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUncheckedUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutRequesterNestedInput
+}
+
+export type UserCreateManyPicUnitInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+}
+
+export type UserUpdateWithoutPicUnitInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  createdCampaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+  campaignMemberships?: Prisma.CampaignMemberUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUpdateManyWithoutCreatedByNestedInput
+  createdSocialAccounts?: Prisma.SocialAccountUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutReviewedByNestedInput
+  submittedBlastTargets?: Prisma.BlastTargetUpdateManyWithoutSubmittedByNestedInput
+  keptBlastAttempts?: Prisma.BlastAttemptUpdateManyWithoutKeptByNestedInput
+  blastReports?: Prisma.BlastReportUpdateManyWithoutSubmittedByNestedInput
+  createdCommentCommands?: Prisma.CommentCommandUpdateManyWithoutCreatedByNestedInput
+  keptCommentTasks?: Prisma.CommentTaskUpdateManyWithoutKeptByNestedInput
+  exportReports?: Prisma.ExportReportUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPicUnitInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2330,13 +3757,36 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   createdCampaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   campaignMemberships?: Prisma.CampaignMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdOrgUnits?: Prisma.OrgUnitUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSocialAccounts?: Prisma.SocialAccountUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedPostingOrders?: Prisma.PostingOrderUncheckedUpdateManyWithoutClaimedByNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedPostingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutReviewedByNestedInput
   submittedBlastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSubmittedByNestedInput
   keptBlastAttempts?: Prisma.BlastAttemptUncheckedUpdateManyWithoutKeptByNestedInput
   blastReports?: Prisma.BlastReportUncheckedUpdateManyWithoutSubmittedByNestedInput
   createdCommentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutCreatedByNestedInput
   keptCommentTasks?: Prisma.CommentTaskUncheckedUpdateManyWithoutKeptByNestedInput
   exportReports?: Prisma.ExportReportUncheckedUpdateManyWithoutRequesterNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutPicUnitInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -2349,7 +3799,12 @@ export type UserCountOutputType = {
   accounts: number
   createdCampaigns: number
   campaignMemberships: number
+  createdOrgUnits: number
   createdSocialAccounts: number
+  createdPostingOrders: number
+  claimedPostingOrders: number
+  postingSubmissions: number
+  reviewedPostingSubmissions: number
   submittedBlastTargets: number
   keptBlastAttempts: number
   blastReports: number
@@ -2364,7 +3819,12 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   createdCampaigns?: boolean | UserCountOutputTypeCountCreatedCampaignsArgs
   campaignMemberships?: boolean | UserCountOutputTypeCountCampaignMembershipsArgs
+  createdOrgUnits?: boolean | UserCountOutputTypeCountCreatedOrgUnitsArgs
   createdSocialAccounts?: boolean | UserCountOutputTypeCountCreatedSocialAccountsArgs
+  createdPostingOrders?: boolean | UserCountOutputTypeCountCreatedPostingOrdersArgs
+  claimedPostingOrders?: boolean | UserCountOutputTypeCountClaimedPostingOrdersArgs
+  postingSubmissions?: boolean | UserCountOutputTypeCountPostingSubmissionsArgs
+  reviewedPostingSubmissions?: boolean | UserCountOutputTypeCountReviewedPostingSubmissionsArgs
   submittedBlastTargets?: boolean | UserCountOutputTypeCountSubmittedBlastTargetsArgs
   keptBlastAttempts?: boolean | UserCountOutputTypeCountKeptBlastAttemptsArgs
   blastReports?: boolean | UserCountOutputTypeCountBlastReportsArgs
@@ -2415,8 +3875,43 @@ export type UserCountOutputTypeCountCampaignMembershipsArgs<ExtArgs extends runt
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountCreatedOrgUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrgUnitWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountCreatedSocialAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SocialAccountWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedPostingOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostingOrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountClaimedPostingOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostingOrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPostingSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostingSubmissionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReviewedPostingSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostingSubmissionWhereInput
 }
 
 /**
@@ -2477,6 +3972,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   image?: boolean
   role?: boolean
   status?: boolean
+  picUnitId?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2486,9 +3982,15 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   banExpires?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  picUnit?: boolean | Prisma.User$picUnitArgs<ExtArgs>
   createdCampaigns?: boolean | Prisma.User$createdCampaignsArgs<ExtArgs>
   campaignMemberships?: boolean | Prisma.User$campaignMembershipsArgs<ExtArgs>
+  createdOrgUnits?: boolean | Prisma.User$createdOrgUnitsArgs<ExtArgs>
   createdSocialAccounts?: boolean | Prisma.User$createdSocialAccountsArgs<ExtArgs>
+  createdPostingOrders?: boolean | Prisma.User$createdPostingOrdersArgs<ExtArgs>
+  claimedPostingOrders?: boolean | Prisma.User$claimedPostingOrdersArgs<ExtArgs>
+  postingSubmissions?: boolean | Prisma.User$postingSubmissionsArgs<ExtArgs>
+  reviewedPostingSubmissions?: boolean | Prisma.User$reviewedPostingSubmissionsArgs<ExtArgs>
   submittedBlastTargets?: boolean | Prisma.User$submittedBlastTargetsArgs<ExtArgs>
   keptBlastAttempts?: boolean | Prisma.User$keptBlastAttemptsArgs<ExtArgs>
   blastReports?: boolean | Prisma.User$blastReportsArgs<ExtArgs>
@@ -2507,6 +4009,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   role?: boolean
   status?: boolean
+  picUnitId?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2514,6 +4017,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   banned?: boolean
   banReason?: boolean
   banExpires?: boolean
+  picUnit?: boolean | Prisma.User$picUnitArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2524,6 +4028,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   role?: boolean
   status?: boolean
+  picUnitId?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2531,6 +4036,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   banned?: boolean
   banReason?: boolean
   banExpires?: boolean
+  picUnit?: boolean | Prisma.User$picUnitArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -2541,6 +4047,7 @@ export type UserSelectScalar = {
   image?: boolean
   role?: boolean
   status?: boolean
+  picUnitId?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2550,13 +4057,19 @@ export type UserSelectScalar = {
   banExpires?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "role" | "status" | "lastLoginAt" | "createdAt" | "updatedAt" | "deletedAt" | "banned" | "banReason" | "banExpires", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "role" | "status" | "picUnitId" | "lastLoginAt" | "createdAt" | "updatedAt" | "deletedAt" | "banned" | "banReason" | "banExpires", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  picUnit?: boolean | Prisma.User$picUnitArgs<ExtArgs>
   createdCampaigns?: boolean | Prisma.User$createdCampaignsArgs<ExtArgs>
   campaignMemberships?: boolean | Prisma.User$campaignMembershipsArgs<ExtArgs>
+  createdOrgUnits?: boolean | Prisma.User$createdOrgUnitsArgs<ExtArgs>
   createdSocialAccounts?: boolean | Prisma.User$createdSocialAccountsArgs<ExtArgs>
+  createdPostingOrders?: boolean | Prisma.User$createdPostingOrdersArgs<ExtArgs>
+  claimedPostingOrders?: boolean | Prisma.User$claimedPostingOrdersArgs<ExtArgs>
+  postingSubmissions?: boolean | Prisma.User$postingSubmissionsArgs<ExtArgs>
+  reviewedPostingSubmissions?: boolean | Prisma.User$reviewedPostingSubmissionsArgs<ExtArgs>
   submittedBlastTargets?: boolean | Prisma.User$submittedBlastTargetsArgs<ExtArgs>
   keptBlastAttempts?: boolean | Prisma.User$keptBlastAttemptsArgs<ExtArgs>
   blastReports?: boolean | Prisma.User$blastReportsArgs<ExtArgs>
@@ -2566,17 +4079,27 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  picUnit?: boolean | Prisma.User$picUnitArgs<ExtArgs>
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  picUnit?: boolean | Prisma.User$picUnitArgs<ExtArgs>
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
+    picUnit: Prisma.$OrgUnitPayload<ExtArgs> | null
     createdCampaigns: Prisma.$CampaignPayload<ExtArgs>[]
     campaignMemberships: Prisma.$CampaignMemberPayload<ExtArgs>[]
+    createdOrgUnits: Prisma.$OrgUnitPayload<ExtArgs>[]
     createdSocialAccounts: Prisma.$SocialAccountPayload<ExtArgs>[]
+    createdPostingOrders: Prisma.$PostingOrderPayload<ExtArgs>[]
+    claimedPostingOrders: Prisma.$PostingOrderPayload<ExtArgs>[]
+    postingSubmissions: Prisma.$PostingSubmissionPayload<ExtArgs>[]
+    reviewedPostingSubmissions: Prisma.$PostingSubmissionPayload<ExtArgs>[]
     submittedBlastTargets: Prisma.$BlastTargetPayload<ExtArgs>[]
     keptBlastAttempts: Prisma.$BlastAttemptPayload<ExtArgs>[]
     blastReports: Prisma.$BlastReportPayload<ExtArgs>[]
@@ -2593,6 +4116,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     image: string | null
     role: $Enums.UserRole
     status: $Enums.UserStatus
+    picUnitId: string | null
     lastLoginAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -2996,9 +4520,15 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  picUnit<T extends Prisma.User$picUnitArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$picUnitArgs<ExtArgs>>): Prisma.Prisma__OrgUnitClient<runtime.Types.Result.GetResult<Prisma.$OrgUnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   createdCampaigns<T extends Prisma.User$createdCampaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   campaignMemberships<T extends Prisma.User$campaignMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$campaignMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdOrgUnits<T extends Prisma.User$createdOrgUnitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdOrgUnitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrgUnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdSocialAccounts<T extends Prisma.User$createdSocialAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdSocialAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SocialAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdPostingOrders<T extends Prisma.User$createdPostingOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdPostingOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostingOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  claimedPostingOrders<T extends Prisma.User$claimedPostingOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$claimedPostingOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostingOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  postingSubmissions<T extends Prisma.User$postingSubmissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$postingSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostingSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewedPostingSubmissions<T extends Prisma.User$reviewedPostingSubmissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedPostingSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostingSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   submittedBlastTargets<T extends Prisma.User$submittedBlastTargetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$submittedBlastTargetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlastTargetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   keptBlastAttempts<T extends Prisma.User$keptBlastAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$keptBlastAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlastAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blastReports<T extends Prisma.User$blastReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blastReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlastReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3042,6 +4572,7 @@ export interface UserFieldRefs {
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly status: Prisma.FieldRef<"User", 'UserStatus'>
+  readonly picUnitId: Prisma.FieldRef<"User", 'String'>
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -3303,6 +4834,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -3373,6 +4908,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -3490,6 +5029,25 @@ export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
+ * User.picUnit
+ */
+export type User$picUnitArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrgUnit
+   */
+  select?: Prisma.OrgUnitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrgUnit
+   */
+  omit?: Prisma.OrgUnitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrgUnitInclude<ExtArgs> | null
+  where?: Prisma.OrgUnitWhereInput
+}
+
+/**
  * User.createdCampaigns
  */
 export type User$createdCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3538,6 +5096,30 @@ export type User$campaignMembershipsArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
+ * User.createdOrgUnits
+ */
+export type User$createdOrgUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrgUnit
+   */
+  select?: Prisma.OrgUnitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrgUnit
+   */
+  omit?: Prisma.OrgUnitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrgUnitInclude<ExtArgs> | null
+  where?: Prisma.OrgUnitWhereInput
+  orderBy?: Prisma.OrgUnitOrderByWithRelationInput | Prisma.OrgUnitOrderByWithRelationInput[]
+  cursor?: Prisma.OrgUnitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrgUnitScalarFieldEnum | Prisma.OrgUnitScalarFieldEnum[]
+}
+
+/**
  * User.createdSocialAccounts
  */
 export type User$createdSocialAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3559,6 +5141,102 @@ export type User$createdSocialAccountsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.SocialAccountScalarFieldEnum | Prisma.SocialAccountScalarFieldEnum[]
+}
+
+/**
+ * User.createdPostingOrders
+ */
+export type User$createdPostingOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostingOrder
+   */
+  select?: Prisma.PostingOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostingOrder
+   */
+  omit?: Prisma.PostingOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostingOrderInclude<ExtArgs> | null
+  where?: Prisma.PostingOrderWhereInput
+  orderBy?: Prisma.PostingOrderOrderByWithRelationInput | Prisma.PostingOrderOrderByWithRelationInput[]
+  cursor?: Prisma.PostingOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostingOrderScalarFieldEnum | Prisma.PostingOrderScalarFieldEnum[]
+}
+
+/**
+ * User.claimedPostingOrders
+ */
+export type User$claimedPostingOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostingOrder
+   */
+  select?: Prisma.PostingOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostingOrder
+   */
+  omit?: Prisma.PostingOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostingOrderInclude<ExtArgs> | null
+  where?: Prisma.PostingOrderWhereInput
+  orderBy?: Prisma.PostingOrderOrderByWithRelationInput | Prisma.PostingOrderOrderByWithRelationInput[]
+  cursor?: Prisma.PostingOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostingOrderScalarFieldEnum | Prisma.PostingOrderScalarFieldEnum[]
+}
+
+/**
+ * User.postingSubmissions
+ */
+export type User$postingSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostingSubmission
+   */
+  select?: Prisma.PostingSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostingSubmission
+   */
+  omit?: Prisma.PostingSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostingSubmissionInclude<ExtArgs> | null
+  where?: Prisma.PostingSubmissionWhereInput
+  orderBy?: Prisma.PostingSubmissionOrderByWithRelationInput | Prisma.PostingSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.PostingSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostingSubmissionScalarFieldEnum | Prisma.PostingSubmissionScalarFieldEnum[]
+}
+
+/**
+ * User.reviewedPostingSubmissions
+ */
+export type User$reviewedPostingSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostingSubmission
+   */
+  select?: Prisma.PostingSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostingSubmission
+   */
+  omit?: Prisma.PostingSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostingSubmissionInclude<ExtArgs> | null
+  where?: Prisma.PostingSubmissionWhereInput
+  orderBy?: Prisma.PostingSubmissionOrderByWithRelationInput | Prisma.PostingSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.PostingSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostingSubmissionScalarFieldEnum | Prisma.PostingSubmissionScalarFieldEnum[]
 }
 
 /**

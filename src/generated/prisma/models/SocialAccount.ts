@@ -231,6 +231,7 @@ export type SocialAccountWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"SocialAccount"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"SocialAccount"> | Date | string | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  postingSubmissions?: Prisma.PostingSubmissionListRelationFilter
   blastTargets?: Prisma.BlastTargetListRelationFilter
   commentCommands?: Prisma.CommentCommandListRelationFilter
 }
@@ -248,6 +249,7 @@ export type SocialAccountOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdBy?: Prisma.UserOrderByWithRelationInput
+  postingSubmissions?: Prisma.PostingSubmissionOrderByRelationAggregateInput
   blastTargets?: Prisma.BlastTargetOrderByRelationAggregateInput
   commentCommands?: Prisma.CommentCommandOrderByRelationAggregateInput
 }
@@ -269,6 +271,7 @@ export type SocialAccountWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"SocialAccount"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"SocialAccount"> | Date | string | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  postingSubmissions?: Prisma.PostingSubmissionListRelationFilter
   blastTargets?: Prisma.BlastTargetListRelationFilter
   commentCommands?: Prisma.CommentCommandListRelationFilter
 }, "id" | "platform_username">
@@ -319,6 +322,7 @@ export type SocialAccountCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedSocialAccountsInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSocialAccountInput
   blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSocialAccountInput
   commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutSocialAccountInput
 }
@@ -335,6 +339,7 @@ export type SocialAccountUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSocialAccountInput
   blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSocialAccountInput
   commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutSocialAccountInput
 }
@@ -351,6 +356,7 @@ export type SocialAccountUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedSocialAccountsNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSocialAccountNestedInput
   blastTargets?: Prisma.BlastTargetUpdateManyWithoutSocialAccountNestedInput
   commentCommands?: Prisma.CommentCommandUpdateManyWithoutSocialAccountNestedInput
 }
@@ -367,6 +373,7 @@ export type SocialAccountUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSocialAccountNestedInput
   blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSocialAccountNestedInput
   commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutSocialAccountNestedInput
 }
@@ -547,6 +554,20 @@ export type SocialAccountUpdateOneRequiredWithoutBlastTargetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SocialAccountUpdateToOneWithWhereWithoutBlastTargetsInput, Prisma.SocialAccountUpdateWithoutBlastTargetsInput>, Prisma.SocialAccountUncheckedUpdateWithoutBlastTargetsInput>
 }
 
+export type SocialAccountCreateNestedOneWithoutPostingSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.SocialAccountCreateWithoutPostingSubmissionsInput, Prisma.SocialAccountUncheckedCreateWithoutPostingSubmissionsInput>
+  connectOrCreate?: Prisma.SocialAccountCreateOrConnectWithoutPostingSubmissionsInput
+  connect?: Prisma.SocialAccountWhereUniqueInput
+}
+
+export type SocialAccountUpdateOneRequiredWithoutPostingSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.SocialAccountCreateWithoutPostingSubmissionsInput, Prisma.SocialAccountUncheckedCreateWithoutPostingSubmissionsInput>
+  connectOrCreate?: Prisma.SocialAccountCreateOrConnectWithoutPostingSubmissionsInput
+  upsert?: Prisma.SocialAccountUpsertWithoutPostingSubmissionsInput
+  connect?: Prisma.SocialAccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SocialAccountUpdateToOneWithWhereWithoutPostingSubmissionsInput, Prisma.SocialAccountUpdateWithoutPostingSubmissionsInput>, Prisma.SocialAccountUncheckedUpdateWithoutPostingSubmissionsInput>
+}
+
 export type SocialAccountCreateNestedOneWithoutCommentCommandsInput = {
   create?: Prisma.XOR<Prisma.SocialAccountCreateWithoutCommentCommandsInput, Prisma.SocialAccountUncheckedCreateWithoutCommentCommandsInput>
   connectOrCreate?: Prisma.SocialAccountCreateOrConnectWithoutCommentCommandsInput
@@ -574,6 +595,7 @@ export type SocialAccountCreateWithoutCreatedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSocialAccountInput
   blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSocialAccountInput
   commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutSocialAccountInput
 }
@@ -589,6 +611,7 @@ export type SocialAccountUncheckedCreateWithoutCreatedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSocialAccountInput
   blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSocialAccountInput
   commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutSocialAccountInput
 }
@@ -648,6 +671,7 @@ export type SocialAccountCreateWithoutBlastTargetsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedSocialAccountsInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSocialAccountInput
   commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutSocialAccountInput
 }
 
@@ -663,6 +687,7 @@ export type SocialAccountUncheckedCreateWithoutBlastTargetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSocialAccountInput
   commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutSocialAccountInput
 }
 
@@ -694,6 +719,7 @@ export type SocialAccountUpdateWithoutBlastTargetsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedSocialAccountsNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSocialAccountNestedInput
   commentCommands?: Prisma.CommentCommandUpdateManyWithoutSocialAccountNestedInput
 }
 
@@ -709,6 +735,87 @@ export type SocialAccountUncheckedUpdateWithoutBlastTargetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSocialAccountNestedInput
+  commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutSocialAccountNestedInput
+}
+
+export type SocialAccountCreateWithoutPostingSubmissionsInput = {
+  id?: string
+  platform: $Enums.Platform
+  username: string
+  displayName: string
+  profileUrl: string
+  category: $Enums.SocialAccountCategory
+  status?: $Enums.SocialAccountStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedSocialAccountsInput
+  blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSocialAccountInput
+  commentCommands?: Prisma.CommentCommandCreateNestedManyWithoutSocialAccountInput
+}
+
+export type SocialAccountUncheckedCreateWithoutPostingSubmissionsInput = {
+  id?: string
+  platform: $Enums.Platform
+  username: string
+  displayName: string
+  profileUrl: string
+  category: $Enums.SocialAccountCategory
+  status?: $Enums.SocialAccountStatus
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSocialAccountInput
+  commentCommands?: Prisma.CommentCommandUncheckedCreateNestedManyWithoutSocialAccountInput
+}
+
+export type SocialAccountCreateOrConnectWithoutPostingSubmissionsInput = {
+  where: Prisma.SocialAccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.SocialAccountCreateWithoutPostingSubmissionsInput, Prisma.SocialAccountUncheckedCreateWithoutPostingSubmissionsInput>
+}
+
+export type SocialAccountUpsertWithoutPostingSubmissionsInput = {
+  update: Prisma.XOR<Prisma.SocialAccountUpdateWithoutPostingSubmissionsInput, Prisma.SocialAccountUncheckedUpdateWithoutPostingSubmissionsInput>
+  create: Prisma.XOR<Prisma.SocialAccountCreateWithoutPostingSubmissionsInput, Prisma.SocialAccountUncheckedCreateWithoutPostingSubmissionsInput>
+  where?: Prisma.SocialAccountWhereInput
+}
+
+export type SocialAccountUpdateToOneWithWhereWithoutPostingSubmissionsInput = {
+  where?: Prisma.SocialAccountWhereInput
+  data: Prisma.XOR<Prisma.SocialAccountUpdateWithoutPostingSubmissionsInput, Prisma.SocialAccountUncheckedUpdateWithoutPostingSubmissionsInput>
+}
+
+export type SocialAccountUpdateWithoutPostingSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  profileUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumSocialAccountCategoryFieldUpdateOperationsInput | $Enums.SocialAccountCategory
+  status?: Prisma.EnumSocialAccountStatusFieldUpdateOperationsInput | $Enums.SocialAccountStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedSocialAccountsNestedInput
+  blastTargets?: Prisma.BlastTargetUpdateManyWithoutSocialAccountNestedInput
+  commentCommands?: Prisma.CommentCommandUpdateManyWithoutSocialAccountNestedInput
+}
+
+export type SocialAccountUncheckedUpdateWithoutPostingSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  profileUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumSocialAccountCategoryFieldUpdateOperationsInput | $Enums.SocialAccountCategory
+  status?: Prisma.EnumSocialAccountStatusFieldUpdateOperationsInput | $Enums.SocialAccountStatus
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSocialAccountNestedInput
   commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutSocialAccountNestedInput
 }
 
@@ -724,6 +831,7 @@ export type SocialAccountCreateWithoutCommentCommandsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedSocialAccountsInput
+  postingSubmissions?: Prisma.PostingSubmissionCreateNestedManyWithoutSocialAccountInput
   blastTargets?: Prisma.BlastTargetCreateNestedManyWithoutSocialAccountInput
 }
 
@@ -739,6 +847,7 @@ export type SocialAccountUncheckedCreateWithoutCommentCommandsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutSocialAccountInput
   blastTargets?: Prisma.BlastTargetUncheckedCreateNestedManyWithoutSocialAccountInput
 }
 
@@ -770,6 +879,7 @@ export type SocialAccountUpdateWithoutCommentCommandsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedSocialAccountsNestedInput
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSocialAccountNestedInput
   blastTargets?: Prisma.BlastTargetUpdateManyWithoutSocialAccountNestedInput
 }
 
@@ -785,6 +895,7 @@ export type SocialAccountUncheckedUpdateWithoutCommentCommandsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSocialAccountNestedInput
   blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSocialAccountNestedInput
 }
 
@@ -812,6 +923,7 @@ export type SocialAccountUpdateWithoutCreatedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionUpdateManyWithoutSocialAccountNestedInput
   blastTargets?: Prisma.BlastTargetUpdateManyWithoutSocialAccountNestedInput
   commentCommands?: Prisma.CommentCommandUpdateManyWithoutSocialAccountNestedInput
 }
@@ -827,6 +939,7 @@ export type SocialAccountUncheckedUpdateWithoutCreatedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  postingSubmissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutSocialAccountNestedInput
   blastTargets?: Prisma.BlastTargetUncheckedUpdateManyWithoutSocialAccountNestedInput
   commentCommands?: Prisma.CommentCommandUncheckedUpdateManyWithoutSocialAccountNestedInput
 }
@@ -850,11 +963,13 @@ export type SocialAccountUncheckedUpdateManyWithoutCreatedByInput = {
  */
 
 export type SocialAccountCountOutputType = {
+  postingSubmissions: number
   blastTargets: number
   commentCommands: number
 }
 
 export type SocialAccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  postingSubmissions?: boolean | SocialAccountCountOutputTypeCountPostingSubmissionsArgs
   blastTargets?: boolean | SocialAccountCountOutputTypeCountBlastTargetsArgs
   commentCommands?: boolean | SocialAccountCountOutputTypeCountCommentCommandsArgs
 }
@@ -867,6 +982,13 @@ export type SocialAccountCountOutputTypeDefaultArgs<ExtArgs extends runtime.Type
    * Select specific fields to fetch from the SocialAccountCountOutputType
    */
   select?: Prisma.SocialAccountCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * SocialAccountCountOutputType without action
+ */
+export type SocialAccountCountOutputTypeCountPostingSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostingSubmissionWhereInput
 }
 
 /**
@@ -897,6 +1019,7 @@ export type SocialAccountSelect<ExtArgs extends runtime.Types.Extensions.Interna
   updatedAt?: boolean
   deletedAt?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  postingSubmissions?: boolean | Prisma.SocialAccount$postingSubmissionsArgs<ExtArgs>
   blastTargets?: boolean | Prisma.SocialAccount$blastTargetsArgs<ExtArgs>
   commentCommands?: boolean | Prisma.SocialAccount$commentCommandsArgs<ExtArgs>
   _count?: boolean | Prisma.SocialAccountCountOutputTypeDefaultArgs<ExtArgs>
@@ -949,6 +1072,7 @@ export type SocialAccountSelectScalar = {
 export type SocialAccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "platform" | "username" | "displayName" | "profileUrl" | "category" | "status" | "createdById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["socialAccount"]>
 export type SocialAccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  postingSubmissions?: boolean | Prisma.SocialAccount$postingSubmissionsArgs<ExtArgs>
   blastTargets?: boolean | Prisma.SocialAccount$blastTargetsArgs<ExtArgs>
   commentCommands?: boolean | Prisma.SocialAccount$commentCommandsArgs<ExtArgs>
   _count?: boolean | Prisma.SocialAccountCountOutputTypeDefaultArgs<ExtArgs>
@@ -964,6 +1088,7 @@ export type $SocialAccountPayload<ExtArgs extends runtime.Types.Extensions.Inter
   name: "SocialAccount"
   objects: {
     createdBy: Prisma.$UserPayload<ExtArgs>
+    postingSubmissions: Prisma.$PostingSubmissionPayload<ExtArgs>[]
     blastTargets: Prisma.$BlastTargetPayload<ExtArgs>[]
     commentCommands: Prisma.$CommentCommandPayload<ExtArgs>[]
   }
@@ -1374,6 +1499,7 @@ readonly fields: SocialAccountFieldRefs;
 export interface Prisma__SocialAccountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  postingSubmissions<T extends Prisma.SocialAccount$postingSubmissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SocialAccount$postingSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostingSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blastTargets<T extends Prisma.SocialAccount$blastTargetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SocialAccount$blastTargetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlastTargetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   commentCommands<T extends Prisma.SocialAccount$commentCommandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SocialAccount$commentCommandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentCommandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1814,6 +1940,30 @@ export type SocialAccountDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many SocialAccounts to delete.
    */
   limit?: number
+}
+
+/**
+ * SocialAccount.postingSubmissions
+ */
+export type SocialAccount$postingSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostingSubmission
+   */
+  select?: Prisma.PostingSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostingSubmission
+   */
+  omit?: Prisma.PostingSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostingSubmissionInclude<ExtArgs> | null
+  where?: Prisma.PostingSubmissionWhereInput
+  orderBy?: Prisma.PostingSubmissionOrderByWithRelationInput | Prisma.PostingSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.PostingSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostingSubmissionScalarFieldEnum | Prisma.PostingSubmissionScalarFieldEnum[]
 }
 
 /**

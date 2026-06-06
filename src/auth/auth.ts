@@ -7,6 +7,7 @@ import { getBetterAuthUrl, getAuthCookieDomain, getTrustedOrigins } from '../con
 import {
   adminRole,
   buzzerRole,
+  picRole,
   rossAccessControl,
   viewerRole,
 } from './permissions.js';
@@ -31,6 +32,11 @@ export const auth = betterAuth({
         type: 'date',
         required: false,
         input: false,
+      },
+      picUnitId: {
+        type: 'string',
+        required: false,
+        input: true,
       },
     },
   },
@@ -112,6 +118,7 @@ export const auth = betterAuth({
       roles: {
         ADMIN: adminRole,
         BUZZER: buzzerRole,
+        PIC: picRole,
         VIEWER: viewerRole,
       },
       bannedUserMessage: 'User is inactive or suspended.',

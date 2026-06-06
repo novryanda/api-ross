@@ -389,9 +389,12 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Campaign: 'Campaign',
+  OrgUnit: 'OrgUnit',
   CampaignMember: 'CampaignMember',
   SocialAccount: 'SocialAccount',
   BlastTarget: 'BlastTarget',
+  PostingOrder: 'PostingOrder',
+  PostingSubmission: 'PostingSubmission',
   BlastAttempt: 'BlastAttempt',
   BlastReport: 'BlastReport',
   CommentCommand: 'CommentCommand',
@@ -413,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "campaign" | "campaignMember" | "socialAccount" | "blastTarget" | "blastAttempt" | "blastReport" | "commentCommand" | "commentTask" | "exportReport" | "auditLog"
+    modelProps: "user" | "session" | "account" | "verification" | "campaign" | "orgUnit" | "campaignMember" | "socialAccount" | "blastTarget" | "postingOrder" | "postingSubmission" | "blastAttempt" | "blastReport" | "commentCommand" | "commentTask" | "exportReport" | "auditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -787,6 +790,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OrgUnit: {
+      payload: Prisma.$OrgUnitPayload<ExtArgs>
+      fields: Prisma.OrgUnitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrgUnitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrgUnitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload>
+        }
+        findFirst: {
+          args: Prisma.OrgUnitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrgUnitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload>
+        }
+        findMany: {
+          args: Prisma.OrgUnitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload>[]
+        }
+        create: {
+          args: Prisma.OrgUnitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload>
+        }
+        createMany: {
+          args: Prisma.OrgUnitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrgUnitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload>[]
+        }
+        delete: {
+          args: Prisma.OrgUnitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload>
+        }
+        update: {
+          args: Prisma.OrgUnitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrgUnitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrgUnitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrgUnitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrgUnitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrgUnitPayload>
+        }
+        aggregate: {
+          args: Prisma.OrgUnitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrgUnit>
+        }
+        groupBy: {
+          args: Prisma.OrgUnitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrgUnitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrgUnitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrgUnitCountAggregateOutputType> | number
+        }
+      }
+    }
     CampaignMember: {
       payload: Prisma.$CampaignMemberPayload<ExtArgs>
       fields: Prisma.CampaignMemberFieldRefs
@@ -1006,6 +1083,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BlastTargetCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BlastTargetCountAggregateOutputType> | number
+        }
+      }
+    }
+    PostingOrder: {
+      payload: Prisma.$PostingOrderPayload<ExtArgs>
+      fields: Prisma.PostingOrderFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PostingOrderFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PostingOrderFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload>
+        }
+        findFirst: {
+          args: Prisma.PostingOrderFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PostingOrderFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload>
+        }
+        findMany: {
+          args: Prisma.PostingOrderFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload>[]
+        }
+        create: {
+          args: Prisma.PostingOrderCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload>
+        }
+        createMany: {
+          args: Prisma.PostingOrderCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PostingOrderCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload>[]
+        }
+        delete: {
+          args: Prisma.PostingOrderDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload>
+        }
+        update: {
+          args: Prisma.PostingOrderUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload>
+        }
+        deleteMany: {
+          args: Prisma.PostingOrderDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PostingOrderUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PostingOrderUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload>[]
+        }
+        upsert: {
+          args: Prisma.PostingOrderUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingOrderPayload>
+        }
+        aggregate: {
+          args: Prisma.PostingOrderAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePostingOrder>
+        }
+        groupBy: {
+          args: Prisma.PostingOrderGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostingOrderGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PostingOrderCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostingOrderCountAggregateOutputType> | number
+        }
+      }
+    }
+    PostingSubmission: {
+      payload: Prisma.$PostingSubmissionPayload<ExtArgs>
+      fields: Prisma.PostingSubmissionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PostingSubmissionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PostingSubmissionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload>
+        }
+        findFirst: {
+          args: Prisma.PostingSubmissionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PostingSubmissionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload>
+        }
+        findMany: {
+          args: Prisma.PostingSubmissionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload>[]
+        }
+        create: {
+          args: Prisma.PostingSubmissionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload>
+        }
+        createMany: {
+          args: Prisma.PostingSubmissionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PostingSubmissionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload>[]
+        }
+        delete: {
+          args: Prisma.PostingSubmissionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload>
+        }
+        update: {
+          args: Prisma.PostingSubmissionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PostingSubmissionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PostingSubmissionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PostingSubmissionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PostingSubmissionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingSubmissionPayload>
+        }
+        aggregate: {
+          args: Prisma.PostingSubmissionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePostingSubmission>
+        }
+        groupBy: {
+          args: Prisma.PostingSubmissionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostingSubmissionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PostingSubmissionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostingSubmissionCountAggregateOutputType> | number
         }
       }
     }
@@ -1500,6 +1725,7 @@ export const UserScalarFieldEnum = {
   image: 'image',
   role: 'role',
   status: 'status',
+  picUnitId: 'picUnitId',
   lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -1575,6 +1801,20 @@ export const CampaignScalarFieldEnum = {
 export type CampaignScalarFieldEnum = (typeof CampaignScalarFieldEnum)[keyof typeof CampaignScalarFieldEnum]
 
 
+export const OrgUnitScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  status: 'status',
+  parentId: 'parentId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrgUnitScalarFieldEnum = (typeof OrgUnitScalarFieldEnum)[keyof typeof OrgUnitScalarFieldEnum]
+
+
 export const CampaignMemberScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
@@ -1607,6 +1847,7 @@ export const BlastTargetScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
   socialAccountId: 'socialAccountId',
+  sourcePostingSubmissionId: 'sourcePostingSubmissionId',
   postUrl: 'postUrl',
   platform: 'platform',
   instruction: 'instruction',
@@ -1620,6 +1861,47 @@ export const BlastTargetScalarFieldEnum = {
 } as const
 
 export type BlastTargetScalarFieldEnum = (typeof BlastTargetScalarFieldEnum)[keyof typeof BlastTargetScalarFieldEnum]
+
+
+export const PostingOrderScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  targetUnitId: 'targetUnitId',
+  platform: 'platform',
+  contentDriveUrl: 'contentDriveUrl',
+  scheduledAt: 'scheduledAt',
+  caption: 'caption',
+  description: 'description',
+  status: 'status',
+  createdById: 'createdById',
+  claimedById: 'claimedById',
+  claimedAt: 'claimedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PostingOrderScalarFieldEnum = (typeof PostingOrderScalarFieldEnum)[keyof typeof PostingOrderScalarFieldEnum]
+
+
+export const PostingSubmissionScalarFieldEnum = {
+  id: 'id',
+  postingOrderId: 'postingOrderId',
+  submittedById: 'submittedById',
+  socialAccountId: 'socialAccountId',
+  postedUrl: 'postedUrl',
+  proofDriveUrl: 'proofDriveUrl',
+  notes: 'notes',
+  status: 'status',
+  reviewNotes: 'reviewNotes',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  submittedAt: 'submittedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PostingSubmissionScalarFieldEnum = (typeof PostingSubmissionScalarFieldEnum)[keyof typeof PostingSubmissionScalarFieldEnum]
 
 
 export const BlastAttemptScalarFieldEnum = {
@@ -1877,6 +2159,20 @@ export type EnumPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'OrgUnitStatus'
+ */
+export type EnumOrgUnitStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrgUnitStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'OrgUnitStatus[]'
+ */
+export type ListEnumOrgUnitStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrgUnitStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'CampaignMemberRole'
  */
 export type EnumCampaignMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignMemberRole'>
@@ -1957,6 +2253,34 @@ export type EnumBlastTargetStatusFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'BlastTargetStatus[]'
  */
 export type ListEnumBlastTargetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BlastTargetStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PostingOrderStatus'
+ */
+export type EnumPostingOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostingOrderStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PostingOrderStatus[]'
+ */
+export type ListEnumPostingOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostingOrderStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PostingSubmissionStatus'
+ */
+export type EnumPostingSubmissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostingSubmissionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PostingSubmissionStatus[]'
+ */
+export type ListEnumPostingSubmissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostingSubmissionStatus[]'>
     
 
 
@@ -2228,9 +2552,12 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   campaign?: Prisma.CampaignOmit
+  orgUnit?: Prisma.OrgUnitOmit
   campaignMember?: Prisma.CampaignMemberOmit
   socialAccount?: Prisma.SocialAccountOmit
   blastTarget?: Prisma.BlastTargetOmit
+  postingOrder?: Prisma.PostingOrderOmit
+  postingSubmission?: Prisma.PostingSubmissionOmit
   blastAttempt?: Prisma.BlastAttemptOmit
   blastReport?: Prisma.BlastReportOmit
   commentCommand?: Prisma.CommentCommandOmit

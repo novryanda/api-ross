@@ -26,6 +26,7 @@ type AuthMeResponse = {
     email: string;
     role: string;
     status: string;
+    picUnitId: string | null;
     lastLoginAt: Date | null;
   };
   meta: {
@@ -61,6 +62,7 @@ export class AuthController {
         email: session.user.email,
         role: session.user.role,
         status: session.user.status,
+        picUnitId: session.user.picUnitId ?? null,
         lastLoginAt: session.user.lastLoginAt ?? null,
       },
       meta: { requestId, signOutEndpoint: BETTER_AUTH_SIGN_OUT_ENDPOINT },

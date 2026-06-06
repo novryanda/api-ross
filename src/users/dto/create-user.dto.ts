@@ -54,6 +54,15 @@ export class CreateUserDto {
 
   @ApiPropertyOptional({
     description:
+      'Optional PIC unit assignment. Relevant when role is PIC; ignored for other roles.',
+    format: 'uuid',
+  })
+  @IsOptional()
+  @IsUUID()
+  picUnitId?: string;
+
+  @ApiPropertyOptional({
+    description:
       'Optional campaign memberships to create immediately (role is taken from the system `role` if a campaign membership role is not separately specified).',
     type: [String],
     maxItems: 100,

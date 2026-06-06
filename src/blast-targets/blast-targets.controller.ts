@@ -87,6 +87,27 @@ export class BlastTargetsController {
     return this.blastTargetsService.create(user, campaignId, dto);
   }
 
+  @Post('from-submission/:submissionId')
+  @Roles(UserRole.ADMIN)
+  @ApiEndpointDoc({
+    summary: 'Create blast target from PIC submission',
+    description:
+      'Converts an approved PIC posting submission into a BlastTarget snapshot and creates its first AVAILABLE attempt.',
+    roles: [UserRole.ADMIN],
+    errors: [401, 403, 404, 409],
+  })
+  createFromSubmission(
+    @CurrentUser() user: RossUserSession['user'],
+    @Param('campaignId') campaignId: string,
+    @Param('submissionId') submissionId: string,
+  ) {
+    return this.blastTargetsService.createFromSubmission(
+      user,
+      campaignId,
+      submissionId,
+    );
+  }
+
   @Get(':blastTargetId/attempts')
   @Roles(UserRole.ADMIN)
   @ApiEndpointDoc({
