@@ -19,6 +19,13 @@ services:
       BETTER_AUTH_URL: ${BETTER_AUTH_URL}
       TRUSTED_ORIGINS: ${TRUSTED_ORIGINS}
       AUTH_COOKIE_DOMAIN: ${AUTH_COOKIE_DOMAIN}
+      EMAIL_PROVIDER: ${EMAIL_PROVIDER}
+      EMAIL_FROM: ${EMAIL_FROM}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_SECURE: ${SMTP_SECURE}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
 
       # ── Startup flags ──────────────────────────────────────
       RUN_MIGRATE_ON_STARTUP: ${RUN_MIGRATE_ON_STARTUP}

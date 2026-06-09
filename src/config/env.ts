@@ -65,28 +65,43 @@ export type SmtpEmailConfig = {
 };
 
 function requiredEnv(name: string): string {
-  const value = process.env[name]?.trim();
+  const value = normalizeOptionalEnv(process.env[name]);
   if (!value) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return value;
 }
 
+function normalizeOptionalEnv(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  if (!trimmed) return trimmed;
+
+  if (
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"))
+  ) {
+    return trimmed.slice(1, -1).trim();
+  }
+
+  return trimmed;
+}
+
 function parseBoolean(value: string | undefined, fallback = false): boolean {
-  if (!value) return fallback;
-  return value.trim().toLowerCase() === 'true';
+  const normalized = normalizeOptionalEnv(value);
+  if (!normalized) return fallback;
+  return normalized.toLowerCase() === 'true';
 }
 
 export function getSmtpEmailConfig(): SmtpEmailConfig | null {
-  if (process.env.EMAIL_PROVIDER?.trim().toLowerCase() !== 'smtp') {
+  if (normalizeOptionalEnv(process.env.EMAIL_PROVIDER)?.toLowerCase() !== 'smtp') {
     return null;
   }
 
-  const from = process.env.EMAIL_FROM?.trim();
-  const host = process.env.SMTP_HOST?.trim();
-  const user = process.env.SMTP_USER?.trim();
-  const pass = process.env.SMTP_PASS?.trim();
-  const port = Number(process.env.SMTP_PORT?.trim() ?? '587');
+  const from = normalizeOptionalEnv(process.env.EMAIL_FROM);
+  const host = normalizeOptionalEnv(process.env.SMTP_HOST);
+  const user = normalizeOptionalEnv(process.env.SMTP_USER);
+  const pass = normalizeOptionalEnv(process.env.SMTP_PASS);
+  const port = Number(normalizeOptionalEnv(process.env.SMTP_PORT) ?? '587');
 
   if (!from || !host || !user || !pass || !Number.isFinite(port)) {
     return null;
