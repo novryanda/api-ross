@@ -1,6 +1,7 @@
 export { AssignCommentCommandDto } from './assign-comment-command.dto.js';
 export { CommentCommandQueryDto } from './comment-command-query.dto.js';
 export { CreateCommentCommandDto } from './create-comment-command.dto.js';
+export { CreateCommentCommandFromSubmissionDto } from './create-comment-command-from-submission.dto.js';
 export {
   UpdateCommentCommandDto,
   UpdateCommentCommandStatusDto,

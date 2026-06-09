@@ -5,19 +5,32 @@ import {
   IsString,
   MaxLength,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 
 export class AdminResetPasswordDto {
-  @ApiProperty({
-    description: 'New password set by an admin. Hashed by Better Auth.',
+  @ApiPropertyOptional({
+    description:
+      'Send a reset-password link to the user email instead of setting a plaintext password manually.',
+    default: false,
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  sendResetEmail?: boolean;
+
+  @ApiPropertyOptional({
+    description:
+      'New password set directly by an admin. Required when `sendResetEmail` is false. Hashed by Better Auth.',
     minLength: 8,
     maxLength: 128,
     example: 'Welcome123!',
   })
+  @ValidateIf((dto: AdminResetPasswordDto) => !dto.sendResetEmail)
   @IsString()
   @MinLength(8)
   @MaxLength(128)
-  newPassword!: string;
+  newPassword?: string;
 
   @ApiPropertyOptional({
     description:

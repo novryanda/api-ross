@@ -29,6 +29,7 @@ enum CampaignStatus {
 enum CampaignMemberRole {
   ADMIN
   BUZZER
+  PIC
   VIEWER
 }
 
@@ -170,6 +171,7 @@ enum AuditAction {
   BLAST_ATTEMPT_CANCELLED
   BLAST_REPORT_SUBMITTED
   BLAST_TARGET_CREATED_FROM_PIC_SUBMISSION
+  COMMENT_COMMAND_CREATED_FROM_PIC_SUBMISSION
   COMMENT_COMMAND_CREATED
   COMMENT_COMMAND_UPDATED
   COMMENT_COMMAND_ASSIGNED
@@ -422,6 +424,7 @@ model PostingOrder {
   id              String             @id @default(uuid()) @db.Uuid
   campaignId      String             @map("campaign_id") @db.Uuid
   targetUnitId    String             @map("target_unit_id") @db.Uuid
+  title           String             @db.VarChar(255)
   platform        Platform
   contentDriveUrl String             @map("content_drive_url")
   scheduledAt     DateTime           @map("scheduled_at")
@@ -435,11 +438,11 @@ model PostingOrder {
   createdAt       DateTime           @default(now()) @map("created_at")
   updatedAt       DateTime           @updatedAt @map("updated_at")
 
-  campaign   Campaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  targetUnit OrgUnit            @relation(fields: [targetUnitId], references: [id])
-  createdBy  User               @relation("PostingOrderCreator", fields: [createdById], references: [id])
-  claimedBy  User?              @relation("PostingOrderClaimer", fields: [claimedById], references: [id])
-  submission PostingSubmission?
+  campaign    Campaign            @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  targetUnit  OrgUnit             @relation(fields: [targetUnitId], references: [id])
+  createdBy   User                @relation("PostingOrderCreator", fields: [createdById], references: [id])
+  claimedBy   User?               @relation("PostingOrderClaimer", fields: [claimedById], references: [id])
+  submissions PostingSubmission[]
 
   @@index([campaignId])
   @@index([targetUnitId])
@@ -451,27 +454,30 @@ model PostingOrder {
 }
 
 model PostingSubmission {
-  id             String                  @id @default(uuid()) @db.Uuid
-  postingOrderId String                  @unique @map("posting_order_id") @db.Uuid
-  submittedById  String                  @map("submitted_by") @db.Uuid
-  socialAccountId String                 @map("social_account_id") @db.Uuid
-  postedUrl      String                  @map("posted_url")
-  proofDriveUrl  String                  @map("proof_drive_url")
-  notes          String?
-  status         PostingSubmissionStatus @default(SUBMITTED)
-  reviewNotes    String?                 @map("review_notes")
-  reviewedById   String?                 @map("reviewed_by") @db.Uuid
-  reviewedAt     DateTime?               @map("reviewed_at")
-  submittedAt    DateTime                @default(now()) @map("submitted_at")
-  createdAt      DateTime                @default(now()) @map("created_at")
-  updatedAt      DateTime                @updatedAt @map("updated_at")
+  id              String                  @id @default(uuid()) @db.Uuid
+  postingOrderId  String                  @map("posting_order_id") @db.Uuid
+  submittedById   String                  @map("submitted_by") @db.Uuid
+  socialAccountId String                  @map("social_account_id") @db.Uuid
+  postedUrl       String                  @map("posted_url")
+  proofDriveUrl   String                  @map("proof_drive_url")
+  notes           String?
+  status          PostingSubmissionStatus @default(SUBMITTED)
+  reviewNotes     String?                 @map("review_notes")
+  reviewedById    String?                 @map("reviewed_by") @db.Uuid
+  reviewedAt      DateTime?               @map("reviewed_at")
+  submittedAt     DateTime                @default(now()) @map("submitted_at")
+  createdAt       DateTime                @default(now()) @map("created_at")
+  updatedAt       DateTime                @updatedAt @map("updated_at")
 
-  postingOrder PostingOrder @relation(fields: [postingOrderId], references: [id], onDelete: Cascade)
-  submittedBy User @relation("PostingSubmissionSubmitter", fields: [submittedById], references: [id])
+  postingOrder PostingOrder  @relation(fields: [postingOrderId], references: [id], onDelete: Cascade)
+  submittedBy  User          @relation("PostingSubmissionSubmitter", fields: [submittedById], references: [id])
   socialAccount SocialAccount @relation(fields: [socialAccountId], references: [id])
-  reviewedBy User? @relation("PostingSubmissionReviewer", fields: [reviewedById], references: [id])
-  blastTarget BlastTarget? @relation("BlastTargetSourceSubmission")
+  reviewedBy   User?         @relation("PostingSubmissionReviewer", fields: [reviewedById], references: [id])
+  blastTarget    BlastTarget?    @relation("BlastTargetSourceSubmission")
+  commentCommand CommentCommand? @relation("CommentCommandSourceSubmission")
 
+  @@unique([postingOrderId, submittedById])
+  @@index([postingOrderId])
   @@index([submittedById])
   @@index([socialAccountId])
   @@index([status])
@@ -527,29 +533,32 @@ model BlastReport {
 }
 
 model CommentCommand {
-  id                String               @id @default(uuid()) @db.Uuid
-  campaignId        String               @map("campaign_id") @db.Uuid
-  targetPostUrl     String               @map("target_post_url")
-  platform          Platform
-  socialAccountId   String?              @map("social_account_id") @db.Uuid
-  stance            CommentStance
-  narrative         String
-  instruction       String?
-  requiredSlots     Int                  @default(1) @map("required_slots")
-  keepExpiryMinutes Int                  @default(120) @map("keep_expiry_minutes")
-  deadline          DateTime
-  status            CommentCommandStatus @default(DRAFT)
-  createdById       String               @map("created_by") @db.Uuid
-  createdAt         DateTime             @default(now()) @map("created_at")
-  updatedAt         DateTime             @updatedAt @map("updated_at")
-  deletedAt         DateTime?            @map("deleted_at")
+  id                        String               @id @default(uuid()) @db.Uuid
+  campaignId                String               @map("campaign_id") @db.Uuid
+  sourcePostingSubmissionId String?              @unique @map("source_posting_submission_id") @db.Uuid
+  targetPostUrl             String               @map("target_post_url")
+  platform                  Platform
+  socialAccountId           String?              @map("social_account_id") @db.Uuid
+  stance                    CommentStance
+  narrative                 String
+  instruction               String?
+  requiredSlots             Int                  @default(1) @map("required_slots")
+  keepExpiryMinutes         Int                  @default(120) @map("keep_expiry_minutes")
+  deadline                  DateTime
+  status                    CommentCommandStatus @default(DRAFT)
+  createdById               String               @map("created_by") @db.Uuid
+  createdAt                 DateTime             @default(now()) @map("created_at")
+  updatedAt                 DateTime             @updatedAt @map("updated_at")
+  deletedAt                 DateTime?            @map("deleted_at")
 
-  campaign      Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  socialAccount SocialAccount? @relation(fields: [socialAccountId], references: [id])
-  createdBy     User           @relation("CommentCommandCreator", fields: [createdById], references: [id])
-  tasks         CommentTask[]
+  campaign                Campaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  sourcePostingSubmission PostingSubmission? @relation("CommentCommandSourceSubmission", fields: [sourcePostingSubmissionId], references: [id])
+  socialAccount           SocialAccount?     @relation(fields: [socialAccountId], references: [id])
+  createdBy               User               @relation("CommentCommandCreator", fields: [createdById], references: [id])
+  tasks                   CommentTask[]
 
   @@index([campaignId])
+  @@index([sourcePostingSubmissionId])
   @@index([socialAccountId])
   @@index([platform])
   @@index([stance])

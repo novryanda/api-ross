@@ -23,6 +23,18 @@ export function getBetterAuthUrl(): string {
   return process.env.BETTER_AUTH_URL ?? 'http://localhost:3001';
 }
 
+export function getFrontendUrl(): string {
+  const configured = process.env.FRONTEND_URL?.trim();
+  if (configured) {
+    return configured.replace(/\/+$/, '');
+  }
+
+  const origins = getTrustedOrigins().filter(
+    (origin) => origin !== getBetterAuthUrl(),
+  );
+  return (origins[0] ?? 'http://localhost:3000').replace(/\/+$/, '');
+}
+
 /**
  * Returns the root domain for cross-subdomain cookie sharing.
  * Set AUTH_COOKIE_DOMAIN=".netkrida.cloud" in production so that cookies
@@ -42,12 +54,53 @@ export type R2Config = {
   publicBaseUrl: string | null;
 };
 
+export type SmtpEmailConfig = {
+  provider: 'smtp';
+  from: string;
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  pass: string;
+};
+
 function requiredEnv(name: string): string {
   const value = process.env[name]?.trim();
   if (!value) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return value;
+}
+
+function parseBoolean(value: string | undefined, fallback = false): boolean {
+  if (!value) return fallback;
+  return value.trim().toLowerCase() === 'true';
+}
+
+export function getSmtpEmailConfig(): SmtpEmailConfig | null {
+  if (process.env.EMAIL_PROVIDER?.trim().toLowerCase() !== 'smtp') {
+    return null;
+  }
+
+  const from = process.env.EMAIL_FROM?.trim();
+  const host = process.env.SMTP_HOST?.trim();
+  const user = process.env.SMTP_USER?.trim();
+  const pass = process.env.SMTP_PASS?.trim();
+  const port = Number(process.env.SMTP_PORT?.trim() ?? '587');
+
+  if (!from || !host || !user || !pass || !Number.isFinite(port)) {
+    return null;
+  }
+
+  return {
+    provider: 'smtp',
+    from,
+    host,
+    port,
+    secure: parseBoolean(process.env.SMTP_SECURE, false),
+    user,
+    pass,
+  };
 }
 
 export function getExportProcessingTimeoutMinutes(): number {

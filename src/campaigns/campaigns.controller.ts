@@ -29,12 +29,12 @@ export class CampaignsController {
   constructor(private readonly campaignsService: CampaignsService) {}
 
   @Get()
-  @Roles(UserRole.ADMIN, UserRole.BUZZER, UserRole.VIEWER)
+  @Roles(UserRole.ADMIN, UserRole.BUZZER, UserRole.PIC, UserRole.VIEWER)
   @ApiEndpointDoc({
     summary: 'List campaigns',
     description:
-      'Lists visible campaigns. Admin sees all; Buzzer/Viewer see campaign memberships.',
-    roles: [UserRole.ADMIN, UserRole.BUZZER, UserRole.VIEWER],
+      'Lists visible campaigns. Admin sees all; other roles see campaign memberships.',
+    roles: [UserRole.ADMIN, UserRole.BUZZER, UserRole.PIC, UserRole.VIEWER],
     query: CampaignQueryDto,
     queryParams: ['page', 'limit', 'status', 'search', 'sortBy', 'sortOrder'],
   })
@@ -63,12 +63,12 @@ export class CampaignsController {
   }
 
   @Get('dashboard/global')
-  @Roles(UserRole.ADMIN, UserRole.BUZZER, UserRole.VIEWER)
+  @Roles(UserRole.ADMIN, UserRole.BUZZER, UserRole.PIC, UserRole.VIEWER)
   @ApiEndpointDoc({
     summary: 'Get global dashboard aggregated metrics',
     description:
       'Returns real-time global dashboard data including calculated historical period deltas.',
-    roles: [UserRole.ADMIN, UserRole.BUZZER, UserRole.VIEWER],
+    roles: [UserRole.ADMIN, UserRole.BUZZER, UserRole.PIC, UserRole.VIEWER],
   })
   getGlobalDashboard(@CurrentUser() user: RossUserSession['user']) {
     return this.campaignsService.getGlobalDashboard(user);
@@ -94,11 +94,11 @@ export class CampaignsController {
   }
 
   @Get(':id')
-  @Roles(UserRole.ADMIN, UserRole.BUZZER, UserRole.VIEWER)
+  @Roles(UserRole.ADMIN, UserRole.BUZZER, UserRole.PIC, UserRole.VIEWER)
   @ApiEndpointDoc({
     summary: 'Get campaign detail',
     description: 'Returns campaign detail for users with campaign access.',
-    roles: [UserRole.ADMIN, UserRole.BUZZER, UserRole.VIEWER],
+    roles: [UserRole.ADMIN, UserRole.BUZZER, UserRole.PIC, UserRole.VIEWER],
     errors: [401, 403, 404],
   })
   findOne(

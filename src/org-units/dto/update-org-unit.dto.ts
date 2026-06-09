@@ -23,10 +23,14 @@ export class UpdateOrgUnitDto {
   @MaxLength(80)
   code?: string;
 
-  @ApiPropertyOptional({ format: 'uuid' })
+  @ApiPropertyOptional({
+    format: 'uuid',
+    nullable: true,
+    description: 'Set to null to move unit to top level.',
+  })
   @IsOptional()
   @IsUUID()
-  parentId?: string;
+  parentId?: string | null;
 
   @ApiPropertyOptional({ enum: OrgUnitStatus })
   @IsOptional()

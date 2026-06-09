@@ -15,6 +15,11 @@ export class CreatePostingOrderDto {
   @IsUUID()
   targetUnitId!: string;
 
+  @ApiProperty({ maxLength: 255 })
+  @IsString()
+  @MaxLength(255)
+  title!: string;
+
   @ApiProperty({ enum: Platform })
   @IsEnum(Platform)
   platform!: Platform;

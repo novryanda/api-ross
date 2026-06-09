@@ -29,6 +29,24 @@ import { PostingOrdersService } from './posting-orders.service.js';
 export class PostingOrdersController {
   constructor(private readonly postingOrdersService: PostingOrdersService) {}
 
+  @Get('posting-orders')
+  @Roles(UserRole.ADMIN)
+  @ApiEndpointDoc({
+    summary: 'List posting orders',
+    description: 'Admin-only listing for all posting orders across campaigns.',
+    roles: [UserRole.ADMIN],
+    query: PostingOrderQueryDto,
+    queryParams: ['page', 'limit', 'campaignId', 'status', 'platform', 'targetUnitId', 'search', 'sortBy', 'sortOrder'],
+    errors: [400, 401, 403],
+  })
+  async listOrders(
+    @CurrentUser() actor: RossUserSession['user'],
+    @Query() query: PostingOrderQueryDto,
+  ) {
+    const result = await this.postingOrdersService.listOrders(actor, query);
+    return successResponse(result.items, result.meta);
+  }
+
   @Get('campaigns/:campaignId/posting-orders')
   @Roles(UserRole.ADMIN)
   @ApiEndpointDoc({
@@ -188,10 +206,10 @@ export class PostingOrdersController {
   @Roles(UserRole.ADMIN)
   @ApiEndpointDoc({
     summary: 'List PIC submissions for a campaign',
-    description: 'Admin listing for campaign submissions. Use eligibleForBlast=true to fetch only blast-ready rows.',
+    description: 'Admin listing for campaign submissions. Use eligibleForBlast=true or eligibleForComment=true to fetch only conversion-ready rows.',
     roles: [UserRole.ADMIN],
     query: PostingOrderQueryDto,
-    queryParams: ['page', 'limit', 'platform', 'submissionStatus', 'eligibleForBlast', 'sortOrder'],
+    queryParams: ['page', 'limit', 'platform', 'submissionStatus', 'eligibleForBlast', 'eligibleForComment', 'sortOrder'],
     errors: [400, 401, 403, 404],
   })
   async listCampaignSubmissions(

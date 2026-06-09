@@ -49,6 +49,7 @@ export class CampaignAccessGuard implements CanActivate {
     const allowedRoles = options.roles ?? [
       UserRole.ADMIN,
       UserRole.BUZZER,
+      UserRole.PIC,
       UserRole.VIEWER,
     ];
 

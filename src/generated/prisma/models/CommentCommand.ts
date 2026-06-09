@@ -39,6 +39,7 @@ export type CommentCommandSumAggregateOutputType = {
 export type CommentCommandMinAggregateOutputType = {
   id: string | null
   campaignId: string | null
+  sourcePostingSubmissionId: string | null
   targetPostUrl: string | null
   platform: $Enums.Platform | null
   socialAccountId: string | null
@@ -58,6 +59,7 @@ export type CommentCommandMinAggregateOutputType = {
 export type CommentCommandMaxAggregateOutputType = {
   id: string | null
   campaignId: string | null
+  sourcePostingSubmissionId: string | null
   targetPostUrl: string | null
   platform: $Enums.Platform | null
   socialAccountId: string | null
@@ -77,6 +79,7 @@ export type CommentCommandMaxAggregateOutputType = {
 export type CommentCommandCountAggregateOutputType = {
   id: number
   campaignId: number
+  sourcePostingSubmissionId: number
   targetPostUrl: number
   platform: number
   socialAccountId: number
@@ -108,6 +111,7 @@ export type CommentCommandSumAggregateInputType = {
 export type CommentCommandMinAggregateInputType = {
   id?: true
   campaignId?: true
+  sourcePostingSubmissionId?: true
   targetPostUrl?: true
   platform?: true
   socialAccountId?: true
@@ -127,6 +131,7 @@ export type CommentCommandMinAggregateInputType = {
 export type CommentCommandMaxAggregateInputType = {
   id?: true
   campaignId?: true
+  sourcePostingSubmissionId?: true
   targetPostUrl?: true
   platform?: true
   socialAccountId?: true
@@ -146,6 +151,7 @@ export type CommentCommandMaxAggregateInputType = {
 export type CommentCommandCountAggregateInputType = {
   id?: true
   campaignId?: true
+  sourcePostingSubmissionId?: true
   targetPostUrl?: true
   platform?: true
   socialAccountId?: true
@@ -252,6 +258,7 @@ export type CommentCommandGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 export type CommentCommandGroupByOutputType = {
   id: string
   campaignId: string
+  sourcePostingSubmissionId: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   socialAccountId: string | null
@@ -294,6 +301,7 @@ export type CommentCommandWhereInput = {
   NOT?: Prisma.CommentCommandWhereInput | Prisma.CommentCommandWhereInput[]
   id?: Prisma.UuidFilter<"CommentCommand"> | string
   campaignId?: Prisma.UuidFilter<"CommentCommand"> | string
+  sourcePostingSubmissionId?: Prisma.UuidNullableFilter<"CommentCommand"> | string | null
   targetPostUrl?: Prisma.StringFilter<"CommentCommand"> | string
   platform?: Prisma.EnumPlatformFilter<"CommentCommand"> | $Enums.Platform
   socialAccountId?: Prisma.UuidNullableFilter<"CommentCommand"> | string | null
@@ -309,6 +317,7 @@ export type CommentCommandWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"CommentCommand"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"CommentCommand"> | Date | string | null
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
+  sourcePostingSubmission?: Prisma.XOR<Prisma.PostingSubmissionNullableScalarRelationFilter, Prisma.PostingSubmissionWhereInput> | null
   socialAccount?: Prisma.XOR<Prisma.SocialAccountNullableScalarRelationFilter, Prisma.SocialAccountWhereInput> | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   tasks?: Prisma.CommentTaskListRelationFilter
@@ -317,6 +326,7 @@ export type CommentCommandWhereInput = {
 export type CommentCommandOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrderInput | Prisma.SortOrder
   targetPostUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -332,6 +342,7 @@ export type CommentCommandOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   campaign?: Prisma.CampaignOrderByWithRelationInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionOrderByWithRelationInput
   socialAccount?: Prisma.SocialAccountOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   tasks?: Prisma.CommentTaskOrderByRelationAggregateInput
@@ -339,6 +350,7 @@ export type CommentCommandOrderByWithRelationInput = {
 
 export type CommentCommandWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  sourcePostingSubmissionId?: string
   AND?: Prisma.CommentCommandWhereInput | Prisma.CommentCommandWhereInput[]
   OR?: Prisma.CommentCommandWhereInput[]
   NOT?: Prisma.CommentCommandWhereInput | Prisma.CommentCommandWhereInput[]
@@ -358,14 +370,16 @@ export type CommentCommandWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"CommentCommand"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"CommentCommand"> | Date | string | null
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
+  sourcePostingSubmission?: Prisma.XOR<Prisma.PostingSubmissionNullableScalarRelationFilter, Prisma.PostingSubmissionWhereInput> | null
   socialAccount?: Prisma.XOR<Prisma.SocialAccountNullableScalarRelationFilter, Prisma.SocialAccountWhereInput> | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   tasks?: Prisma.CommentTaskListRelationFilter
-}, "id">
+}, "id" | "sourcePostingSubmissionId">
 
 export type CommentCommandOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrderInput | Prisma.SortOrder
   targetPostUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -393,6 +407,7 @@ export type CommentCommandScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CommentCommandScalarWhereWithAggregatesInput | Prisma.CommentCommandScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"CommentCommand"> | string
   campaignId?: Prisma.UuidWithAggregatesFilter<"CommentCommand"> | string
+  sourcePostingSubmissionId?: Prisma.UuidNullableWithAggregatesFilter<"CommentCommand"> | string | null
   targetPostUrl?: Prisma.StringWithAggregatesFilter<"CommentCommand"> | string
   platform?: Prisma.EnumPlatformWithAggregatesFilter<"CommentCommand"> | $Enums.Platform
   socialAccountId?: Prisma.UuidNullableWithAggregatesFilter<"CommentCommand"> | string | null
@@ -424,6 +439,7 @@ export type CommentCommandCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   campaign: Prisma.CampaignCreateNestedOneWithoutCommentCommandsInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutCommentCommandInput
   socialAccount?: Prisma.SocialAccountCreateNestedOneWithoutCommentCommandsInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCommentCommandsInput
   tasks?: Prisma.CommentTaskCreateNestedManyWithoutCommandInput
@@ -432,6 +448,7 @@ export type CommentCommandCreateInput = {
 export type CommentCommandUncheckedCreateInput = {
   id?: string
   campaignId: string
+  sourcePostingSubmissionId?: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   socialAccountId?: string | null
@@ -464,6 +481,7 @@ export type CommentCommandUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutCommentCommandsNestedInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutCommentCommandNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneWithoutCommentCommandsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCommentCommandsNestedInput
   tasks?: Prisma.CommentTaskUpdateManyWithoutCommandNestedInput
@@ -472,6 +490,7 @@ export type CommentCommandUpdateInput = {
 export type CommentCommandUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   socialAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -492,6 +511,7 @@ export type CommentCommandUncheckedUpdateInput = {
 export type CommentCommandCreateManyInput = {
   id?: string
   campaignId: string
+  sourcePostingSubmissionId?: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   socialAccountId?: string | null
@@ -527,6 +547,7 @@ export type CommentCommandUpdateManyMutationInput = {
 export type CommentCommandUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   socialAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -553,9 +574,15 @@ export type CommentCommandOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type CommentCommandNullableScalarRelationFilter = {
+  is?: Prisma.CommentCommandWhereInput | null
+  isNot?: Prisma.CommentCommandWhereInput | null
+}
+
 export type CommentCommandCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrder
   targetPostUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrder
@@ -580,6 +607,7 @@ export type CommentCommandAvgOrderByAggregateInput = {
 export type CommentCommandMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrder
   targetPostUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrder
@@ -599,6 +627,7 @@ export type CommentCommandMaxOrderByAggregateInput = {
 export type CommentCommandMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
+  sourcePostingSubmissionId?: Prisma.SortOrder
   targetPostUrl?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   socialAccountId?: Prisma.SortOrder
@@ -751,6 +780,38 @@ export type CommentCommandUncheckedUpdateManyWithoutSocialAccountNestedInput = {
   deleteMany?: Prisma.CommentCommandScalarWhereInput | Prisma.CommentCommandScalarWhereInput[]
 }
 
+export type CommentCommandCreateNestedOneWithoutSourcePostingSubmissionInput = {
+  create?: Prisma.XOR<Prisma.CommentCommandCreateWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUncheckedCreateWithoutSourcePostingSubmissionInput>
+  connectOrCreate?: Prisma.CommentCommandCreateOrConnectWithoutSourcePostingSubmissionInput
+  connect?: Prisma.CommentCommandWhereUniqueInput
+}
+
+export type CommentCommandUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput = {
+  create?: Prisma.XOR<Prisma.CommentCommandCreateWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUncheckedCreateWithoutSourcePostingSubmissionInput>
+  connectOrCreate?: Prisma.CommentCommandCreateOrConnectWithoutSourcePostingSubmissionInput
+  connect?: Prisma.CommentCommandWhereUniqueInput
+}
+
+export type CommentCommandUpdateOneWithoutSourcePostingSubmissionNestedInput = {
+  create?: Prisma.XOR<Prisma.CommentCommandCreateWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUncheckedCreateWithoutSourcePostingSubmissionInput>
+  connectOrCreate?: Prisma.CommentCommandCreateOrConnectWithoutSourcePostingSubmissionInput
+  upsert?: Prisma.CommentCommandUpsertWithoutSourcePostingSubmissionInput
+  disconnect?: Prisma.CommentCommandWhereInput | boolean
+  delete?: Prisma.CommentCommandWhereInput | boolean
+  connect?: Prisma.CommentCommandWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CommentCommandUpdateToOneWithWhereWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUpdateWithoutSourcePostingSubmissionInput>, Prisma.CommentCommandUncheckedUpdateWithoutSourcePostingSubmissionInput>
+}
+
+export type CommentCommandUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput = {
+  create?: Prisma.XOR<Prisma.CommentCommandCreateWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUncheckedCreateWithoutSourcePostingSubmissionInput>
+  connectOrCreate?: Prisma.CommentCommandCreateOrConnectWithoutSourcePostingSubmissionInput
+  upsert?: Prisma.CommentCommandUpsertWithoutSourcePostingSubmissionInput
+  disconnect?: Prisma.CommentCommandWhereInput | boolean
+  delete?: Prisma.CommentCommandWhereInput | boolean
+  connect?: Prisma.CommentCommandWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CommentCommandUpdateToOneWithWhereWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUpdateWithoutSourcePostingSubmissionInput>, Prisma.CommentCommandUncheckedUpdateWithoutSourcePostingSubmissionInput>
+}
+
 export type EnumCommentStanceFieldUpdateOperationsInput = {
   set?: $Enums.CommentStance
 }
@@ -788,6 +849,7 @@ export type CommentCommandCreateWithoutCreatedByInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   campaign: Prisma.CampaignCreateNestedOneWithoutCommentCommandsInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutCommentCommandInput
   socialAccount?: Prisma.SocialAccountCreateNestedOneWithoutCommentCommandsInput
   tasks?: Prisma.CommentTaskCreateNestedManyWithoutCommandInput
 }
@@ -795,6 +857,7 @@ export type CommentCommandCreateWithoutCreatedByInput = {
 export type CommentCommandUncheckedCreateWithoutCreatedByInput = {
   id?: string
   campaignId: string
+  sourcePostingSubmissionId?: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   socialAccountId?: string | null
@@ -843,6 +906,7 @@ export type CommentCommandScalarWhereInput = {
   NOT?: Prisma.CommentCommandScalarWhereInput | Prisma.CommentCommandScalarWhereInput[]
   id?: Prisma.UuidFilter<"CommentCommand"> | string
   campaignId?: Prisma.UuidFilter<"CommentCommand"> | string
+  sourcePostingSubmissionId?: Prisma.UuidNullableFilter<"CommentCommand"> | string | null
   targetPostUrl?: Prisma.StringFilter<"CommentCommand"> | string
   platform?: Prisma.EnumPlatformFilter<"CommentCommand"> | $Enums.Platform
   socialAccountId?: Prisma.UuidNullableFilter<"CommentCommand"> | string | null
@@ -873,6 +937,7 @@ export type CommentCommandCreateWithoutCampaignInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutCommentCommandInput
   socialAccount?: Prisma.SocialAccountCreateNestedOneWithoutCommentCommandsInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCommentCommandsInput
   tasks?: Prisma.CommentTaskCreateNestedManyWithoutCommandInput
@@ -880,6 +945,7 @@ export type CommentCommandCreateWithoutCampaignInput = {
 
 export type CommentCommandUncheckedCreateWithoutCampaignInput = {
   id?: string
+  sourcePostingSubmissionId?: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   socialAccountId?: string | null
@@ -938,6 +1004,7 @@ export type CommentCommandCreateWithoutSocialAccountInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   campaign: Prisma.CampaignCreateNestedOneWithoutCommentCommandsInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutCommentCommandInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCommentCommandsInput
   tasks?: Prisma.CommentTaskCreateNestedManyWithoutCommandInput
 }
@@ -945,6 +1012,7 @@ export type CommentCommandCreateWithoutSocialAccountInput = {
 export type CommentCommandUncheckedCreateWithoutSocialAccountInput = {
   id?: string
   campaignId: string
+  sourcePostingSubmissionId?: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   stance: $Enums.CommentStance
@@ -987,7 +1055,7 @@ export type CommentCommandUpdateManyWithWhereWithoutSocialAccountInput = {
   data: Prisma.XOR<Prisma.CommentCommandUpdateManyMutationInput, Prisma.CommentCommandUncheckedUpdateManyWithoutSocialAccountInput>
 }
 
-export type CommentCommandCreateWithoutTasksInput = {
+export type CommentCommandCreateWithoutSourcePostingSubmissionInput = {
   id?: string
   targetPostUrl: string
   platform: $Enums.Platform
@@ -1004,11 +1072,109 @@ export type CommentCommandCreateWithoutTasksInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutCommentCommandsInput
   socialAccount?: Prisma.SocialAccountCreateNestedOneWithoutCommentCommandsInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedCommentCommandsInput
+  tasks?: Prisma.CommentTaskCreateNestedManyWithoutCommandInput
+}
+
+export type CommentCommandUncheckedCreateWithoutSourcePostingSubmissionInput = {
+  id?: string
+  campaignId: string
+  targetPostUrl: string
+  platform: $Enums.Platform
+  socialAccountId?: string | null
+  stance: $Enums.CommentStance
+  narrative: string
+  instruction?: string | null
+  requiredSlots?: number
+  keepExpiryMinutes?: number
+  deadline: Date | string
+  status?: $Enums.CommentCommandStatus
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  tasks?: Prisma.CommentTaskUncheckedCreateNestedManyWithoutCommandInput
+}
+
+export type CommentCommandCreateOrConnectWithoutSourcePostingSubmissionInput = {
+  where: Prisma.CommentCommandWhereUniqueInput
+  create: Prisma.XOR<Prisma.CommentCommandCreateWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUncheckedCreateWithoutSourcePostingSubmissionInput>
+}
+
+export type CommentCommandUpsertWithoutSourcePostingSubmissionInput = {
+  update: Prisma.XOR<Prisma.CommentCommandUpdateWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUncheckedUpdateWithoutSourcePostingSubmissionInput>
+  create: Prisma.XOR<Prisma.CommentCommandCreateWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUncheckedCreateWithoutSourcePostingSubmissionInput>
+  where?: Prisma.CommentCommandWhereInput
+}
+
+export type CommentCommandUpdateToOneWithWhereWithoutSourcePostingSubmissionInput = {
+  where?: Prisma.CommentCommandWhereInput
+  data: Prisma.XOR<Prisma.CommentCommandUpdateWithoutSourcePostingSubmissionInput, Prisma.CommentCommandUncheckedUpdateWithoutSourcePostingSubmissionInput>
+}
+
+export type CommentCommandUpdateWithoutSourcePostingSubmissionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+  stance?: Prisma.EnumCommentStanceFieldUpdateOperationsInput | $Enums.CommentStance
+  narrative?: Prisma.StringFieldUpdateOperationsInput | string
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  keepExpiryMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  deadline?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumCommentCommandStatusFieldUpdateOperationsInput | $Enums.CommentCommandStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  campaign?: Prisma.CampaignUpdateOneRequiredWithoutCommentCommandsNestedInput
+  socialAccount?: Prisma.SocialAccountUpdateOneWithoutCommentCommandsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCommentCommandsNestedInput
+  tasks?: Prisma.CommentTaskUpdateManyWithoutCommandNestedInput
+}
+
+export type CommentCommandUncheckedUpdateWithoutSourcePostingSubmissionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+  socialAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stance?: Prisma.EnumCommentStanceFieldUpdateOperationsInput | $Enums.CommentStance
+  narrative?: Prisma.StringFieldUpdateOperationsInput | string
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  keepExpiryMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  deadline?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumCommentCommandStatusFieldUpdateOperationsInput | $Enums.CommentCommandStatus
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tasks?: Prisma.CommentTaskUncheckedUpdateManyWithoutCommandNestedInput
+}
+
+export type CommentCommandCreateWithoutTasksInput = {
+  id?: string
+  targetPostUrl: string
+  platform: $Enums.Platform
+  stance: $Enums.CommentStance
+  narrative: string
+  instruction?: string | null
+  requiredSlots?: number
+  keepExpiryMinutes?: number
+  deadline: Date | string
+  status?: $Enums.CommentCommandStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  campaign: Prisma.CampaignCreateNestedOneWithoutCommentCommandsInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionCreateNestedOneWithoutCommentCommandInput
+  socialAccount?: Prisma.SocialAccountCreateNestedOneWithoutCommentCommandsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedCommentCommandsInput
 }
 
 export type CommentCommandUncheckedCreateWithoutTasksInput = {
   id?: string
   campaignId: string
+  sourcePostingSubmissionId?: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   socialAccountId?: string | null
@@ -1056,6 +1222,7 @@ export type CommentCommandUpdateWithoutTasksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutCommentCommandsNestedInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutCommentCommandNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneWithoutCommentCommandsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCommentCommandsNestedInput
 }
@@ -1063,6 +1230,7 @@ export type CommentCommandUpdateWithoutTasksInput = {
 export type CommentCommandUncheckedUpdateWithoutTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   socialAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1082,6 +1250,7 @@ export type CommentCommandUncheckedUpdateWithoutTasksInput = {
 export type CommentCommandCreateManyCreatedByInput = {
   id?: string
   campaignId: string
+  sourcePostingSubmissionId?: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   socialAccountId?: string | null
@@ -1112,6 +1281,7 @@ export type CommentCommandUpdateWithoutCreatedByInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutCommentCommandsNestedInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutCommentCommandNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneWithoutCommentCommandsNestedInput
   tasks?: Prisma.CommentTaskUpdateManyWithoutCommandNestedInput
 }
@@ -1119,6 +1289,7 @@ export type CommentCommandUpdateWithoutCreatedByInput = {
 export type CommentCommandUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   socialAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1138,6 +1309,7 @@ export type CommentCommandUncheckedUpdateWithoutCreatedByInput = {
 export type CommentCommandUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   socialAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1155,6 +1327,7 @@ export type CommentCommandUncheckedUpdateManyWithoutCreatedByInput = {
 
 export type CommentCommandCreateManyCampaignInput = {
   id?: string
+  sourcePostingSubmissionId?: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   socialAccountId?: string | null
@@ -1185,6 +1358,7 @@ export type CommentCommandUpdateWithoutCampaignInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutCommentCommandNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneWithoutCommentCommandsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCommentCommandsNestedInput
   tasks?: Prisma.CommentTaskUpdateManyWithoutCommandNestedInput
@@ -1192,6 +1366,7 @@ export type CommentCommandUpdateWithoutCampaignInput = {
 
 export type CommentCommandUncheckedUpdateWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   socialAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1211,6 +1386,7 @@ export type CommentCommandUncheckedUpdateWithoutCampaignInput = {
 
 export type CommentCommandUncheckedUpdateManyWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   socialAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1230,6 +1406,7 @@ export type CommentCommandUncheckedUpdateManyWithoutCampaignInput = {
 export type CommentCommandCreateManySocialAccountInput = {
   id?: string
   campaignId: string
+  sourcePostingSubmissionId?: string | null
   targetPostUrl: string
   platform: $Enums.Platform
   stance: $Enums.CommentStance
@@ -1260,6 +1437,7 @@ export type CommentCommandUpdateWithoutSocialAccountInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutCommentCommandsNestedInput
+  sourcePostingSubmission?: Prisma.PostingSubmissionUpdateOneWithoutCommentCommandNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedCommentCommandsNestedInput
   tasks?: Prisma.CommentTaskUpdateManyWithoutCommandNestedInput
 }
@@ -1267,6 +1445,7 @@ export type CommentCommandUpdateWithoutSocialAccountInput = {
 export type CommentCommandUncheckedUpdateWithoutSocialAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   stance?: Prisma.EnumCommentStanceFieldUpdateOperationsInput | $Enums.CommentStance
@@ -1286,6 +1465,7 @@ export type CommentCommandUncheckedUpdateWithoutSocialAccountInput = {
 export type CommentCommandUncheckedUpdateManyWithoutSocialAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourcePostingSubmissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetPostUrl?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   stance?: Prisma.EnumCommentStanceFieldUpdateOperationsInput | $Enums.CommentStance
@@ -1335,6 +1515,7 @@ export type CommentCommandCountOutputTypeCountTasksArgs<ExtArgs extends runtime.
 export type CommentCommandSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   campaignId?: boolean
+  sourcePostingSubmissionId?: boolean
   targetPostUrl?: boolean
   platform?: boolean
   socialAccountId?: boolean
@@ -1350,6 +1531,7 @@ export type CommentCommandSelect<ExtArgs extends runtime.Types.Extensions.Intern
   updatedAt?: boolean
   deletedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.CommentCommand$sourcePostingSubmissionArgs<ExtArgs>
   socialAccount?: boolean | Prisma.CommentCommand$socialAccountArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   tasks?: boolean | Prisma.CommentCommand$tasksArgs<ExtArgs>
@@ -1359,6 +1541,7 @@ export type CommentCommandSelect<ExtArgs extends runtime.Types.Extensions.Intern
 export type CommentCommandSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   campaignId?: boolean
+  sourcePostingSubmissionId?: boolean
   targetPostUrl?: boolean
   platform?: boolean
   socialAccountId?: boolean
@@ -1374,6 +1557,7 @@ export type CommentCommandSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   updatedAt?: boolean
   deletedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.CommentCommand$sourcePostingSubmissionArgs<ExtArgs>
   socialAccount?: boolean | Prisma.CommentCommand$socialAccountArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["commentCommand"]>
@@ -1381,6 +1565,7 @@ export type CommentCommandSelectCreateManyAndReturn<ExtArgs extends runtime.Type
 export type CommentCommandSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   campaignId?: boolean
+  sourcePostingSubmissionId?: boolean
   targetPostUrl?: boolean
   platform?: boolean
   socialAccountId?: boolean
@@ -1396,6 +1581,7 @@ export type CommentCommandSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   updatedAt?: boolean
   deletedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.CommentCommand$sourcePostingSubmissionArgs<ExtArgs>
   socialAccount?: boolean | Prisma.CommentCommand$socialAccountArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["commentCommand"]>
@@ -1403,6 +1589,7 @@ export type CommentCommandSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
 export type CommentCommandSelectScalar = {
   id?: boolean
   campaignId?: boolean
+  sourcePostingSubmissionId?: boolean
   targetPostUrl?: boolean
   platform?: boolean
   socialAccountId?: boolean
@@ -1419,9 +1606,10 @@ export type CommentCommandSelectScalar = {
   deletedAt?: boolean
 }
 
-export type CommentCommandOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "targetPostUrl" | "platform" | "socialAccountId" | "stance" | "narrative" | "instruction" | "requiredSlots" | "keepExpiryMinutes" | "deadline" | "status" | "createdById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["commentCommand"]>
+export type CommentCommandOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "sourcePostingSubmissionId" | "targetPostUrl" | "platform" | "socialAccountId" | "stance" | "narrative" | "instruction" | "requiredSlots" | "keepExpiryMinutes" | "deadline" | "status" | "createdById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["commentCommand"]>
 export type CommentCommandInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.CommentCommand$sourcePostingSubmissionArgs<ExtArgs>
   socialAccount?: boolean | Prisma.CommentCommand$socialAccountArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   tasks?: boolean | Prisma.CommentCommand$tasksArgs<ExtArgs>
@@ -1429,11 +1617,13 @@ export type CommentCommandInclude<ExtArgs extends runtime.Types.Extensions.Inter
 }
 export type CommentCommandIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.CommentCommand$sourcePostingSubmissionArgs<ExtArgs>
   socialAccount?: boolean | Prisma.CommentCommand$socialAccountArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CommentCommandIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  sourcePostingSubmission?: boolean | Prisma.CommentCommand$sourcePostingSubmissionArgs<ExtArgs>
   socialAccount?: boolean | Prisma.CommentCommand$socialAccountArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -1442,6 +1632,7 @@ export type $CommentCommandPayload<ExtArgs extends runtime.Types.Extensions.Inte
   name: "CommentCommand"
   objects: {
     campaign: Prisma.$CampaignPayload<ExtArgs>
+    sourcePostingSubmission: Prisma.$PostingSubmissionPayload<ExtArgs> | null
     socialAccount: Prisma.$SocialAccountPayload<ExtArgs> | null
     createdBy: Prisma.$UserPayload<ExtArgs>
     tasks: Prisma.$CommentTaskPayload<ExtArgs>[]
@@ -1449,6 +1640,7 @@ export type $CommentCommandPayload<ExtArgs extends runtime.Types.Extensions.Inte
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     campaignId: string
+    sourcePostingSubmissionId: string | null
     targetPostUrl: string
     platform: $Enums.Platform
     socialAccountId: string | null
@@ -1858,6 +2050,7 @@ readonly fields: CommentCommandFieldRefs;
 export interface Prisma__CommentCommandClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   campaign<T extends Prisma.CampaignDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignDefaultArgs<ExtArgs>>): Prisma.Prisma__CampaignClient<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  sourcePostingSubmission<T extends Prisma.CommentCommand$sourcePostingSubmissionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CommentCommand$sourcePostingSubmissionArgs<ExtArgs>>): Prisma.Prisma__PostingSubmissionClient<runtime.Types.Result.GetResult<Prisma.$PostingSubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   socialAccount<T extends Prisma.CommentCommand$socialAccountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CommentCommand$socialAccountArgs<ExtArgs>>): Prisma.Prisma__SocialAccountClient<runtime.Types.Result.GetResult<Prisma.$SocialAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tasks<T extends Prisma.CommentCommand$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CommentCommand$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1892,6 +2085,7 @@ export interface Prisma__CommentCommandClient<T, Null = never, ExtArgs extends r
 export interface CommentCommandFieldRefs {
   readonly id: Prisma.FieldRef<"CommentCommand", 'String'>
   readonly campaignId: Prisma.FieldRef<"CommentCommand", 'String'>
+  readonly sourcePostingSubmissionId: Prisma.FieldRef<"CommentCommand", 'String'>
   readonly targetPostUrl: Prisma.FieldRef<"CommentCommand", 'String'>
   readonly platform: Prisma.FieldRef<"CommentCommand", 'Platform'>
   readonly socialAccountId: Prisma.FieldRef<"CommentCommand", 'String'>
@@ -2304,6 +2498,25 @@ export type CommentCommandDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many CommentCommands to delete.
    */
   limit?: number
+}
+
+/**
+ * CommentCommand.sourcePostingSubmission
+ */
+export type CommentCommand$sourcePostingSubmissionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostingSubmission
+   */
+  select?: Prisma.PostingSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostingSubmission
+   */
+  omit?: Prisma.PostingSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostingSubmissionInclude<ExtArgs> | null
+  where?: Prisma.PostingSubmissionWhereInput
 }
 
 /**

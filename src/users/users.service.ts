@@ -22,7 +22,9 @@ import {
 import { toAuditJson } from '../common/utils/audit-json.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { AuditLogService } from '../audit-logs/audit-log.service.js';
+import { authApi } from '../auth/auth-api.js';
 import type { RossUserSession } from '../auth/auth.types.js';
+import { getFrontendUrl } from '../config/env.js';
 import {
   AdminResetPasswordDto,
   CreateUserDto,
@@ -72,6 +74,7 @@ function campaignMemberRoleForUserRole(role: UserRole): CampaignMemberRole {
     case UserRole.VIEWER:
       return CampaignMemberRole.VIEWER;
     case UserRole.PIC:
+      return CampaignMemberRole.PIC;
     case UserRole.BUZZER:
     default:
       return CampaignMemberRole.BUZZER;
@@ -196,7 +199,7 @@ export class UsersService {
     const email = dto.email.trim().toLowerCase();
     await this.ensureEmailAvailable(email);
 
-    if (dto.campaignIds?.length && dto.role !== UserRole.PIC) {
+    if (dto.campaignIds?.length) {
       await this.ensureCampaignsExist(dto.campaignIds);
     }
 
@@ -233,7 +236,7 @@ export class UsersService {
         });
       }
 
-      if (dto.campaignIds?.length && dto.role !== UserRole.PIC) {
+      if (dto.campaignIds?.length) {
         const memberRole = campaignMemberRoleForUserRole(dto.role);
         await tx.campaignMember.createMany({
           data: dto.campaignIds.map((campaignId) => ({
@@ -279,10 +282,26 @@ export class UsersService {
       });
     }
 
+    let inviteEmailSent = false;
+    if (dto.sendInviteEmail) {
+      try {
+        await authApi.requestPasswordReset({
+          body: {
+            email,
+            redirectTo: `${getFrontendUrl()}/reset-password`,
+          },
+        });
+        inviteEmailSent = true;
+      } catch (error) {
+        console.error('[UsersService] Failed to send invite email', error);
+      }
+    }
+
     return {
       ...created,
-      campaignCount:
-        dto.role === UserRole.PIC ? 0 : (dto.campaignIds?.length ?? 0),
+      campaignCount: dto.campaignIds?.length ?? 0,
+      inviteRequested: dto.sendInviteEmail === true,
+      inviteEmailSent,
       // Signal to UI that the auth provider does not yet enforce
       // "require password change on next login".
       requirePasswordChange:
@@ -451,8 +470,65 @@ export class UsersService {
     request?: { ip?: string; userAgent?: string },
   ) {
     const target = await this.findExistingUser(userId);
-    const passwordHash = await betterAuthHashPassword(dto.newPassword);
     const revokeSessions = dto.revokeSessions ?? true;
+
+    if (dto.sendResetEmail) {
+      let emailSent = false;
+      try {
+        await authApi.requestPasswordReset({
+          body: {
+            email: target.email,
+            redirectTo: `${getFrontendUrl()}/reset-password`,
+          },
+        });
+        emailSent = true;
+      } catch (error) {
+        console.error('[UsersService] Failed to send admin reset email', error);
+      }
+
+      await this.prisma.auditLog.create({
+        data: {
+          actorId: actor.id,
+          action: AuditAction.USER_PASSWORD_RESET_REQUESTED,
+          entityType: 'User',
+          entityId: target.id,
+          newValue: toAuditJson({
+            mode: 'email_link',
+            emailSent,
+            revokeSessions,
+            requirePasswordChange: dto.requirePasswordChange ?? false,
+          }),
+          ipAddress: request?.ip,
+          userAgent: request?.userAgent,
+        },
+      });
+
+      return {
+        success: true,
+        mode: 'email_link' as const,
+        emailSent,
+        revokeSessions,
+        requirePasswordChange:
+          dto.requirePasswordChange === true
+            ? 'NEEDS_AUTH_PROVIDER_SUPPORT'
+            : false,
+      };
+    }
+
+    if (!dto.newPassword) {
+      throw new BadRequestException({
+        code: 'VALIDATION_ERROR',
+        message: 'newPassword is required when sendResetEmail is false.',
+        details: [
+          {
+            field: 'newPassword',
+            message: 'Required unless sendResetEmail is true.',
+          },
+        ],
+      });
+    }
+
+    const passwordHash = await betterAuthHashPassword(dto.newPassword);
 
     await this.prisma.$transaction(async (tx) => {
       await tx.account.upsert({
@@ -482,6 +558,7 @@ export class UsersService {
           entityType: 'User',
           entityId: target.id,
           newValue: toAuditJson({
+            mode: 'manual_password',
             revokeSessions,
             requirePasswordChange: dto.requirePasswordChange ?? false,
           }),
@@ -493,6 +570,8 @@ export class UsersService {
 
     return {
       success: true,
+      mode: 'manual_password' as const,
+      emailSent: false,
       revokeSessions,
       requirePasswordChange:
         dto.requirePasswordChange === true

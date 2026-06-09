@@ -236,6 +236,7 @@ export const PostingOrderScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
   targetUnitId: 'targetUnitId',
+  title: 'title',
   platform: 'platform',
   contentDriveUrl: 'contentDriveUrl',
   scheduledAt: 'scheduledAt',
@@ -309,6 +310,7 @@ export type BlastReportScalarFieldEnum = (typeof BlastReportScalarFieldEnum)[key
 export const CommentCommandScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
+  sourcePostingSubmissionId: 'sourcePostingSubmissionId',
   targetPostUrl: 'targetPostUrl',
   platform: 'platform',
   socialAccountId: 'socialAccountId',

@@ -4,6 +4,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin as adminPlugin } from 'better-auth/plugins/admin';
 import { UserRole, UserStatus } from '../generated/prisma/client.js';
 import { getBetterAuthUrl, getAuthCookieDomain, getTrustedOrigins } from '../config/env.js';
+import { isSmtpEmailEnabled, sendPasswordActionEmail } from '../mail/smtp-mailer.js';
 import {
   adminRole,
   buzzerRole,
@@ -47,6 +48,27 @@ export const auth = betterAuth({
     minPasswordLength: 8,
     maxPasswordLength: 128,
     revokeSessionsOnPasswordReset: true,
+    resetPasswordTokenExpiresIn: 60 * 60,
+    ...(isSmtpEmailEnabled()
+      ? {
+          sendResetPassword: async ({ user, url }: { user: { id: string; name: string; email: string }; url: string }) => {
+            const credentialAccount = await prisma.account.findFirst({
+              where: {
+                userId: user.id,
+                providerId: 'credential',
+              },
+              select: { id: true },
+            });
+
+            await sendPasswordActionEmail({
+              to: user.email,
+              name: user.name,
+              url,
+              isInitialSetup: !credentialAccount,
+            });
+          },
+        }
+      : {}),
   },
   session: {
     expiresIn: 60 * 60 * 24 * 7,

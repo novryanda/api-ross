@@ -77,6 +77,15 @@ export class CreateUserDto {
 
   @ApiPropertyOptional({
     description:
+      'Send an email link so the user can create or reset their own password. Uses the Better Auth reset-password flow and Nodemailer SMTP transport.',
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  sendInviteEmail?: boolean;
+
+  @ApiPropertyOptional({
+    description:
       'Temporary password for the new user (Better Auth hashes it). If omitted the user is created without a credential account and an admin must call reset-password later.',
     minLength: 8,
     maxLength: 128,

@@ -56,6 +56,45 @@ export class PostingOrdersService {
     private readonly orgUnitsService: OrgUnitsService,
   ) {}
 
+  async listOrders(actor: CurrentUser, query: PostingOrderQueryDto) {
+    this.assertAdmin(actor);
+
+    const where: Prisma.PostingOrderWhereInput = {
+      ...(query.campaignId ? { campaignId: query.campaignId } : {}),
+      ...(query.status ? { status: query.status } : {}),
+      ...(query.platform ? { platform: query.platform } : {}),
+      ...(query.targetUnitId ? { targetUnitId: query.targetUnitId } : {}),
+      ...(query.search
+        ? {
+            OR: [
+              { caption: { contains: query.search, mode: 'insensitive' } },
+              { description: { contains: query.search, mode: 'insensitive' } },
+              { title: { contains: query.search, mode: 'insensitive' } },
+              { contentDriveUrl: { contains: query.search, mode: 'insensitive' } },
+              { campaign: { name: { contains: query.search, mode: 'insensitive' } } },
+              { targetUnit: { name: { contains: query.search, mode: 'insensitive' } } },
+            ],
+          }
+        : {}),
+    };
+
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.postingOrder.findMany({
+        where,
+        orderBy: postingOrderOrderBy(query),
+        skip: (query.page - 1) * query.limit,
+        take: query.limit,
+        include: this.orderInclude(),
+      }),
+      this.prisma.postingOrder.count({ where }),
+    ]);
+
+    return {
+      items,
+      meta: buildPaginationMeta(query.page, query.limit, total),
+    };
+  }
+
   async listCampaignOrders(
     actor: CurrentUser,
     campaignId: string,
@@ -74,6 +113,7 @@ export class PostingOrdersService {
             OR: [
               { caption: { contains: query.search, mode: 'insensitive' } },
               { description: { contains: query.search, mode: 'insensitive' } },
+              { title: { contains: query.search, mode: 'insensitive' } },
               { contentDriveUrl: { contains: query.search, mode: 'insensitive' } },
             ],
           }
@@ -118,6 +158,7 @@ export class PostingOrdersService {
       data: {
         campaignId,
         targetUnitId: dto.targetUnitId,
+        title: dto.title,
         platform: dto.platform,
         contentDriveUrl: dto.contentDriveUrl,
         scheduledAt: new Date(dto.scheduledAt),
@@ -165,6 +206,7 @@ export class PostingOrdersService {
       where: { id },
       data: {
         ...(dto.targetUnitId !== undefined ? { targetUnitId: dto.targetUnitId } : {}),
+        ...(dto.title !== undefined ? { title: dto.title } : {}),
         ...(dto.platform !== undefined ? { platform: dto.platform } : {}),
         ...(dto.contentDriveUrl !== undefined
           ? { contentDriveUrl: dto.contentDriveUrl }
@@ -207,20 +249,39 @@ export class PostingOrdersService {
 
     const where: Prisma.PostingOrderWhereInput = {
       targetUnitId: { in: visibleUnitIds },
+      campaign: {
+        members: {
+          some: {
+            userId: actor.id,
+          },
+        },
+      },
+      ...(query.status
+        ? { status: query.status }
+        : {
+            status: {
+              in: [
+                PostingOrderStatus.PUBLISHED_TO_QUEUE,
+                PostingOrderStatus.CLAIMED,
+              ],
+            },
+          }),
       ...(query.platform ? { platform: query.platform } : {}),
       ...(query.search
         ? {
             OR: [
               { caption: { contains: query.search, mode: 'insensitive' } },
               { description: { contains: query.search, mode: 'insensitive' } },
+              { title: { contains: query.search, mode: 'insensitive' } },
               { contentDriveUrl: { contains: query.search, mode: 'insensitive' } },
             ],
           }
         : {}),
-      OR: [
-        { status: PostingOrderStatus.PUBLISHED_TO_QUEUE },
-        { status: PostingOrderStatus.CLAIMED, claimedById: actor.id },
-      ],
+      submissions: {
+        none: {
+          submittedById: actor.id,
+        },
+      },
     };
 
     const [items, total] = await this.prisma.$transaction([
@@ -270,37 +331,43 @@ export class PostingOrdersService {
     const current = await this.findExistingOrder(id);
     await this.assertOrderVisible(actor, current);
 
-    if (current.status !== PostingOrderStatus.PUBLISHED_TO_QUEUE) {
+    if (!this.isOrderAssignable(current.status)) {
       throw new ConflictException({
         code: 'CONFLICT',
-        message: 'Posting order is not available to claim.',
+        message: 'Posting order is not active anymore.',
         details: [],
       });
     }
 
-    const now = new Date();
-    const result = await this.prisma.postingOrder.updateMany({
+    const existingSubmission = await this.prisma.postingSubmission.findFirst({
       where: {
-        id,
-        status: PostingOrderStatus.PUBLISHED_TO_QUEUE,
-        claimedById: null,
+        postingOrderId: id,
+        submittedById: actor.id,
       },
-      data: {
-        status: PostingOrderStatus.CLAIMED,
-        claimedById: actor.id,
-        claimedAt: now,
-      },
+      select: { id: true },
     });
 
-    if (result.count === 0) {
+    if (existingSubmission) {
       throw new ConflictException({
         code: 'CONFLICT',
-        message: 'Posting order has already been claimed by another PIC.',
+        message: 'You have already submitted this posting order.',
         details: [],
       });
     }
 
-    const updated = await this.findExistingOrder(id);
+    const updated = await this.prisma.postingOrder.update({
+      where: { id },
+      data: {
+        status:
+          current.status === PostingOrderStatus.PUBLISHED_TO_QUEUE
+            ? PostingOrderStatus.CLAIMED
+            : current.status,
+        claimedById: actor.id,
+        claimedAt: new Date(),
+      },
+      include: this.orderInclude(),
+    });
+
     await this.auditLogs.create({
       actorId: actor.id,
       campaignId: updated.campaignId,
@@ -364,18 +431,26 @@ export class PostingOrdersService {
     const order = await this.findExistingOrder(id);
     await this.assertOrderVisible(actor, order);
 
-    if (order.status !== PostingOrderStatus.CLAIMED || order.claimedById !== actor.id) {
+    if (!this.isOrderAssignable(order.status)) {
       throw new ConflictException({
         code: 'CONFLICT',
-        message: 'Only the claiming PIC can submit this posting order.',
+        message: 'Posting order is not active anymore.',
         details: [],
       });
     }
 
-    if (order.submission) {
+    const existingSubmission = await this.prisma.postingSubmission.findFirst({
+      where: {
+        postingOrderId: id,
+        submittedById: actor.id,
+      },
+      select: { id: true },
+    });
+
+    if (existingSubmission) {
       throw new ConflictException({
         code: 'CONFLICT',
-        message: 'Posting order already has a submission.',
+        message: 'You have already submitted this posting order.',
         details: [],
       });
     }
@@ -399,29 +474,16 @@ export class PostingOrdersService {
       });
     }
 
-    const now = new Date();
-    const submission = await this.prisma.$transaction(async (tx) => {
-      const created = await tx.postingSubmission.create({
-        data: {
-          postingOrderId: id,
-          submittedById: actor.id,
-          socialAccountId: dto.socialAccountId,
-          postedUrl: dto.postedUrl,
-          proofDriveUrl: dto.proofDriveUrl,
-          notes: dto.notes,
-        },
-        include: this.submissionInclude(),
-      });
-
-      await tx.postingOrder.update({
-        where: { id },
-        data: {
-          status: PostingOrderStatus.COMPLETED,
-          completedAt: now,
-        },
-      });
-
-      return created;
+    const submission = await this.prisma.postingSubmission.create({
+      data: {
+        postingOrderId: id,
+        submittedById: actor.id,
+        socialAccountId: dto.socialAccountId,
+        postedUrl: dto.postedUrl,
+        proofDriveUrl: dto.proofDriveUrl,
+        notes: dto.notes,
+      },
+      include: this.submissionInclude(),
     });
 
     await this.auditLogs.create({
@@ -445,6 +507,7 @@ export class PostingOrdersService {
     await this.ensureCampaignExists(campaignId);
 
     const eligibleForBlast = query.eligibleForBlast === 'true';
+    const eligibleForComment = query.eligibleForComment === 'true';
     const where: Prisma.PostingSubmissionWhereInput = {
       postingOrder: {
         campaignId,
@@ -455,6 +518,12 @@ export class PostingOrdersService {
         ? {
             status: PostingSubmissionStatus.APPROVED_FOR_BLAST,
             blastTarget: null,
+          }
+        : {}),
+      ...(eligibleForComment
+        ? {
+            status: PostingSubmissionStatus.APPROVED_FOR_BLAST,
+            commentCommand: null,
           }
         : {}),
     };
@@ -533,8 +602,10 @@ export class PostingOrdersService {
       claimedBy: {
         select: { id: true, name: true, email: true, role: true },
       },
-      submission: {
-        include: this.submissionInclude(),
+      _count: {
+        select: {
+          submissions: true,
+        },
       },
     } satisfies Prisma.PostingOrderInclude;
   }
@@ -576,6 +647,15 @@ export class PostingOrdersService {
           id: true,
           campaignId: true,
           postUrl: true,
+          platform: true,
+          status: true,
+        },
+      },
+      commentCommand: {
+        select: {
+          id: true,
+          campaignId: true,
+          targetPostUrl: true,
           platform: true,
           status: true,
         },
@@ -632,7 +712,15 @@ export class PostingOrdersService {
     }
   }
 
-  private async assertOrderVisible(actor: CurrentUser, order: { targetUnitId: string; claimedById: string | null; status: PostingOrderStatus }) {
+  private async assertOrderVisible(
+    actor: CurrentUser,
+    order: {
+      campaignId: string;
+      targetUnitId: string;
+      claimedById: string | null;
+      status: PostingOrderStatus;
+    },
+  ) {
     if (actor.role === UserRole.ADMIN) {
       return;
     }
@@ -647,15 +735,34 @@ export class PostingOrdersService {
     }
 
     const visibleUnits = await this.orgUnitsService.getDescendantUnitIds(actor.picUnitId);
-    const visible =
-      visibleUnits.includes(order.targetUnitId) &&
-      (order.status === PostingOrderStatus.PUBLISHED_TO_QUEUE ||
-        order.claimedById === actor.id);
+    const visible = visibleUnits.includes(order.targetUnitId);
 
     if (!visible) {
       throw new ForbiddenException({
         code: 'FORBIDDEN',
         message: 'Posting order access denied.',
+        details: [],
+      });
+    }
+
+    await this.assertCampaignMembership(actor.id, order.campaignId);
+  }
+
+  private async assertCampaignMembership(userId: string, campaignId: string) {
+    const membership = await this.prisma.campaignMember.findUnique({
+      where: {
+        campaignId_userId: {
+          campaignId,
+          userId,
+        },
+      },
+      select: { id: true },
+    });
+
+    if (!membership) {
+      throw new ForbiddenException({
+        code: 'FORBIDDEN',
+        message: 'Campaign access denied.',
         details: [],
       });
     }
@@ -669,6 +776,13 @@ export class PostingOrdersService {
         details: [],
       });
     }
+  }
+
+  private isOrderAssignable(status: PostingOrderStatus) {
+    return (
+      status === PostingOrderStatus.PUBLISHED_TO_QUEUE ||
+      status === PostingOrderStatus.CLAIMED
+    );
   }
 
   private assertPic(actor: CurrentUser) {

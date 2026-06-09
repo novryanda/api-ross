@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Header,
   Param,
   Patch,
   Post,
@@ -16,6 +18,7 @@ import { successResponse } from '../common/http/api-response.js';
 import { ApiEndpointDoc } from '../common/swagger/api-docs.js';
 import {
   CreateOrgUnitDto,
+  MoveOrgUnitDto,
   OrgUnitQueryDto,
   UpdateOrgUnitDto,
 } from './dto/index.js';
@@ -32,10 +35,19 @@ export class OrgUnitsController {
   @ApiEndpointDoc({
     summary: 'List org units',
     description:
-      'Admin sees all units. PIC sees only their assigned subtree.',
+      'Admin sees all units. PIC sees only their assigned subtree. Supports flat pagination or tree view.',
     roles: [UserRole.ADMIN, UserRole.PIC],
-    query: OrgUnitQueryDto,
-    queryParams: ['page', 'limit', 'status', 'search', 'sortBy', 'sortOrder'],
+    queryParams: [
+      'page',
+      'limit',
+      'status',
+      'search',
+      'level',
+      'picAssigned',
+      'view',
+      'sortBy',
+      'sortOrder',
+    ],
     errors: [400, 401, 403],
   })
   async findAll(
@@ -44,6 +56,41 @@ export class OrgUnitsController {
   ) {
     const result = await this.orgUnitsService.findAll(actor, query);
     return successResponse(result.items, result.meta);
+  }
+
+  @Get('export')
+  @Roles(UserRole.ADMIN)
+  @Header('Content-Type', 'text/csv; charset=utf-8')
+  @Header('Content-Disposition', 'attachment; filename="pic-structure.csv"')
+  @ApiEndpointDoc({
+    summary: 'Export org units',
+    description:
+      'Admin-only CSV export for PIC structure with the same filters as list endpoint.',
+    roles: [UserRole.ADMIN],
+    errors: [400, 401, 403],
+  })
+  async export(
+    @CurrentUser() actor: RossUserSession['user'],
+    @Query() query: OrgUnitQueryDto,
+  ) {
+    return this.orgUnitsService.exportCsv(actor, query);
+  }
+
+  @Get(':id')
+  @Roles(UserRole.ADMIN, UserRole.PIC)
+  @ApiEndpointDoc({
+    summary: 'Get org unit detail',
+    description:
+      'Returns org unit metadata, ancestor chain, and assigned PIC members.',
+    roles: [UserRole.ADMIN, UserRole.PIC],
+    errors: [401, 403, 404],
+  })
+  async findOne(
+    @CurrentUser() actor: RossUserSession['user'],
+    @Param('id') id: string,
+  ) {
+    const unit = await this.orgUnitsService.findOne(actor, id);
+    return successResponse(unit);
   }
 
   @Post()
@@ -62,6 +109,24 @@ export class OrgUnitsController {
     return this.orgUnitsService.create(actor, dto);
   }
 
+  @Patch(':id/move')
+  @Roles(UserRole.ADMIN)
+  @ApiEndpointDoc({
+    summary: 'Move org unit',
+    description:
+      'Admin-only endpoint to change parent of a PIC hierarchy node.',
+    roles: [UserRole.ADMIN],
+    body: MoveOrgUnitDto,
+    errors: [400, 401, 403, 404],
+  })
+  move(
+    @CurrentUser() actor: RossUserSession['user'],
+    @Param('id') id: string,
+    @Body() dto: MoveOrgUnitDto,
+  ) {
+    return this.orgUnitsService.move(actor, id, dto);
+  }
+
   @Patch(':id')
   @Roles(UserRole.ADMIN)
   @ApiEndpointDoc({
@@ -77,5 +142,21 @@ export class OrgUnitsController {
     @Body() dto: UpdateOrgUnitDto,
   ) {
     return this.orgUnitsService.update(actor, id, dto);
+  }
+
+  @Delete(':id')
+  @Roles(UserRole.ADMIN)
+  @ApiEndpointDoc({
+    summary: 'Delete org unit',
+    description:
+      'Admin-only delete endpoint for PIC hierarchy nodes that no longer have children, assigned PIC users, or posting orders.',
+    roles: [UserRole.ADMIN],
+    errors: [400, 401, 403, 404],
+  })
+  remove(
+    @CurrentUser() actor: RossUserSession['user'],
+    @Param('id') id: string,
+  ) {
+    return this.orgUnitsService.remove(actor, id);
   }
 }

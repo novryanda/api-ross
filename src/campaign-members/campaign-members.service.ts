@@ -26,6 +26,20 @@ type NormalizedMemberInput = {
 
 const MEMBER_SORT_FIELDS = new Set(['createdAt', 'memberRole']);
 
+function memberRoleForUserRole(role: UserRole): CampaignMemberRole {
+  switch (role) {
+    case UserRole.ADMIN:
+      return CampaignMemberRole.ADMIN;
+    case UserRole.VIEWER:
+      return CampaignMemberRole.VIEWER;
+    case UserRole.PIC:
+      return CampaignMemberRole.PIC;
+    case UserRole.BUZZER:
+    default:
+      return CampaignMemberRole.BUZZER;
+  }
+}
+
 function memberOrderBy(
   query: MemberQueryDto,
 ): Prisma.CampaignMemberOrderByWithRelationInput {
@@ -126,6 +140,23 @@ export class CampaignMembersService {
         message: 'One or more users were not found or inactive.',
         details: [],
       });
+    }
+
+    const usersById = new Map(targetUsers.map((user) => [user.id, user.role]));
+    for (const member of members) {
+      const userRole = usersById.get(member.userId);
+      if (!userRole) {
+        continue;
+      }
+
+      const expectedRole = memberRoleForUserRole(userRole);
+      if (member.memberRole !== expectedRole) {
+        throw new BadRequestException({
+          code: 'VALIDATION_ERROR',
+          message: `User role ${userRole} cannot be assigned as campaign member role ${member.memberRole}.`,
+          details: [{ userId: member.userId, userRole, memberRole: member.memberRole }],
+        });
+      }
     }
 
     await this.prisma.$transaction(async (tx) => {

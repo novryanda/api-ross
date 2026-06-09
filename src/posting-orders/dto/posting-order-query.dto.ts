@@ -8,6 +8,10 @@ import {
 
 export class PostingOrderQueryDto extends PaginationQueryDto {
   @IsOptional()
+  @IsUUID()
+  campaignId?: string;
+
+  @IsOptional()
   @IsEnum(PostingOrderStatus)
   status?: PostingOrderStatus;
 
@@ -26,6 +30,10 @@ export class PostingOrderQueryDto extends PaginationQueryDto {
   @IsOptional()
   @IsBooleanString()
   eligibleForBlast?: string;
+
+  @IsOptional()
+  @IsBooleanString()
+  eligibleForComment?: string;
 
   @IsOptional()
   @IsEnum(PostingSubmissionStatus)

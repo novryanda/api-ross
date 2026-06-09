@@ -14,6 +14,7 @@ describe('AuthController', () => {
         email: 'admin@example.com',
         role: UserRole.ADMIN,
         status: UserStatus.ACTIVE,
+        picUnitId: null,
         lastLoginAt: new Date('2026-05-10T00:00:00.000Z'),
       },
     };
@@ -31,6 +32,7 @@ describe('AuthController', () => {
         email: session.user.email,
         role: UserRole.ADMIN,
         status: UserStatus.ACTIVE,
+        picUnitId: null,
         lastLoginAt: session.user.lastLoginAt,
       },
       meta: {

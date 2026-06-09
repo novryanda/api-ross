@@ -259,6 +259,7 @@ export type PostingSubmissionWhereInput = {
   socialAccount?: Prisma.XOR<Prisma.SocialAccountScalarRelationFilter, Prisma.SocialAccountWhereInput>
   reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   blastTarget?: Prisma.XOR<Prisma.BlastTargetNullableScalarRelationFilter, Prisma.BlastTargetWhereInput> | null
+  commentCommand?: Prisma.XOR<Prisma.CommentCommandNullableScalarRelationFilter, Prisma.CommentCommandWhereInput> | null
 }
 
 export type PostingSubmissionOrderByWithRelationInput = {
@@ -281,14 +282,16 @@ export type PostingSubmissionOrderByWithRelationInput = {
   socialAccount?: Prisma.SocialAccountOrderByWithRelationInput
   reviewedBy?: Prisma.UserOrderByWithRelationInput
   blastTarget?: Prisma.BlastTargetOrderByWithRelationInput
+  commentCommand?: Prisma.CommentCommandOrderByWithRelationInput
 }
 
 export type PostingSubmissionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  postingOrderId?: string
+  postingOrderId_submittedById?: Prisma.PostingSubmissionPostingOrderIdSubmittedByIdCompoundUniqueInput
   AND?: Prisma.PostingSubmissionWhereInput | Prisma.PostingSubmissionWhereInput[]
   OR?: Prisma.PostingSubmissionWhereInput[]
   NOT?: Prisma.PostingSubmissionWhereInput | Prisma.PostingSubmissionWhereInput[]
+  postingOrderId?: Prisma.UuidFilter<"PostingSubmission"> | string
   submittedById?: Prisma.UuidFilter<"PostingSubmission"> | string
   socialAccountId?: Prisma.UuidFilter<"PostingSubmission"> | string
   postedUrl?: Prisma.StringFilter<"PostingSubmission"> | string
@@ -306,7 +309,8 @@ export type PostingSubmissionWhereUniqueInput = Prisma.AtLeast<{
   socialAccount?: Prisma.XOR<Prisma.SocialAccountScalarRelationFilter, Prisma.SocialAccountWhereInput>
   reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   blastTarget?: Prisma.XOR<Prisma.BlastTargetNullableScalarRelationFilter, Prisma.BlastTargetWhereInput> | null
-}, "id" | "postingOrderId">
+  commentCommand?: Prisma.XOR<Prisma.CommentCommandNullableScalarRelationFilter, Prisma.CommentCommandWhereInput> | null
+}, "id" | "postingOrderId_submittedById">
 
 export type PostingSubmissionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -359,11 +363,12 @@ export type PostingSubmissionCreateInput = {
   submittedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionInput
+  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionsInput
   submittedBy: Prisma.UserCreateNestedOneWithoutPostingSubmissionsInput
   socialAccount: Prisma.SocialAccountCreateNestedOneWithoutPostingSubmissionsInput
   reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedPostingSubmissionsInput
   blastTarget?: Prisma.BlastTargetCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionUncheckedCreateInput = {
@@ -382,6 +387,7 @@ export type PostingSubmissionUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   blastTarget?: Prisma.BlastTargetUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionUpdateInput = {
@@ -395,11 +401,12 @@ export type PostingSubmissionUpdateInput = {
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionNestedInput
+  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionsNestedInput
   submittedBy?: Prisma.UserUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   reviewedBy?: Prisma.UserUpdateOneWithoutReviewedPostingSubmissionsNestedInput
   blastTarget?: Prisma.BlastTargetUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionUncheckedUpdateInput = {
@@ -418,6 +425,7 @@ export type PostingSubmissionUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blastTarget?: Prisma.BlastTargetUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionCreateManyInput = {
@@ -480,6 +488,11 @@ export type PostingSubmissionOrderByRelationAggregateInput = {
 export type PostingSubmissionNullableScalarRelationFilter = {
   is?: Prisma.PostingSubmissionWhereInput | null
   isNot?: Prisma.PostingSubmissionWhereInput | null
+}
+
+export type PostingSubmissionPostingOrderIdSubmittedByIdCompoundUniqueInput = {
+  postingOrderId: string
+  submittedById: string
 }
 
 export type PostingSubmissionCountOrderByAggregateInput = {
@@ -675,40 +688,66 @@ export type PostingSubmissionUpdateOneWithoutBlastTargetNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PostingSubmissionUpdateToOneWithWhereWithoutBlastTargetInput, Prisma.PostingSubmissionUpdateWithoutBlastTargetInput>, Prisma.PostingSubmissionUncheckedUpdateWithoutBlastTargetInput>
 }
 
-export type PostingSubmissionCreateNestedOneWithoutPostingOrderInput = {
-  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput>
-  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput
-  connect?: Prisma.PostingSubmissionWhereUniqueInput
+export type PostingSubmissionCreateNestedManyWithoutPostingOrderInput = {
+  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput> | Prisma.PostingSubmissionCreateWithoutPostingOrderInput[] | Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput[]
+  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput | Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput[]
+  createMany?: Prisma.PostingSubmissionCreateManyPostingOrderInputEnvelope
+  connect?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
 }
 
-export type PostingSubmissionUncheckedCreateNestedOneWithoutPostingOrderInput = {
-  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput>
-  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput
-  connect?: Prisma.PostingSubmissionWhereUniqueInput
+export type PostingSubmissionUncheckedCreateNestedManyWithoutPostingOrderInput = {
+  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput> | Prisma.PostingSubmissionCreateWithoutPostingOrderInput[] | Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput[]
+  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput | Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput[]
+  createMany?: Prisma.PostingSubmissionCreateManyPostingOrderInputEnvelope
+  connect?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
 }
 
-export type PostingSubmissionUpdateOneWithoutPostingOrderNestedInput = {
-  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput>
-  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput
-  upsert?: Prisma.PostingSubmissionUpsertWithoutPostingOrderInput
-  disconnect?: Prisma.PostingSubmissionWhereInput | boolean
-  delete?: Prisma.PostingSubmissionWhereInput | boolean
-  connect?: Prisma.PostingSubmissionWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PostingSubmissionUpdateToOneWithWhereWithoutPostingOrderInput, Prisma.PostingSubmissionUpdateWithoutPostingOrderInput>, Prisma.PostingSubmissionUncheckedUpdateWithoutPostingOrderInput>
+export type PostingSubmissionUpdateManyWithoutPostingOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput> | Prisma.PostingSubmissionCreateWithoutPostingOrderInput[] | Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput[]
+  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput | Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput[]
+  upsert?: Prisma.PostingSubmissionUpsertWithWhereUniqueWithoutPostingOrderInput | Prisma.PostingSubmissionUpsertWithWhereUniqueWithoutPostingOrderInput[]
+  createMany?: Prisma.PostingSubmissionCreateManyPostingOrderInputEnvelope
+  set?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
+  disconnect?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
+  delete?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
+  connect?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
+  update?: Prisma.PostingSubmissionUpdateWithWhereUniqueWithoutPostingOrderInput | Prisma.PostingSubmissionUpdateWithWhereUniqueWithoutPostingOrderInput[]
+  updateMany?: Prisma.PostingSubmissionUpdateManyWithWhereWithoutPostingOrderInput | Prisma.PostingSubmissionUpdateManyWithWhereWithoutPostingOrderInput[]
+  deleteMany?: Prisma.PostingSubmissionScalarWhereInput | Prisma.PostingSubmissionScalarWhereInput[]
 }
 
-export type PostingSubmissionUncheckedUpdateOneWithoutPostingOrderNestedInput = {
-  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput>
-  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput
-  upsert?: Prisma.PostingSubmissionUpsertWithoutPostingOrderInput
-  disconnect?: Prisma.PostingSubmissionWhereInput | boolean
-  delete?: Prisma.PostingSubmissionWhereInput | boolean
-  connect?: Prisma.PostingSubmissionWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PostingSubmissionUpdateToOneWithWhereWithoutPostingOrderInput, Prisma.PostingSubmissionUpdateWithoutPostingOrderInput>, Prisma.PostingSubmissionUncheckedUpdateWithoutPostingOrderInput>
+export type PostingSubmissionUncheckedUpdateManyWithoutPostingOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput> | Prisma.PostingSubmissionCreateWithoutPostingOrderInput[] | Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput[]
+  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput | Prisma.PostingSubmissionCreateOrConnectWithoutPostingOrderInput[]
+  upsert?: Prisma.PostingSubmissionUpsertWithWhereUniqueWithoutPostingOrderInput | Prisma.PostingSubmissionUpsertWithWhereUniqueWithoutPostingOrderInput[]
+  createMany?: Prisma.PostingSubmissionCreateManyPostingOrderInputEnvelope
+  set?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
+  disconnect?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
+  delete?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
+  connect?: Prisma.PostingSubmissionWhereUniqueInput | Prisma.PostingSubmissionWhereUniqueInput[]
+  update?: Prisma.PostingSubmissionUpdateWithWhereUniqueWithoutPostingOrderInput | Prisma.PostingSubmissionUpdateWithWhereUniqueWithoutPostingOrderInput[]
+  updateMany?: Prisma.PostingSubmissionUpdateManyWithWhereWithoutPostingOrderInput | Prisma.PostingSubmissionUpdateManyWithWhereWithoutPostingOrderInput[]
+  deleteMany?: Prisma.PostingSubmissionScalarWhereInput | Prisma.PostingSubmissionScalarWhereInput[]
 }
 
 export type EnumPostingSubmissionStatusFieldUpdateOperationsInput = {
   set?: $Enums.PostingSubmissionStatus
+}
+
+export type PostingSubmissionCreateNestedOneWithoutCommentCommandInput = {
+  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutCommentCommandInput, Prisma.PostingSubmissionUncheckedCreateWithoutCommentCommandInput>
+  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutCommentCommandInput
+  connect?: Prisma.PostingSubmissionWhereUniqueInput
+}
+
+export type PostingSubmissionUpdateOneWithoutCommentCommandNestedInput = {
+  create?: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutCommentCommandInput, Prisma.PostingSubmissionUncheckedCreateWithoutCommentCommandInput>
+  connectOrCreate?: Prisma.PostingSubmissionCreateOrConnectWithoutCommentCommandInput
+  upsert?: Prisma.PostingSubmissionUpsertWithoutCommentCommandInput
+  disconnect?: Prisma.PostingSubmissionWhereInput | boolean
+  delete?: Prisma.PostingSubmissionWhereInput | boolean
+  connect?: Prisma.PostingSubmissionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PostingSubmissionUpdateToOneWithWhereWithoutCommentCommandInput, Prisma.PostingSubmissionUpdateWithoutCommentCommandInput>, Prisma.PostingSubmissionUncheckedUpdateWithoutCommentCommandInput>
 }
 
 export type PostingSubmissionCreateWithoutSubmittedByInput = {
@@ -722,10 +761,11 @@ export type PostingSubmissionCreateWithoutSubmittedByInput = {
   submittedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionInput
+  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionsInput
   socialAccount: Prisma.SocialAccountCreateNestedOneWithoutPostingSubmissionsInput
   reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedPostingSubmissionsInput
   blastTarget?: Prisma.BlastTargetCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionUncheckedCreateWithoutSubmittedByInput = {
@@ -743,6 +783,7 @@ export type PostingSubmissionUncheckedCreateWithoutSubmittedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   blastTarget?: Prisma.BlastTargetUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionCreateOrConnectWithoutSubmittedByInput = {
@@ -766,10 +807,11 @@ export type PostingSubmissionCreateWithoutReviewedByInput = {
   submittedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionInput
+  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionsInput
   submittedBy: Prisma.UserCreateNestedOneWithoutPostingSubmissionsInput
   socialAccount: Prisma.SocialAccountCreateNestedOneWithoutPostingSubmissionsInput
   blastTarget?: Prisma.BlastTargetCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionUncheckedCreateWithoutReviewedByInput = {
@@ -787,6 +829,7 @@ export type PostingSubmissionUncheckedCreateWithoutReviewedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   blastTarget?: Prisma.BlastTargetUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionCreateOrConnectWithoutReviewedByInput = {
@@ -862,10 +905,11 @@ export type PostingSubmissionCreateWithoutSocialAccountInput = {
   submittedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionInput
+  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionsInput
   submittedBy: Prisma.UserCreateNestedOneWithoutPostingSubmissionsInput
   reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedPostingSubmissionsInput
   blastTarget?: Prisma.BlastTargetCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionUncheckedCreateWithoutSocialAccountInput = {
@@ -883,6 +927,7 @@ export type PostingSubmissionUncheckedCreateWithoutSocialAccountInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   blastTarget?: Prisma.BlastTargetUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionCreateOrConnectWithoutSocialAccountInput = {
@@ -922,10 +967,11 @@ export type PostingSubmissionCreateWithoutBlastTargetInput = {
   submittedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionInput
+  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionsInput
   submittedBy: Prisma.UserCreateNestedOneWithoutPostingSubmissionsInput
   socialAccount: Prisma.SocialAccountCreateNestedOneWithoutPostingSubmissionsInput
   reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedPostingSubmissionsInput
+  commentCommand?: Prisma.CommentCommandCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionUncheckedCreateWithoutBlastTargetInput = {
@@ -943,6 +989,7 @@ export type PostingSubmissionUncheckedCreateWithoutBlastTargetInput = {
   submittedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  commentCommand?: Prisma.CommentCommandUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionCreateOrConnectWithoutBlastTargetInput = {
@@ -972,10 +1019,11 @@ export type PostingSubmissionUpdateWithoutBlastTargetInput = {
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionNestedInput
+  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionsNestedInput
   submittedBy?: Prisma.UserUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   reviewedBy?: Prisma.UserUpdateOneWithoutReviewedPostingSubmissionsNestedInput
+  commentCommand?: Prisma.CommentCommandUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionUncheckedUpdateWithoutBlastTargetInput = {
@@ -993,6 +1041,7 @@ export type PostingSubmissionUncheckedUpdateWithoutBlastTargetInput = {
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  commentCommand?: Prisma.CommentCommandUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionCreateWithoutPostingOrderInput = {
@@ -1010,6 +1059,7 @@ export type PostingSubmissionCreateWithoutPostingOrderInput = {
   socialAccount: Prisma.SocialAccountCreateNestedOneWithoutPostingSubmissionsInput
   reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedPostingSubmissionsInput
   blastTarget?: Prisma.BlastTargetCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionUncheckedCreateWithoutPostingOrderInput = {
@@ -1027,6 +1077,7 @@ export type PostingSubmissionUncheckedCreateWithoutPostingOrderInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   blastTarget?: Prisma.BlastTargetUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
+  commentCommand?: Prisma.CommentCommandUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
 }
 
 export type PostingSubmissionCreateOrConnectWithoutPostingOrderInput = {
@@ -1034,18 +1085,80 @@ export type PostingSubmissionCreateOrConnectWithoutPostingOrderInput = {
   create: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput>
 }
 
-export type PostingSubmissionUpsertWithoutPostingOrderInput = {
-  update: Prisma.XOR<Prisma.PostingSubmissionUpdateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedUpdateWithoutPostingOrderInput>
-  create: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput>
-  where?: Prisma.PostingSubmissionWhereInput
+export type PostingSubmissionCreateManyPostingOrderInputEnvelope = {
+  data: Prisma.PostingSubmissionCreateManyPostingOrderInput | Prisma.PostingSubmissionCreateManyPostingOrderInput[]
+  skipDuplicates?: boolean
 }
 
-export type PostingSubmissionUpdateToOneWithWhereWithoutPostingOrderInput = {
-  where?: Prisma.PostingSubmissionWhereInput
+export type PostingSubmissionUpsertWithWhereUniqueWithoutPostingOrderInput = {
+  where: Prisma.PostingSubmissionWhereUniqueInput
+  update: Prisma.XOR<Prisma.PostingSubmissionUpdateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedUpdateWithoutPostingOrderInput>
+  create: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedCreateWithoutPostingOrderInput>
+}
+
+export type PostingSubmissionUpdateWithWhereUniqueWithoutPostingOrderInput = {
+  where: Prisma.PostingSubmissionWhereUniqueInput
   data: Prisma.XOR<Prisma.PostingSubmissionUpdateWithoutPostingOrderInput, Prisma.PostingSubmissionUncheckedUpdateWithoutPostingOrderInput>
 }
 
-export type PostingSubmissionUpdateWithoutPostingOrderInput = {
+export type PostingSubmissionUpdateManyWithWhereWithoutPostingOrderInput = {
+  where: Prisma.PostingSubmissionScalarWhereInput
+  data: Prisma.XOR<Prisma.PostingSubmissionUpdateManyMutationInput, Prisma.PostingSubmissionUncheckedUpdateManyWithoutPostingOrderInput>
+}
+
+export type PostingSubmissionCreateWithoutCommentCommandInput = {
+  id?: string
+  postedUrl: string
+  proofDriveUrl: string
+  notes?: string | null
+  status?: $Enums.PostingSubmissionStatus
+  reviewNotes?: string | null
+  reviewedAt?: Date | string | null
+  submittedAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postingOrder: Prisma.PostingOrderCreateNestedOneWithoutSubmissionsInput
+  submittedBy: Prisma.UserCreateNestedOneWithoutPostingSubmissionsInput
+  socialAccount: Prisma.SocialAccountCreateNestedOneWithoutPostingSubmissionsInput
+  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedPostingSubmissionsInput
+  blastTarget?: Prisma.BlastTargetCreateNestedOneWithoutSourcePostingSubmissionInput
+}
+
+export type PostingSubmissionUncheckedCreateWithoutCommentCommandInput = {
+  id?: string
+  postingOrderId: string
+  submittedById: string
+  socialAccountId: string
+  postedUrl: string
+  proofDriveUrl: string
+  notes?: string | null
+  status?: $Enums.PostingSubmissionStatus
+  reviewNotes?: string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  submittedAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  blastTarget?: Prisma.BlastTargetUncheckedCreateNestedOneWithoutSourcePostingSubmissionInput
+}
+
+export type PostingSubmissionCreateOrConnectWithoutCommentCommandInput = {
+  where: Prisma.PostingSubmissionWhereUniqueInput
+  create: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutCommentCommandInput, Prisma.PostingSubmissionUncheckedCreateWithoutCommentCommandInput>
+}
+
+export type PostingSubmissionUpsertWithoutCommentCommandInput = {
+  update: Prisma.XOR<Prisma.PostingSubmissionUpdateWithoutCommentCommandInput, Prisma.PostingSubmissionUncheckedUpdateWithoutCommentCommandInput>
+  create: Prisma.XOR<Prisma.PostingSubmissionCreateWithoutCommentCommandInput, Prisma.PostingSubmissionUncheckedCreateWithoutCommentCommandInput>
+  where?: Prisma.PostingSubmissionWhereInput
+}
+
+export type PostingSubmissionUpdateToOneWithWhereWithoutCommentCommandInput = {
+  where?: Prisma.PostingSubmissionWhereInput
+  data: Prisma.XOR<Prisma.PostingSubmissionUpdateWithoutCommentCommandInput, Prisma.PostingSubmissionUncheckedUpdateWithoutCommentCommandInput>
+}
+
+export type PostingSubmissionUpdateWithoutCommentCommandInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   postedUrl?: Prisma.StringFieldUpdateOperationsInput | string
   proofDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1056,14 +1169,16 @@ export type PostingSubmissionUpdateWithoutPostingOrderInput = {
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionsNestedInput
   submittedBy?: Prisma.UserUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   reviewedBy?: Prisma.UserUpdateOneWithoutReviewedPostingSubmissionsNestedInput
   blastTarget?: Prisma.BlastTargetUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
-export type PostingSubmissionUncheckedUpdateWithoutPostingOrderInput = {
+export type PostingSubmissionUncheckedUpdateWithoutCommentCommandInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  postingOrderId?: Prisma.StringFieldUpdateOperationsInput | string
   submittedById?: Prisma.StringFieldUpdateOperationsInput | string
   socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   postedUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1122,10 +1237,11 @@ export type PostingSubmissionUpdateWithoutSubmittedByInput = {
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionNestedInput
+  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionsNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   reviewedBy?: Prisma.UserUpdateOneWithoutReviewedPostingSubmissionsNestedInput
   blastTarget?: Prisma.BlastTargetUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionUncheckedUpdateWithoutSubmittedByInput = {
@@ -1143,6 +1259,7 @@ export type PostingSubmissionUncheckedUpdateWithoutSubmittedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blastTarget?: Prisma.BlastTargetUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionUncheckedUpdateManyWithoutSubmittedByInput = {
@@ -1172,10 +1289,11 @@ export type PostingSubmissionUpdateWithoutReviewedByInput = {
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionNestedInput
+  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionsNestedInput
   submittedBy?: Prisma.UserUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   blastTarget?: Prisma.BlastTargetUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionUncheckedUpdateWithoutReviewedByInput = {
@@ -1193,6 +1311,7 @@ export type PostingSubmissionUncheckedUpdateWithoutReviewedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blastTarget?: Prisma.BlastTargetUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionUncheckedUpdateManyWithoutReviewedByInput = {
@@ -1238,10 +1357,11 @@ export type PostingSubmissionUpdateWithoutSocialAccountInput = {
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionNestedInput
+  postingOrder?: Prisma.PostingOrderUpdateOneRequiredWithoutSubmissionsNestedInput
   submittedBy?: Prisma.UserUpdateOneRequiredWithoutPostingSubmissionsNestedInput
   reviewedBy?: Prisma.UserUpdateOneWithoutReviewedPostingSubmissionsNestedInput
   blastTarget?: Prisma.BlastTargetUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionUncheckedUpdateWithoutSocialAccountInput = {
@@ -1259,12 +1379,81 @@ export type PostingSubmissionUncheckedUpdateWithoutSocialAccountInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blastTarget?: Prisma.BlastTargetUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
 }
 
 export type PostingSubmissionUncheckedUpdateManyWithoutSocialAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   postingOrderId?: Prisma.StringFieldUpdateOperationsInput | string
   submittedById?: Prisma.StringFieldUpdateOperationsInput | string
+  postedUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  proofDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPostingSubmissionStatusFieldUpdateOperationsInput | $Enums.PostingSubmissionStatus
+  reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PostingSubmissionCreateManyPostingOrderInput = {
+  id?: string
+  submittedById: string
+  socialAccountId: string
+  postedUrl: string
+  proofDriveUrl: string
+  notes?: string | null
+  status?: $Enums.PostingSubmissionStatus
+  reviewNotes?: string | null
+  reviewedById?: string | null
+  reviewedAt?: Date | string | null
+  submittedAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PostingSubmissionUpdateWithoutPostingOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  postedUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  proofDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPostingSubmissionStatusFieldUpdateOperationsInput | $Enums.PostingSubmissionStatus
+  reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  submittedBy?: Prisma.UserUpdateOneRequiredWithoutPostingSubmissionsNestedInput
+  socialAccount?: Prisma.SocialAccountUpdateOneRequiredWithoutPostingSubmissionsNestedInput
+  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedPostingSubmissionsNestedInput
+  blastTarget?: Prisma.BlastTargetUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUpdateOneWithoutSourcePostingSubmissionNestedInput
+}
+
+export type PostingSubmissionUncheckedUpdateWithoutPostingOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  submittedById?: Prisma.StringFieldUpdateOperationsInput | string
+  socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  postedUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  proofDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPostingSubmissionStatusFieldUpdateOperationsInput | $Enums.PostingSubmissionStatus
+  reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  blastTarget?: Prisma.BlastTargetUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
+  commentCommand?: Prisma.CommentCommandUncheckedUpdateOneWithoutSourcePostingSubmissionNestedInput
+}
+
+export type PostingSubmissionUncheckedUpdateManyWithoutPostingOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  submittedById?: Prisma.StringFieldUpdateOperationsInput | string
+  socialAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   postedUrl?: Prisma.StringFieldUpdateOperationsInput | string
   proofDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1299,6 +1488,7 @@ export type PostingSubmissionSelect<ExtArgs extends runtime.Types.Extensions.Int
   socialAccount?: boolean | Prisma.SocialAccountDefaultArgs<ExtArgs>
   reviewedBy?: boolean | Prisma.PostingSubmission$reviewedByArgs<ExtArgs>
   blastTarget?: boolean | Prisma.PostingSubmission$blastTargetArgs<ExtArgs>
+  commentCommand?: boolean | Prisma.PostingSubmission$commentCommandArgs<ExtArgs>
 }, ExtArgs["result"]["postingSubmission"]>
 
 export type PostingSubmissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1367,6 +1557,7 @@ export type PostingSubmissionInclude<ExtArgs extends runtime.Types.Extensions.In
   socialAccount?: boolean | Prisma.SocialAccountDefaultArgs<ExtArgs>
   reviewedBy?: boolean | Prisma.PostingSubmission$reviewedByArgs<ExtArgs>
   blastTarget?: boolean | Prisma.PostingSubmission$blastTargetArgs<ExtArgs>
+  commentCommand?: boolean | Prisma.PostingSubmission$commentCommandArgs<ExtArgs>
 }
 export type PostingSubmissionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   postingOrder?: boolean | Prisma.PostingOrderDefaultArgs<ExtArgs>
@@ -1389,6 +1580,7 @@ export type $PostingSubmissionPayload<ExtArgs extends runtime.Types.Extensions.I
     socialAccount: Prisma.$SocialAccountPayload<ExtArgs>
     reviewedBy: Prisma.$UserPayload<ExtArgs> | null
     blastTarget: Prisma.$BlastTargetPayload<ExtArgs> | null
+    commentCommand: Prisma.$CommentCommandPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1804,6 +1996,7 @@ export interface Prisma__PostingSubmissionClient<T, Null = never, ExtArgs extend
   socialAccount<T extends Prisma.SocialAccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SocialAccountDefaultArgs<ExtArgs>>): Prisma.Prisma__SocialAccountClient<runtime.Types.Result.GetResult<Prisma.$SocialAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   reviewedBy<T extends Prisma.PostingSubmission$reviewedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostingSubmission$reviewedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   blastTarget<T extends Prisma.PostingSubmission$blastTargetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostingSubmission$blastTargetArgs<ExtArgs>>): Prisma.Prisma__BlastTargetClient<runtime.Types.Result.GetResult<Prisma.$BlastTargetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  commentCommand<T extends Prisma.PostingSubmission$commentCommandArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostingSubmission$commentCommandArgs<ExtArgs>>): Prisma.Prisma__CommentCommandClient<runtime.Types.Result.GetResult<Prisma.$CommentCommandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2283,6 +2476,25 @@ export type PostingSubmission$blastTargetArgs<ExtArgs extends runtime.Types.Exte
    */
   include?: Prisma.BlastTargetInclude<ExtArgs> | null
   where?: Prisma.BlastTargetWhereInput
+}
+
+/**
+ * PostingSubmission.commentCommand
+ */
+export type PostingSubmission$commentCommandArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommentCommand
+   */
+  select?: Prisma.CommentCommandSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommentCommand
+   */
+  omit?: Prisma.CommentCommandOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommentCommandInclude<ExtArgs> | null
+  where?: Prisma.CommentCommandWhereInput
 }
 
 /**

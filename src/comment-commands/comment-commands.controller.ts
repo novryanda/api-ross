@@ -22,6 +22,7 @@ import {
   AssignCommentCommandDto,
   CommentCommandQueryDto,
   CreateCommentCommandDto,
+  CreateCommentCommandFromSubmissionDto,
   UpdateCommentCommandDto,
   UpdateCommentCommandStatusDto,
 } from './dto/index.js';
@@ -83,6 +84,33 @@ export class CommentCommandsController {
     const command = await this.commentCommandsService.create(
       user,
       campaignId,
+      dto,
+      getRequestAuditContext(request),
+    );
+    return successResponse(command);
+  }
+
+  @Post('campaigns/:campaignId/comment-commands/from-submission/:submissionId')
+  @Roles(UserRole.ADMIN)
+  @ApiEndpointDoc({
+    summary: 'Create comment command from PIC submission',
+    description:
+      'Creates a PRO/KONTRA comment command snapshot from an approved PIC posting submission.',
+    roles: [UserRole.ADMIN],
+    body: CreateCommentCommandFromSubmissionDto,
+    errors: [400, 401, 403, 404, 409],
+  })
+  async createFromSubmission(
+    @CurrentUser() user: RossUserSession['user'],
+    @Param('campaignId') campaignId: string,
+    @Param('submissionId') submissionId: string,
+    @Body() dto: CreateCommentCommandFromSubmissionDto,
+    @Req() request: Request,
+  ) {
+    const command = await this.commentCommandsService.createFromSubmission(
+      user,
+      campaignId,
+      submissionId,
       dto,
       getRequestAuditContext(request),
     );

@@ -28,6 +28,7 @@ export type PostingOrderMinAggregateOutputType = {
   id: string | null
   campaignId: string | null
   targetUnitId: string | null
+  title: string | null
   platform: $Enums.Platform | null
   contentDriveUrl: string | null
   scheduledAt: Date | null
@@ -46,6 +47,7 @@ export type PostingOrderMaxAggregateOutputType = {
   id: string | null
   campaignId: string | null
   targetUnitId: string | null
+  title: string | null
   platform: $Enums.Platform | null
   contentDriveUrl: string | null
   scheduledAt: Date | null
@@ -64,6 +66,7 @@ export type PostingOrderCountAggregateOutputType = {
   id: number
   campaignId: number
   targetUnitId: number
+  title: number
   platform: number
   contentDriveUrl: number
   scheduledAt: number
@@ -84,6 +87,7 @@ export type PostingOrderMinAggregateInputType = {
   id?: true
   campaignId?: true
   targetUnitId?: true
+  title?: true
   platform?: true
   contentDriveUrl?: true
   scheduledAt?: true
@@ -102,6 +106,7 @@ export type PostingOrderMaxAggregateInputType = {
   id?: true
   campaignId?: true
   targetUnitId?: true
+  title?: true
   platform?: true
   contentDriveUrl?: true
   scheduledAt?: true
@@ -120,6 +125,7 @@ export type PostingOrderCountAggregateInputType = {
   id?: true
   campaignId?: true
   targetUnitId?: true
+  title?: true
   platform?: true
   contentDriveUrl?: true
   scheduledAt?: true
@@ -211,6 +217,7 @@ export type PostingOrderGroupByOutputType = {
   id: string
   campaignId: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date
@@ -250,6 +257,7 @@ export type PostingOrderWhereInput = {
   id?: Prisma.UuidFilter<"PostingOrder"> | string
   campaignId?: Prisma.UuidFilter<"PostingOrder"> | string
   targetUnitId?: Prisma.UuidFilter<"PostingOrder"> | string
+  title?: Prisma.StringFilter<"PostingOrder"> | string
   platform?: Prisma.EnumPlatformFilter<"PostingOrder"> | $Enums.Platform
   contentDriveUrl?: Prisma.StringFilter<"PostingOrder"> | string
   scheduledAt?: Prisma.DateTimeFilter<"PostingOrder"> | Date | string
@@ -266,13 +274,14 @@ export type PostingOrderWhereInput = {
   targetUnit?: Prisma.XOR<Prisma.OrgUnitScalarRelationFilter, Prisma.OrgUnitWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   claimedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  submission?: Prisma.XOR<Prisma.PostingSubmissionNullableScalarRelationFilter, Prisma.PostingSubmissionWhereInput> | null
+  submissions?: Prisma.PostingSubmissionListRelationFilter
 }
 
 export type PostingOrderOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   targetUnitId?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   contentDriveUrl?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
@@ -289,7 +298,7 @@ export type PostingOrderOrderByWithRelationInput = {
   targetUnit?: Prisma.OrgUnitOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   claimedBy?: Prisma.UserOrderByWithRelationInput
-  submission?: Prisma.PostingSubmissionOrderByWithRelationInput
+  submissions?: Prisma.PostingSubmissionOrderByRelationAggregateInput
 }
 
 export type PostingOrderWhereUniqueInput = Prisma.AtLeast<{
@@ -299,6 +308,7 @@ export type PostingOrderWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PostingOrderWhereInput | Prisma.PostingOrderWhereInput[]
   campaignId?: Prisma.UuidFilter<"PostingOrder"> | string
   targetUnitId?: Prisma.UuidFilter<"PostingOrder"> | string
+  title?: Prisma.StringFilter<"PostingOrder"> | string
   platform?: Prisma.EnumPlatformFilter<"PostingOrder"> | $Enums.Platform
   contentDriveUrl?: Prisma.StringFilter<"PostingOrder"> | string
   scheduledAt?: Prisma.DateTimeFilter<"PostingOrder"> | Date | string
@@ -315,13 +325,14 @@ export type PostingOrderWhereUniqueInput = Prisma.AtLeast<{
   targetUnit?: Prisma.XOR<Prisma.OrgUnitScalarRelationFilter, Prisma.OrgUnitWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   claimedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  submission?: Prisma.XOR<Prisma.PostingSubmissionNullableScalarRelationFilter, Prisma.PostingSubmissionWhereInput> | null
+  submissions?: Prisma.PostingSubmissionListRelationFilter
 }, "id">
 
 export type PostingOrderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   targetUnitId?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   contentDriveUrl?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
@@ -346,6 +357,7 @@ export type PostingOrderScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"PostingOrder"> | string
   campaignId?: Prisma.UuidWithAggregatesFilter<"PostingOrder"> | string
   targetUnitId?: Prisma.UuidWithAggregatesFilter<"PostingOrder"> | string
+  title?: Prisma.StringWithAggregatesFilter<"PostingOrder"> | string
   platform?: Prisma.EnumPlatformWithAggregatesFilter<"PostingOrder"> | $Enums.Platform
   contentDriveUrl?: Prisma.StringWithAggregatesFilter<"PostingOrder"> | string
   scheduledAt?: Prisma.DateTimeWithAggregatesFilter<"PostingOrder"> | Date | string
@@ -362,6 +374,7 @@ export type PostingOrderScalarWhereWithAggregatesInput = {
 
 export type PostingOrderCreateInput = {
   id?: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -376,13 +389,14 @@ export type PostingOrderCreateInput = {
   targetUnit: Prisma.OrgUnitCreateNestedOneWithoutPostingOrdersInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedPostingOrdersInput
   claimedBy?: Prisma.UserCreateNestedOneWithoutClaimedPostingOrdersInput
-  submission?: Prisma.PostingSubmissionCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderUncheckedCreateInput = {
   id?: string
   campaignId: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -395,11 +409,12 @@ export type PostingOrderUncheckedCreateInput = {
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  submission?: Prisma.PostingSubmissionUncheckedCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -414,13 +429,14 @@ export type PostingOrderUpdateInput = {
   targetUnit?: Prisma.OrgUnitUpdateOneRequiredWithoutPostingOrdersNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedPostingOrdersNestedInput
   claimedBy?: Prisma.UserUpdateOneWithoutClaimedPostingOrdersNestedInput
-  submission?: Prisma.PostingSubmissionUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   targetUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -433,13 +449,14 @@ export type PostingOrderUncheckedUpdateInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  submission?: Prisma.PostingSubmissionUncheckedUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderCreateManyInput = {
   id?: string
   campaignId: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -456,6 +473,7 @@ export type PostingOrderCreateManyInput = {
 
 export type PostingOrderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -472,6 +490,7 @@ export type PostingOrderUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   targetUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -500,6 +519,7 @@ export type PostingOrderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   targetUnitId?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   contentDriveUrl?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
@@ -518,6 +538,7 @@ export type PostingOrderMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   targetUnitId?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   contentDriveUrl?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
@@ -536,6 +557,7 @@ export type PostingOrderMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignId?: Prisma.SortOrder
   targetUnitId?: Prisma.SortOrder
+  title?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   contentDriveUrl?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
@@ -727,22 +749,23 @@ export type EnumPostingOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.PostingOrderStatus
 }
 
-export type PostingOrderCreateNestedOneWithoutSubmissionInput = {
-  create?: Prisma.XOR<Prisma.PostingOrderCreateWithoutSubmissionInput, Prisma.PostingOrderUncheckedCreateWithoutSubmissionInput>
-  connectOrCreate?: Prisma.PostingOrderCreateOrConnectWithoutSubmissionInput
+export type PostingOrderCreateNestedOneWithoutSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.PostingOrderCreateWithoutSubmissionsInput, Prisma.PostingOrderUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.PostingOrderCreateOrConnectWithoutSubmissionsInput
   connect?: Prisma.PostingOrderWhereUniqueInput
 }
 
-export type PostingOrderUpdateOneRequiredWithoutSubmissionNestedInput = {
-  create?: Prisma.XOR<Prisma.PostingOrderCreateWithoutSubmissionInput, Prisma.PostingOrderUncheckedCreateWithoutSubmissionInput>
-  connectOrCreate?: Prisma.PostingOrderCreateOrConnectWithoutSubmissionInput
-  upsert?: Prisma.PostingOrderUpsertWithoutSubmissionInput
+export type PostingOrderUpdateOneRequiredWithoutSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PostingOrderCreateWithoutSubmissionsInput, Prisma.PostingOrderUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.PostingOrderCreateOrConnectWithoutSubmissionsInput
+  upsert?: Prisma.PostingOrderUpsertWithoutSubmissionsInput
   connect?: Prisma.PostingOrderWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PostingOrderUpdateToOneWithWhereWithoutSubmissionInput, Prisma.PostingOrderUpdateWithoutSubmissionInput>, Prisma.PostingOrderUncheckedUpdateWithoutSubmissionInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PostingOrderUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.PostingOrderUpdateWithoutSubmissionsInput>, Prisma.PostingOrderUncheckedUpdateWithoutSubmissionsInput>
 }
 
 export type PostingOrderCreateWithoutCreatedByInput = {
   id?: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -756,13 +779,14 @@ export type PostingOrderCreateWithoutCreatedByInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutPostingOrdersInput
   targetUnit: Prisma.OrgUnitCreateNestedOneWithoutPostingOrdersInput
   claimedBy?: Prisma.UserCreateNestedOneWithoutClaimedPostingOrdersInput
-  submission?: Prisma.PostingSubmissionCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderUncheckedCreateWithoutCreatedByInput = {
   id?: string
   campaignId: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -774,7 +798,7 @@ export type PostingOrderUncheckedCreateWithoutCreatedByInput = {
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  submission?: Prisma.PostingSubmissionUncheckedCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderCreateOrConnectWithoutCreatedByInput = {
@@ -789,6 +813,7 @@ export type PostingOrderCreateManyCreatedByInputEnvelope = {
 
 export type PostingOrderCreateWithoutClaimedByInput = {
   id?: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -802,13 +827,14 @@ export type PostingOrderCreateWithoutClaimedByInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutPostingOrdersInput
   targetUnit: Prisma.OrgUnitCreateNestedOneWithoutPostingOrdersInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedPostingOrdersInput
-  submission?: Prisma.PostingSubmissionCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderUncheckedCreateWithoutClaimedByInput = {
   id?: string
   campaignId: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -820,7 +846,7 @@ export type PostingOrderUncheckedCreateWithoutClaimedByInput = {
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  submission?: Prisma.PostingSubmissionUncheckedCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderCreateOrConnectWithoutClaimedByInput = {
@@ -856,6 +882,7 @@ export type PostingOrderScalarWhereInput = {
   id?: Prisma.UuidFilter<"PostingOrder"> | string
   campaignId?: Prisma.UuidFilter<"PostingOrder"> | string
   targetUnitId?: Prisma.UuidFilter<"PostingOrder"> | string
+  title?: Prisma.StringFilter<"PostingOrder"> | string
   platform?: Prisma.EnumPlatformFilter<"PostingOrder"> | $Enums.Platform
   contentDriveUrl?: Prisma.StringFilter<"PostingOrder"> | string
   scheduledAt?: Prisma.DateTimeFilter<"PostingOrder"> | Date | string
@@ -888,6 +915,7 @@ export type PostingOrderUpdateManyWithWhereWithoutClaimedByInput = {
 
 export type PostingOrderCreateWithoutCampaignInput = {
   id?: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -901,12 +929,13 @@ export type PostingOrderCreateWithoutCampaignInput = {
   targetUnit: Prisma.OrgUnitCreateNestedOneWithoutPostingOrdersInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedPostingOrdersInput
   claimedBy?: Prisma.UserCreateNestedOneWithoutClaimedPostingOrdersInput
-  submission?: Prisma.PostingSubmissionCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderUncheckedCreateWithoutCampaignInput = {
   id?: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -919,7 +948,7 @@ export type PostingOrderUncheckedCreateWithoutCampaignInput = {
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  submission?: Prisma.PostingSubmissionUncheckedCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderCreateOrConnectWithoutCampaignInput = {
@@ -950,6 +979,7 @@ export type PostingOrderUpdateManyWithWhereWithoutCampaignInput = {
 
 export type PostingOrderCreateWithoutTargetUnitInput = {
   id?: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -963,12 +993,13 @@ export type PostingOrderCreateWithoutTargetUnitInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutPostingOrdersInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedPostingOrdersInput
   claimedBy?: Prisma.UserCreateNestedOneWithoutClaimedPostingOrdersInput
-  submission?: Prisma.PostingSubmissionCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderUncheckedCreateWithoutTargetUnitInput = {
   id?: string
   campaignId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -981,7 +1012,7 @@ export type PostingOrderUncheckedCreateWithoutTargetUnitInput = {
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  submission?: Prisma.PostingSubmissionUncheckedCreateNestedOneWithoutPostingOrderInput
+  submissions?: Prisma.PostingSubmissionUncheckedCreateNestedManyWithoutPostingOrderInput
 }
 
 export type PostingOrderCreateOrConnectWithoutTargetUnitInput = {
@@ -1010,8 +1041,9 @@ export type PostingOrderUpdateManyWithWhereWithoutTargetUnitInput = {
   data: Prisma.XOR<Prisma.PostingOrderUpdateManyMutationInput, Prisma.PostingOrderUncheckedUpdateManyWithoutTargetUnitInput>
 }
 
-export type PostingOrderCreateWithoutSubmissionInput = {
+export type PostingOrderCreateWithoutSubmissionsInput = {
   id?: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -1028,10 +1060,11 @@ export type PostingOrderCreateWithoutSubmissionInput = {
   claimedBy?: Prisma.UserCreateNestedOneWithoutClaimedPostingOrdersInput
 }
 
-export type PostingOrderUncheckedCreateWithoutSubmissionInput = {
+export type PostingOrderUncheckedCreateWithoutSubmissionsInput = {
   id?: string
   campaignId: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -1046,24 +1079,25 @@ export type PostingOrderUncheckedCreateWithoutSubmissionInput = {
   updatedAt?: Date | string
 }
 
-export type PostingOrderCreateOrConnectWithoutSubmissionInput = {
+export type PostingOrderCreateOrConnectWithoutSubmissionsInput = {
   where: Prisma.PostingOrderWhereUniqueInput
-  create: Prisma.XOR<Prisma.PostingOrderCreateWithoutSubmissionInput, Prisma.PostingOrderUncheckedCreateWithoutSubmissionInput>
+  create: Prisma.XOR<Prisma.PostingOrderCreateWithoutSubmissionsInput, Prisma.PostingOrderUncheckedCreateWithoutSubmissionsInput>
 }
 
-export type PostingOrderUpsertWithoutSubmissionInput = {
-  update: Prisma.XOR<Prisma.PostingOrderUpdateWithoutSubmissionInput, Prisma.PostingOrderUncheckedUpdateWithoutSubmissionInput>
-  create: Prisma.XOR<Prisma.PostingOrderCreateWithoutSubmissionInput, Prisma.PostingOrderUncheckedCreateWithoutSubmissionInput>
+export type PostingOrderUpsertWithoutSubmissionsInput = {
+  update: Prisma.XOR<Prisma.PostingOrderUpdateWithoutSubmissionsInput, Prisma.PostingOrderUncheckedUpdateWithoutSubmissionsInput>
+  create: Prisma.XOR<Prisma.PostingOrderCreateWithoutSubmissionsInput, Prisma.PostingOrderUncheckedCreateWithoutSubmissionsInput>
   where?: Prisma.PostingOrderWhereInput
 }
 
-export type PostingOrderUpdateToOneWithWhereWithoutSubmissionInput = {
+export type PostingOrderUpdateToOneWithWhereWithoutSubmissionsInput = {
   where?: Prisma.PostingOrderWhereInput
-  data: Prisma.XOR<Prisma.PostingOrderUpdateWithoutSubmissionInput, Prisma.PostingOrderUncheckedUpdateWithoutSubmissionInput>
+  data: Prisma.XOR<Prisma.PostingOrderUpdateWithoutSubmissionsInput, Prisma.PostingOrderUncheckedUpdateWithoutSubmissionsInput>
 }
 
-export type PostingOrderUpdateWithoutSubmissionInput = {
+export type PostingOrderUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1080,10 +1114,11 @@ export type PostingOrderUpdateWithoutSubmissionInput = {
   claimedBy?: Prisma.UserUpdateOneWithoutClaimedPostingOrdersNestedInput
 }
 
-export type PostingOrderUncheckedUpdateWithoutSubmissionInput = {
+export type PostingOrderUncheckedUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   targetUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1102,6 +1137,7 @@ export type PostingOrderCreateManyCreatedByInput = {
   id?: string
   campaignId: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -1119,6 +1155,7 @@ export type PostingOrderCreateManyClaimedByInput = {
   id?: string
   campaignId: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -1134,6 +1171,7 @@ export type PostingOrderCreateManyClaimedByInput = {
 
 export type PostingOrderUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1147,13 +1185,14 @@ export type PostingOrderUpdateWithoutCreatedByInput = {
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutPostingOrdersNestedInput
   targetUnit?: Prisma.OrgUnitUpdateOneRequiredWithoutPostingOrdersNestedInput
   claimedBy?: Prisma.UserUpdateOneWithoutClaimedPostingOrdersNestedInput
-  submission?: Prisma.PostingSubmissionUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   targetUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1165,13 +1204,14 @@ export type PostingOrderUncheckedUpdateWithoutCreatedByInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  submission?: Prisma.PostingSubmissionUncheckedUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   targetUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1187,6 +1227,7 @@ export type PostingOrderUncheckedUpdateManyWithoutCreatedByInput = {
 
 export type PostingOrderUpdateWithoutClaimedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1200,13 +1241,14 @@ export type PostingOrderUpdateWithoutClaimedByInput = {
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutPostingOrdersNestedInput
   targetUnit?: Prisma.OrgUnitUpdateOneRequiredWithoutPostingOrdersNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedPostingOrdersNestedInput
-  submission?: Prisma.PostingSubmissionUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderUncheckedUpdateWithoutClaimedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   targetUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1218,13 +1260,14 @@ export type PostingOrderUncheckedUpdateWithoutClaimedByInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  submission?: Prisma.PostingSubmissionUncheckedUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderUncheckedUpdateManyWithoutClaimedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   targetUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1241,6 +1284,7 @@ export type PostingOrderUncheckedUpdateManyWithoutClaimedByInput = {
 export type PostingOrderCreateManyCampaignInput = {
   id?: string
   targetUnitId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -1257,6 +1301,7 @@ export type PostingOrderCreateManyCampaignInput = {
 
 export type PostingOrderUpdateWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1270,12 +1315,13 @@ export type PostingOrderUpdateWithoutCampaignInput = {
   targetUnit?: Prisma.OrgUnitUpdateOneRequiredWithoutPostingOrdersNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedPostingOrdersNestedInput
   claimedBy?: Prisma.UserUpdateOneWithoutClaimedPostingOrdersNestedInput
-  submission?: Prisma.PostingSubmissionUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderUncheckedUpdateWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targetUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1288,12 +1334,13 @@ export type PostingOrderUncheckedUpdateWithoutCampaignInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  submission?: Prisma.PostingSubmissionUncheckedUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderUncheckedUpdateManyWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targetUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1311,6 +1358,7 @@ export type PostingOrderUncheckedUpdateManyWithoutCampaignInput = {
 export type PostingOrderCreateManyTargetUnitInput = {
   id?: string
   campaignId: string
+  title: string
   platform: $Enums.Platform
   contentDriveUrl: string
   scheduledAt: Date | string
@@ -1327,6 +1375,7 @@ export type PostingOrderCreateManyTargetUnitInput = {
 
 export type PostingOrderUpdateWithoutTargetUnitInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1340,12 +1389,13 @@ export type PostingOrderUpdateWithoutTargetUnitInput = {
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutPostingOrdersNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedPostingOrdersNestedInput
   claimedBy?: Prisma.UserUpdateOneWithoutClaimedPostingOrdersNestedInput
-  submission?: Prisma.PostingSubmissionUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderUncheckedUpdateWithoutTargetUnitInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1358,12 +1408,13 @@ export type PostingOrderUncheckedUpdateWithoutTargetUnitInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  submission?: Prisma.PostingSubmissionUncheckedUpdateOneWithoutPostingOrderNestedInput
+  submissions?: Prisma.PostingSubmissionUncheckedUpdateManyWithoutPostingOrderNestedInput
 }
 
 export type PostingOrderUncheckedUpdateManyWithoutTargetUnitInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
   contentDriveUrl?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1378,12 +1429,42 @@ export type PostingOrderUncheckedUpdateManyWithoutTargetUnitInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type PostingOrderCountOutputType
+ */
+
+export type PostingOrderCountOutputType = {
+  submissions: number
+}
+
+export type PostingOrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  submissions?: boolean | PostingOrderCountOutputTypeCountSubmissionsArgs
+}
+
+/**
+ * PostingOrderCountOutputType without action
+ */
+export type PostingOrderCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostingOrderCountOutputType
+   */
+  select?: Prisma.PostingOrderCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PostingOrderCountOutputType without action
+ */
+export type PostingOrderCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostingSubmissionWhereInput
+}
 
 
 export type PostingOrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   campaignId?: boolean
   targetUnitId?: boolean
+  title?: boolean
   platform?: boolean
   contentDriveUrl?: boolean
   scheduledAt?: boolean
@@ -1400,13 +1481,15 @@ export type PostingOrderSelect<ExtArgs extends runtime.Types.Extensions.Internal
   targetUnit?: boolean | Prisma.OrgUnitDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   claimedBy?: boolean | Prisma.PostingOrder$claimedByArgs<ExtArgs>
-  submission?: boolean | Prisma.PostingOrder$submissionArgs<ExtArgs>
+  submissions?: boolean | Prisma.PostingOrder$submissionsArgs<ExtArgs>
+  _count?: boolean | Prisma.PostingOrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["postingOrder"]>
 
 export type PostingOrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   campaignId?: boolean
   targetUnitId?: boolean
+  title?: boolean
   platform?: boolean
   contentDriveUrl?: boolean
   scheduledAt?: boolean
@@ -1429,6 +1512,7 @@ export type PostingOrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   campaignId?: boolean
   targetUnitId?: boolean
+  title?: boolean
   platform?: boolean
   contentDriveUrl?: boolean
   scheduledAt?: boolean
@@ -1451,6 +1535,7 @@ export type PostingOrderSelectScalar = {
   id?: boolean
   campaignId?: boolean
   targetUnitId?: boolean
+  title?: boolean
   platform?: boolean
   contentDriveUrl?: boolean
   scheduledAt?: boolean
@@ -1465,13 +1550,14 @@ export type PostingOrderSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PostingOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "targetUnitId" | "platform" | "contentDriveUrl" | "scheduledAt" | "caption" | "description" | "status" | "createdById" | "claimedById" | "claimedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["postingOrder"]>
+export type PostingOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "targetUnitId" | "title" | "platform" | "contentDriveUrl" | "scheduledAt" | "caption" | "description" | "status" | "createdById" | "claimedById" | "claimedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["postingOrder"]>
 export type PostingOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   targetUnit?: boolean | Prisma.OrgUnitDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   claimedBy?: boolean | Prisma.PostingOrder$claimedByArgs<ExtArgs>
-  submission?: boolean | Prisma.PostingOrder$submissionArgs<ExtArgs>
+  submissions?: boolean | Prisma.PostingOrder$submissionsArgs<ExtArgs>
+  _count?: boolean | Prisma.PostingOrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PostingOrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
@@ -1493,12 +1579,13 @@ export type $PostingOrderPayload<ExtArgs extends runtime.Types.Extensions.Intern
     targetUnit: Prisma.$OrgUnitPayload<ExtArgs>
     createdBy: Prisma.$UserPayload<ExtArgs>
     claimedBy: Prisma.$UserPayload<ExtArgs> | null
-    submission: Prisma.$PostingSubmissionPayload<ExtArgs> | null
+    submissions: Prisma.$PostingSubmissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     campaignId: string
     targetUnitId: string
+    title: string
     platform: $Enums.Platform
     contentDriveUrl: string
     scheduledAt: Date
@@ -1909,7 +1996,7 @@ export interface Prisma__PostingOrderClient<T, Null = never, ExtArgs extends run
   targetUnit<T extends Prisma.OrgUnitDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrgUnitDefaultArgs<ExtArgs>>): Prisma.Prisma__OrgUnitClient<runtime.Types.Result.GetResult<Prisma.$OrgUnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   claimedBy<T extends Prisma.PostingOrder$claimedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostingOrder$claimedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  submission<T extends Prisma.PostingOrder$submissionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostingOrder$submissionArgs<ExtArgs>>): Prisma.Prisma__PostingSubmissionClient<runtime.Types.Result.GetResult<Prisma.$PostingSubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  submissions<T extends Prisma.PostingOrder$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostingOrder$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostingSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1942,6 +2029,7 @@ export interface PostingOrderFieldRefs {
   readonly id: Prisma.FieldRef<"PostingOrder", 'String'>
   readonly campaignId: Prisma.FieldRef<"PostingOrder", 'String'>
   readonly targetUnitId: Prisma.FieldRef<"PostingOrder", 'String'>
+  readonly title: Prisma.FieldRef<"PostingOrder", 'String'>
   readonly platform: Prisma.FieldRef<"PostingOrder", 'Platform'>
   readonly contentDriveUrl: Prisma.FieldRef<"PostingOrder", 'String'>
   readonly scheduledAt: Prisma.FieldRef<"PostingOrder", 'DateTime'>
@@ -2374,9 +2462,9 @@ export type PostingOrder$claimedByArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
- * PostingOrder.submission
+ * PostingOrder.submissions
  */
-export type PostingOrder$submissionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type PostingOrder$submissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the PostingSubmission
    */
@@ -2390,6 +2478,11 @@ export type PostingOrder$submissionArgs<ExtArgs extends runtime.Types.Extensions
    */
   include?: Prisma.PostingSubmissionInclude<ExtArgs> | null
   where?: Prisma.PostingSubmissionWhereInput
+  orderBy?: Prisma.PostingSubmissionOrderByWithRelationInput | Prisma.PostingSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.PostingSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostingSubmissionScalarFieldEnum | Prisma.PostingSubmissionScalarFieldEnum[]
 }
 
 /**

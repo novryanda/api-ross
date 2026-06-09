@@ -150,7 +150,7 @@ export class UsersController {
   @ApiEndpointDoc({
     summary: 'Admin reset password',
     description:
-      'Hashes the new password with Better Auth crypto and stores it on the credential account. Revokes existing sessions by default. No plaintext is stored or returned.',
+      'Either hashes a new password set by an admin or sends a reset link to the user email. Revokes existing sessions by default. No plaintext is stored or returned by the API.',
     roles: [UserRole.ADMIN],
     body: AdminResetPasswordDto,
     errors: [400, 401, 403, 404],

@@ -8,6 +8,7 @@ import {
   AuditAction,
   CommentCommandStatus,
   CommentTaskStatus,
+  PostingSubmissionStatus,
   Prisma,
   SocialAccountStatus,
 } from '../generated/prisma/client.js';
@@ -20,6 +21,7 @@ import {
   AssignCommentCommandDto,
   CommentCommandQueryDto,
   CreateCommentCommandDto,
+  CreateCommentCommandFromSubmissionDto,
   UpdateCommentCommandDto,
   UpdateCommentCommandStatusDto,
 } from './dto/index.js';
@@ -226,6 +228,126 @@ export class CommentCommandsService {
             ...created,
             createdSlots:
               status === CommentCommandStatus.ACTIVE ? dto.requiredSlots : 0,
+          }),
+          ipAddress: auditContext?.ipAddress,
+          userAgent: auditContext?.userAgent,
+        },
+      });
+
+      return created;
+    });
+
+    const slotCounts = await this.getSlotCounts(
+      command.id,
+      command.requiredSlots,
+    );
+    return this.toCommandResponse(command, slotCounts);
+  }
+
+  async createFromSubmission(
+    user: CurrentUser,
+    campaignId: string,
+    submissionId: string,
+    dto: CreateCommentCommandFromSubmissionDto,
+    auditContext?: RequestAuditContext,
+  ) {
+    await this.ensureCampaignExists(campaignId);
+
+    const submission = await this.prisma.postingSubmission.findFirst({
+      where: {
+        id: submissionId,
+        status: PostingSubmissionStatus.APPROVED_FOR_BLAST,
+        commentCommand: null,
+        postingOrder: {
+          campaignId,
+        },
+      },
+      include: {
+        postingOrder: true,
+        socialAccount: true,
+      },
+    });
+
+    if (!submission) {
+      throw new NotFoundException({
+        code: 'NOT_FOUND',
+        message:
+          'Approved PIC submission not found or already converted to comment command.',
+        details: [],
+      });
+    }
+
+    await this.validateSocialAccount(
+      submission.socialAccountId,
+      submission.postingOrder.platform,
+    );
+
+    const status = dto.status ?? CommentCommandStatus.ACTIVE;
+    const keepExpiryMinutes =
+      dto.keepExpiryMinutes ?? DEFAULT_KEEP_EXPIRY_MINUTES;
+
+    const command = await this.prisma.$transaction(async (tx) => {
+      const created = await tx.commentCommand.create({
+        data: {
+          campaignId,
+          sourcePostingSubmissionId: submission.id,
+          socialAccountId: submission.socialAccountId,
+          targetPostUrl: submission.postedUrl,
+          platform: submission.postingOrder.platform,
+          stance: dto.stance,
+          narrative: dto.narrative,
+          instruction:
+            dto.instruction ??
+            submission.postingOrder.description ??
+            submission.postingOrder.caption ??
+            undefined,
+          requiredSlots: dto.requiredSlots,
+          keepExpiryMinutes,
+          deadline: new Date(dto.deadline),
+          status,
+          createdById: user.id,
+        },
+        include: COMMENT_COMMAND_INCLUDE,
+      });
+
+      if (status === CommentCommandStatus.ACTIVE) {
+        await tx.commentTask.createMany({
+          data: Array.from({ length: dto.requiredSlots }, (_, index) => ({
+            commentCommandId: created.id,
+            taskNo: index + 1,
+            status: CommentTaskStatus.AVAILABLE,
+          })),
+        });
+      }
+
+      await tx.auditLog.create({
+        data: {
+          actorId: user.id,
+          campaignId,
+          action: AuditAction.COMMENT_COMMAND_CREATED,
+          entityType: 'CommentCommand',
+          entityId: created.id,
+          newValue: toAuditJson({
+            ...created,
+            createdSlots:
+              status === CommentCommandStatus.ACTIVE ? dto.requiredSlots : 0,
+          }),
+          ipAddress: auditContext?.ipAddress,
+          userAgent: auditContext?.userAgent,
+        },
+      });
+
+      await tx.auditLog.create({
+        data: {
+          actorId: user.id,
+          campaignId,
+          action: AuditAction.COMMENT_COMMAND_CREATED_FROM_PIC_SUBMISSION,
+          entityType: 'PostingSubmission',
+          entityId: submission.id,
+          newValue: toAuditJson({
+            commentCommandId: created.id,
+            targetPostUrl: submission.postedUrl,
+            socialAccountId: submission.socialAccountId,
           }),
           ipAddress: auditContext?.ipAddress,
           userAgent: auditContext?.userAgent,

@@ -16,6 +16,12 @@ export class UpdatePostingOrderDto {
   @IsUUID()
   targetUnitId?: string;
 
+  @ApiPropertyOptional({ maxLength: 255 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  title?: string;
+
   @ApiPropertyOptional({ enum: Platform })
   @IsOptional()
   @IsEnum(Platform)
